@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+.DS_STORE
+/.xmake
+/.vscode
+CMakeLists.txt
+/xcode
+/vs
+/clion
+/build
+/cmake-build-debug
+/toolchain
+/.idea
