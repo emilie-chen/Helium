@@ -62,10 +62,23 @@ GLWindow::GLWindow(const String& title, const glm::ivec2& dim, WindowCloseCallba
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     //glDebugMessageCallback(MessageCallback, nullptr);
 #endif // heliumDebug
+
+    // imgui context
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    ImGui_ImplGlfw_InitForOpenGL(m_Window.GetObject(), true);
+    ImGui_ImplOpenGL3_Init("#version 410");
+    ImGui::StyleColorsLight();
 }
 
 GLWindow::~GLWindow()
 {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwDestroyWindow(m_Window.GetObject());
     glfwTerminate();
 }
@@ -103,6 +116,20 @@ GLWindow::MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity
 {
     spdlog::error("GL error: %s type = 0x%x, severity = 0x%x, message = %s\n",
              (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""), type, severity, message);
+}
+
+void GLWindow::OnGUIUpdate(F32 dt)
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    static Bool show_demo_window = true;
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 heliumEnd

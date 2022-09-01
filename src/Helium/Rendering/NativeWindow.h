@@ -15,6 +15,8 @@ public:
 
     virtual void PreUpdate(F32 dt) = 0;
     virtual void PostUpdate(F32 dt) = 0;
+
+    virtual void OnGUIUpdate(F32 dt) = 0;
 };
 
 heliumEnd

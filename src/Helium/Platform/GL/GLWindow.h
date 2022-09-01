@@ -20,6 +20,8 @@ public:
     void PreUpdate(F32 dt) override;
     void PostUpdate(F32 dt) override;
 
+    void OnGUIUpdate(F32 dt) override;
+
 private:
     static void GLAPIENTRY MessageCallback(GLenum source,
                                            GLenum type,
