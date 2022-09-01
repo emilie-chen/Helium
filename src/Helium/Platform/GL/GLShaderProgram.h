@@ -8,7 +8,19 @@ heliumBegin
 class GLShaderProgram final : public ShaderProgram
 {
 public:
-    GLShaderProgram(const String& vertexShader, const String& fragmentShader);
+    GLShaderProgram(const String& vertexShaderPath, const String& fragmentShaderPath);
+    ~GLShaderProgram() override;
+
+private:
+    void CompileAndLinkShadersFromSource(const String& vertSource, const String& fragSource);
+    void CompileVertexShaderFromSource(const String& vert);
+    void CompileFragmentShaderFromSource(const String& frag);
+    void CreateAndLinkShaderProgram();
+    void Use() override;
+
+    static String ReadFromFile(const String& path);
+
+    GLuint m_Program = 0, m_VertexShader = 0, m_FragmentShader = 0;
 };
 
 heliumEnd

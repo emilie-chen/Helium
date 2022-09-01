@@ -7,6 +7,8 @@
 
 heliumBegin
 
+class ShaderProgram;
+
 class Application final
 {
 public:
@@ -20,6 +22,7 @@ private:
     Reference<TimerSystem> m_TimerSystem;
     Reference<NativeWindow> m_Window;
     Bool m_ShouldClose;
+    Reference<ShaderProgram> m_TestShader;
 };
 
 heliumEnd

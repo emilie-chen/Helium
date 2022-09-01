@@ -7,7 +7,11 @@ heliumBegin
 class ShaderProgram
 {
 public:
-    static Reference<ShaderProgram> Create(const String& vertexShader, const String& fragmentShader);
+    static Reference<ShaderProgram> Create(const String& vertexShaderPath, const String& fragmentShaderPath);
+
+    virtual ~ShaderProgram() = default;
+
+    virtual void Use() = 0;
 };
 
 heliumEnd

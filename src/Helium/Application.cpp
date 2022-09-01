@@ -1,6 +1,7 @@
 #include "Helium/HeliumPrecompiled.h"
 
 #include "Helium/Application.h"
+#include "Helium/Rendering/ShaderProgram.h"
 
 heliumBegin
 
@@ -42,50 +43,8 @@ Application::Application()
         m_ShouldClose = true;
     });
 
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    std::array<const char*, 1> vertexShaderSources = {
-    VERTEX_SHADER_SRC.c_str()
-    };
-    glShaderSource(vertexShader, 1, vertexShaderSources.begin(), nullptr);
-    glCompileShader(vertexShader);
-    GLint success;
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        spdlog::error("{}", infoLog);
-    }
-
-    std::array<const char*, 1> fragmentShaderSources = {
-    FRAGMENT_SHADER_SRC.c_str()
-    };
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, fragmentShaderSources.begin(), nullptr);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        spdlog::error("{}", infoLog);
-    }
-
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-    glLinkProgram(program);
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        GLchar infoLog[512];
-        glGetProgramInfoLog(program, 512, nullptr, infoLog);
-        spdlog::error("{}", infoLog);
-    }
-
-    glUseProgram(program);
-    glDetachShader(program, vertexShader);
-    glDetachShader(program, fragmentShader);;
+    m_TestShader = ShaderProgram::Create("Assets/Shaders/test.vert", "Assets/Shaders/test.frag");
+    m_TestShader->Use();
 
     GLuint vertexArray = 0;
     glGenVertexArrays(1, &vertexArray);
