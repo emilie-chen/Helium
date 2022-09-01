@@ -1,1 +1,1 @@
-xmake project -k cmake
+xmake project -k cmake -a x64

@@ -10,7 +10,10 @@ template <typename T>
 class UnsafeHandle final
 {
 public:
+    UnsafeHandle();
     explicit UnsafeHandle(T* value);
+
+    virtual ~UnsafeHandle();
 
     T* GetObject();
     const T* GetObject() const;
@@ -28,7 +31,6 @@ template<typename T>
 UnsafeHandle<T>::UnsafeHandle(T* value)
     : m_Pointer(value)
 {
-    Assert(value != nullptr);
 }
 
 template<typename T>
@@ -59,6 +61,18 @@ template<typename T>
 UnsafeHandle<T>::operator Bool() const
 {
     return static_cast<Bool>(m_Pointer);
+}
+
+template<typename T>
+UnsafeHandle<T>::~UnsafeHandle()
+{
+
+}
+
+template<typename T>
+UnsafeHandle<T>::UnsafeHandle()
+    : m_Pointer(nullptr)
+{
 }
 
 heliumEnd

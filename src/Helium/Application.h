@@ -3,7 +3,7 @@
 #include "Helium/HeliumPrecompiled.h"
 #include "Helium/TimerSystem.h"
 #include "Helium/Core/Singleton.h"
-#include "Helium/Core/Reference.h"
+#include "Helium/Rendering/NativeWindow.h"
 
 heliumBegin
 
@@ -14,10 +14,12 @@ public:
     void Execute();
 
 private:
-    Bool Loop();
+    void Loop();
 
 private:
     Reference<TimerSystem> m_TimerSystem;
+    Reference<NativeWindow> m_Window;
+    Bool m_ShouldClose;
 };
 
 heliumEnd

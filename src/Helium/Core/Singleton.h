@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Helium/HeliumPrecompiled.h"
-#include "Helium/Core/Handle.h"
-#include "Helium/Core/Reference.h"
 
 heliumBegin
 

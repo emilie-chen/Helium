@@ -1,6 +1,6 @@
 #include "Helium/HeliumPrecompiled.h"
 
-#include "Reference.h"
+#include "VertexBuffer.h"
 
 heliumBegin
 

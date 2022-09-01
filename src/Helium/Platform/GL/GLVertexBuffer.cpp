@@ -1,6 +1,6 @@
 #include "Helium/HeliumPrecompiled.h"
 
-#include "Handle.h"
+#include "GLVertexBuffer.h"
 
 heliumBegin
 

@@ -12,6 +12,9 @@
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace Helium
 {
     struct IsInHeliumNamespace : std::true_type {};
@@ -19,10 +22,9 @@ namespace Helium
 
 struct IsInHeliumNamespace : std::false_type {};
 
-#define heliumBegin static_assert(!IsInHeliumNamespace::value); namespace Helium {
+#define heliumBegin static_assert(!IsInHeliumNamespace::value); namespace Helium { inline namespace V0 {
 
-#define heliumEnd static_assert(IsInHeliumNamespace::value); \
-}
+#define heliumEnd } static_assert(IsInHeliumNamespace::value); }
 
 heliumBegin
 
@@ -40,10 +42,52 @@ typedef double F64;
 typedef std::string String;
 typedef bool Bool;
 
+template <typename T>
+using Reference = std::shared_ptr<T>;
+
+template <typename T>
+using Handle = std::weak_ptr<T>;
+
+template <typename T, typename ... Args>
+inline Reference<T> MakeReference(Args&& ... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+enum class GraphicsAPI : U8
+{
+    Invalid = 0,
+    OpenGL = 1,
+    Vulkan = 2,
+    Direct3D = 3,
+    Metal = 4,
+};
+
+enum class Platform : U8
+{
+    Invalid = 0,
+    Windows = 1,
+    MacOS = 2,
+    Linux = 3,
+};
+
+constexpr GraphicsAPI GRAPHICS_API = GraphicsAPI::OpenGL;
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+constexpr Platform PLATFORM = Platform::Windows;
+#elif defined(__APPLE__) || defined(__MACH__)
+constexpr Platform PLATFORM = Platform::MacOS;
+#elif defined(__linux__) || defined(__linux)
+constexpr Platform PLATFORM = Platform::Linux;
+#else
+constexpr Platform PLATFORM = Platform::Invalid;
+#error "Unsupported platform"
+#endif // Platform
+
 namespace Internal
 {
 template <typename... Args>
-void LogError(Args&&... args)
+inline void LogError(Args&&... args)
 {
     spdlog::error(std::forward<Args>(args)...);
 }

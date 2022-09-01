@@ -1,7 +1,9 @@
 set_languages("c17", "cxx20")
+set_allowedarchs("x64")
+set_defaultarchs("x64")
 
 add_rules("mode.debug", "mode.release")
-add_requires("spdlog", "fmt", "glm")
+add_requires("vcpkg::spdlog", "vcpkg::fmt", "vcpkg::glm", "opengl", "vcpkg::glad", "vcpkg::glfw3")
 
 target("Helium")
     set_kind("binary")
@@ -13,4 +15,7 @@ target("Helium")
         set_symbols("debug")
         set_optimize("none")
     end
-    add_packages("spdlog", "fmt", "glm")
+    add_packages("vcpkg::spdlog", "vcpkg::fmt", "vcpkg::glm", "opengl", "vcpkg::glad", "vcpkg::glfw3")
+    if is_plat("macosx") then
+        add_frameworks("Cocoa", "IOKit")
+    end
