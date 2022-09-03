@@ -9,22 +9,24 @@ heliumBegin
 
 struct Serializer final
 {
-    static String Serialize(const Reference<ManagedObject>& object)
+    static String Serialize(const Reference<ManagedObject>& object);
+
+    template<typename T> requires std::is_base_of_v<ManagedObject, T>
+    static Reference<T> Deserialize(const String& data)
     {
-        if (object)
+        return Deserialize<T>(YAML::Load(data));
+    }
+
+    template<typename T> requires std::is_base_of_v<ManagedObject, T>
+    static Reference<T> Deserialize(const YAML::Node& in)
+    {
+        if (in.IsNull())
         {
-            if (!object->IsSerializable())
-            {
-                spdlog::warn("Object is not serializable: {}", object->ToString());
-                return "";
-            }
-
-            YAML::Node out;
-            object->Serialize(out);
-            return YAML::Dump(out);
+            return nullptr;
         }
-
-        return "null";
+        Reference<T> ref = MakeManaged<T>();
+        ref->Deserialize(in);
+        return ref;
     }
 };
 

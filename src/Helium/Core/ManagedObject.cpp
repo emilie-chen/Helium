@@ -41,7 +41,7 @@ void ManagedObject::Serialize(YAML::Node& out) const
 
 void ManagedObject::Deserialize(const YAML::Node& in)
 {
-    if (in["Type"].as<CRC32>() != GetClassTypeID())
+    if (in["TypeID"].as<CRC32>() != GetClassTypeID())
     {
         Assert(false, "Type mismatch");
     }

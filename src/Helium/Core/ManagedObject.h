@@ -73,4 +73,25 @@ Reference<T> MakeManaged(Args&& ... args)
         out[#field] = field;   \
     }
 
+#define BEGIN_IMPLEMENT_DESERIALIZE() \
+    {                                 \
+        super::Deserialize(in["Super"]); \
+        if (in["TypeID"].as<CRC32>() != GetClassTypeID()) \
+        { \
+            Assert(false, "Type mismatch"); \
+        } \
+    }
+
+#define END_IMPLEMENT_DESERIALIZE()
+
+#define DESERIALIZE_PLAIN(field) \
+    {                          \
+        field = in[#field].as<decltype(field)>(); \
+    }
+
+#define DESERIALIZE_REFERENCE(ref) \
+    {                              \
+        ref = Serializer::Deserialize<typename decltype(ref)::element_type>(in[#ref]); \
+    }
+
 heliumEnd
