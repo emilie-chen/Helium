@@ -26,6 +26,7 @@ struct IsInHeliumNamespace : std::false_type {};
 heliumBegin
 
 #define interface struct
+#define nameof(x) #x
 
 using namespace glm;
 typedef uint8_t U8;
