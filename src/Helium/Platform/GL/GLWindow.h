@@ -2,6 +2,7 @@
 
 #include "Helium/HeliumPrecompiled.h"
 
+#include "Helium/Platform/GL/GL.h"
 #include "Helium/Rendering/NativeWindow.h"
 #include "Helium/Core/UnsafeHandle.h"
 
@@ -11,15 +12,13 @@ class GLWindow final : public NativeWindow
 {
 public:
     GLWindow(const String& title, const ivec2& vec1, WindowCloseCallback closeCallback = nullptr);
-    GLWindow(const GLWindow&) = delete;
-    GLWindow(GLWindow&&) = delete;
-    GLWindow& operator=(const GLWindow&) = delete;
-    GLWindow& operator=(GLWindow&&) = delete;
+    DELETE_COPY_AND_MOVE(GLWindow)
     ~GLWindow() override;
 
+    //
+    // IUpdatable
     void PreUpdate(F32 dt) override;
     void PostUpdate(F32 dt) override;
-
     void OnGUIUpdate(F32 dt) override;
 
 private:

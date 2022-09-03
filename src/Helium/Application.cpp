@@ -86,6 +86,8 @@ void Application::Loop()
     m_Window->PreUpdate(0.0f);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    m_Window->OnRendererUpdate(0.0f);
+    m_Window->OnUpdate(0.0f);
     m_Window->OnGUIUpdate(0.0f);
     m_Window->PostUpdate(0.0f);
 }

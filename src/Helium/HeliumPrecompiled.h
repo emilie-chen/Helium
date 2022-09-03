@@ -12,12 +12,6 @@
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-
 namespace Helium
 {
     struct IsInHeliumNamespace : std::true_type {};
@@ -30,6 +24,8 @@ struct IsInHeliumNamespace : std::false_type {};
 #define heliumEnd } static_assert(IsInHeliumNamespace::value); }
 
 heliumBegin
+
+#define interface struct
 
 using namespace glm;
 typedef uint8_t U8;
@@ -112,5 +108,13 @@ void LogError();
 #else
 #define Assert(condition, ...)
 #endif // heliumDebug
+
+#define DELETE_COPY_AND_MOVE(Type) \
+    Type(const Type&) = delete; \
+    Type(Type&&) = delete; \
+    Type& operator=(const Type&) = delete; \
+    Type& operator=(Type&&) = delete;
+
+#define NODISCARD [[nodiscard]]
 
 heliumEnd

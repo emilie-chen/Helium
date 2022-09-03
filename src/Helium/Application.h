@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Helium/HeliumPrecompiled.h"
+
+#include "Helium/Platform/GL/GL.h"
 #include "Helium/TimerSystem.h"
 #include "Helium/Core/Singleton.h"
 #include "Helium/Rendering/NativeWindow.h"
@@ -21,7 +23,7 @@ private:
 private:
     Reference<TimerSystem> m_TimerSystem;
     Reference<NativeWindow> m_Window;
-    Bool m_ShouldClose;
+    Bool m_ShouldClose = false;
     Reference<ShaderProgram> m_TestShader;
 };
 

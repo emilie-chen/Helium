@@ -102,10 +102,17 @@ void GLWindow::PreUpdate(F32 dt)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 }
 
 void GLWindow::PostUpdate(F32 dt)
 {
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
     glfwSwapBuffers(m_Window.GetObject());
     glfwPollEvents();
 }
@@ -120,16 +127,9 @@ GLWindow::MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity
 
 void GLWindow::OnGUIUpdate(F32 dt)
 {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
     static Bool show_demo_window = true;
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 heliumEnd

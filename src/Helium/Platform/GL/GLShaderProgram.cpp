@@ -93,7 +93,7 @@ GLShaderProgram::~GLShaderProgram()
     glDeleteProgram(m_Program);
 }
 
-void GLShaderProgram::Use()
+void GLShaderProgram::Use() const
 {
     glUseProgram(m_Program);
 }

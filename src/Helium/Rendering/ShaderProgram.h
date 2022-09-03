@@ -11,7 +11,7 @@ public:
 
     virtual ~ShaderProgram() = default;
 
-    virtual void Use() = 0;
+    virtual void Use() const = 0;
 };
 
 heliumEnd
