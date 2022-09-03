@@ -21,7 +21,7 @@ public:
     NODISCARD virtual String GetTypeName() const;
     NODISCARD virtual CRC32 GetTypeID() const;
     NODISCARD static CRC32 GetClassTypeID();
-    virtual void Serialize(YAML::Emitter& out) const;
+    virtual void Serialize(YAML::Node& out) const;
     virtual void Deserialize(const YAML::Node& in);
 };
 
@@ -40,5 +40,37 @@ public:
     NODISCARD static CRC32 GetClassTypeID() { return s_TypeID; } \
     private:
 
+template <typename T, typename ... Args> requires std::is_base_of_v<ManagedObject, T>
+Reference<T> MakeManaged(Args&& ... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args) ...);
+}
+
+#define DECLARE_SERIALIZE() \
+    static_assert(s_IsSerializable);                        \
+    virtual void Serialize(YAML::Node& out) const override; \
+    virtual void Deserialize(const YAML::Node& in) override;
+
+#define BEGIN_IMPLEMENT_SERIALIZE() \
+    {                               \
+        YAML::Node superNode;       \
+        super::Serialize(superNode);\
+        out["Super"] = superNode;   \
+        out["TypeID"] = GetClassTypeID(); \
+    }
+
+#define END_IMPLEMENT_SERIALIZE()
+
+#define SERIALIZE_REFERENCE(ref) \
+    { \
+        YAML::Node refOut;       \
+        ref->Serialize(refOut);  \
+        out[#ref] = refOut;      \
+    }
+
+#define SERIALIZE_PLAIN(field) \
+    {                          \
+        out[#field] = field;   \
+    }
 
 heliumEnd

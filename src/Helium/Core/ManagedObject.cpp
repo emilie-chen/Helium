@@ -34,16 +34,17 @@ CRC32 ManagedObject::GetClassTypeID()
     return s_TypeID;
 }
 
-void ManagedObject::Serialize(YAML::Emitter& out) const
+void ManagedObject::Serialize(YAML::Node& out) const
 {
-    out << YAML::BeginMap;
-    out << YAML::Key << "Type" << YAML::Value << GetTypeName();
-    out << YAML::EndMap;
+    out["TypeID"] = GetClassTypeID();
 }
 
 void ManagedObject::Deserialize(const YAML::Node& in)
 {
-    // Nothing to do
+    if (in["Type"].as<CRC32>() != GetClassTypeID())
+    {
+        Assert(false, "Type mismatch");
+    }
 }
 
 heliumEnd
