@@ -3,10 +3,14 @@
 #include "Helium/Rendering/NativeWindow.h"
 #include "Helium/AssetManagement/Asset.h"
 #include "Helium/Core/ManagedObject.h"
+#include "Helium/Serialization/Serializer.h"
+#include "Helium/HeliumTypeRegistry.h"
+
+using namespace Helium;
 
 int main()
 {
-    using namespace Helium;
+    HeliumRegisterClasses();
     Application app{};
     app.Execute();
     return 0;

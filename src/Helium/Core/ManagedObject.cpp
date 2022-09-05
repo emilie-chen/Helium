@@ -47,4 +47,19 @@ void ManagedObject::Deserialize(const YAML::Node& in)
     }
 }
 
+UnsafeHandle<ManagedClassDescriptor> ManagedObject::GetDescriptor() const
+{
+    return UnsafeHandle<ManagedClassDescriptor>(const_cast<ManagedClassDescriptor*>(&s_TypeDescriptor));
+}
+
+UnsafeHandle<ManagedClassDescriptor> ManagedObject::GetClassDescriptor()
+{
+    return UnsafeHandle<ManagedClassDescriptor>(const_cast<ManagedClassDescriptor*>(&s_TypeDescriptor));
+}
+
+Reference <ManagedObject> ManagedObject::StaticConstruct()
+{
+    return MakeManaged<ManagedObject>();
+}
+
 heliumEnd

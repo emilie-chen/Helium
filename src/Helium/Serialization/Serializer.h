@@ -24,9 +24,26 @@ struct Serializer final
         {
             return nullptr;
         }
-        Reference<T> ref = MakeManaged<T>();
-        ref->Deserialize(in);
-        return ref;
+        // find its real type
+        const auto typeID = in["TypeID"].as<CRC32>();
+        const auto providedTypeID = T::GetClassTypeID();
+        if (typeID == providedTypeID)
+        {
+            Reference<T> ref = MakeManaged<T>();
+            ref->Deserialize(in);
+            return ref;
+        }
+
+        // find the type in the registry and deserialize it
+        const auto descriptor = TypeRegistry::GetInstance()->GetClassDescriptor(typeID);
+        if (descriptor)
+        {
+            Reference<T> ref = std::static_pointer_cast<T>(descriptor->CreateInstance());
+            ref->Deserialize(in);
+            return ref;
+        }
+
+        return nullptr;
     }
 };
 

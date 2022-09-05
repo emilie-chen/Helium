@@ -8,6 +8,11 @@
 #include <vector>
 #include <csignal>
 #include <memory>
+#include <map>
+#include <unordered_map>
+#include <set>
+#include <unordered_set>
+#include <functional>
 
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>

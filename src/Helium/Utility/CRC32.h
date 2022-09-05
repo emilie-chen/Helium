@@ -77,6 +77,6 @@ constexpr CRC32 CRC32Compute(const char* data, U32 len, U32 crc = 0)
 }
 
 #define CRC32_COMPUTE(A)                                                           \
-    std::integral_constant<uint32_t, CRC32Compute(A, sizeof(A) - 1)>::value
+    std::integral_constant<U32, CRC32Compute(A, sizeof(A) - 1)>::value
 
 heliumEnd
