@@ -15,6 +15,23 @@ heliumBegin
 template <typename T, typename ... Args> requires std::is_base_of_v<ManagedObject, T>
 Reference<T> MakeManaged(Args&& ... args);
 
+namespace Internal
+{
+template<typename T, typename ... Args>
+requires std::is_base_of_v<ManagedObject, T> && (!std::is_abstract_v<T>)
+Reference <T> MakeManagedConditional(Args&& ... args)
+{
+    return MakeManaged<T>(std::forward<Args>(args)...);
+}
+
+template<typename T, typename ... Args>
+requires std::is_base_of_v<ManagedObject, T> && std::is_abstract_v<T>
+Reference <T> MakeManagedConditional(Args&& ... args)
+{
+    return nullptr;
+}
+}
+
 class ManagedObject
 {
 private:
@@ -43,9 +60,9 @@ public:
     virtual void Deserialize(const YAML::Node& in);
 };
 
-#define MANAGED_OBJECT(className, superClass, isSerializable) \
+#define MANAGED_CLASS(className, superClass, isSerializable) \
     private:                                                  \
-    static Reference<className> StaticConstruct() { return MakeManaged<className>(); } \
+    static Reference<className> StaticConstruct() { return Internal::MakeManagedConditional<className>(); } \
     private:                                      \
     constexpr static Bool s_IsSerializable = (isSerializable); \
     constexpr static CRC32 s_TypeID = CRC32_COMPUTE(nameof(className)); \
@@ -98,6 +115,11 @@ Reference<T> MakeManaged(Args&& ... args)
         out[#field] = field;   \
     }
 
+#define SERIALIZE_ENUM(field) \
+    {                          \
+        out[#field] = (U64)field;   \
+    }
+
 #define BEGIN_IMPLEMENT_DESERIALIZE() \
     {                                 \
         super::Deserialize(in["Super"]); \
@@ -117,6 +139,11 @@ Reference<T> MakeManaged(Args&& ... args)
 #define DESERIALIZE_REFERENCE(ref) \
     {                              \
         ref = Serializer::Deserialize<typename decltype(ref)::element_type>(in[#ref]); \
+    }
+
+#define DESERIALIZE_ENUM(field) \
+    {                           \
+        field = (decltype(field))in[#field].as<U64>(); \
     }
 
 heliumEnd

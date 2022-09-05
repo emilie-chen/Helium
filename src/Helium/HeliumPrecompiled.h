@@ -1,18 +1,20 @@
 #pragma once
 
 #include <chrono>
+#include <csignal>
 #include <cstddef>
+#include <filesystem>
+#include <functional>
 #include <iostream>
+#include <locale>
+#include <map>
+#include <memory>
+#include <set>
 #include <string>
 #include <type_traits>
-#include <vector>
-#include <csignal>
-#include <memory>
-#include <map>
 #include <unordered_map>
-#include <set>
 #include <unordered_set>
-#include <functional>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
@@ -45,7 +47,13 @@ typedef int64_t S64;
 typedef float F32;
 typedef double F64;
 typedef std::string String;
+typedef std::u8string UString;
+typedef std::wstring WString;
+typedef std::filesystem::path Path;
 typedef bool Bool;
+#define TEXT(x) x
+#define UTEXT(x) u8 ## x
+#define WTEXT(x) L ## x
 
 template <typename T>
 using Reference = std::shared_ptr<T>;
