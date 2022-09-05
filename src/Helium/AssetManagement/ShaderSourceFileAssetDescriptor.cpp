@@ -1,6 +1,6 @@
 #include "Helium/HeliumPrecompiled.h"
 
-#include "Helium/Core/Singleton.h"
+#include "ShaderSourceFileAssetDescriptor.h"
 
 heliumBegin
 

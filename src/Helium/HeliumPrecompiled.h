@@ -16,6 +16,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include <boost/bimap.hpp>
 #include <glm/glm.hpp>
 #include <spdlog/spdlog.h>
 
@@ -54,6 +55,9 @@ typedef bool Bool;
 #define TEXT(x) x
 #define UTEXT(x) u8 ## x
 #define WTEXT(x) L ## x
+
+template <typename T1, typename T2>
+using Bimap = boost::bimap<T1, T2>;
 
 template <typename T>
 using Reference = std::shared_ptr<T>;

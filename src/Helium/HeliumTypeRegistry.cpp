@@ -3,7 +3,7 @@
 #include "Helium/AssetManagement/AssetDescriptor.h"
 #include "Helium/AssetManagement/PlainTextFileAsset.h"
 #include "Helium/AssetManagement/PlainTextFileAssetDescriptor.h"
-#include "Helium/Core/ManagedObject.h"
+#include "Helium/ObjectModel/ManagedObject.h"
 #include "Helium/HeliumTypeRegistry.h"
 #include "Helium/Reflection/TypeRegistry.h"
 

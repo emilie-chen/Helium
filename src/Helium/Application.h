@@ -4,7 +4,7 @@
 
 #include "Helium/Platform/GL/GL.h"
 #include "Helium/TimerSystem.h"
-#include "Helium/Core/Singleton.h"
+#include "Helium/ObjectModel/Singleton.h"
 #include "Helium/Rendering/NativeWindow.h"
 
 heliumBegin

@@ -28,4 +28,21 @@ Reference <ManagedObject> ManagedClassDescriptor::CreateInstance() const
     return m_Factory();
 }
 
+ManagedEnumDescriptor::ManagedEnumDescriptor(const String& enumName)
+    : m_EnumName(enumName)
+    , m_EnumID(CRC32Compute(enumName.c_str(), enumName.length()))
+{
+
+}
+
+String ManagedEnumDescriptor::GetEnumName() const
+{
+    return m_EnumName;
+}
+
+CRC32 ManagedEnumDescriptor::GetEnumID() const
+{
+    return m_EnumID;
+}
+
 heliumEnd

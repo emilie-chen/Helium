@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Helium/HeliumPrecompiled.h"
-#include "Helium/Core/Singleton.h"
+#include "Helium/ObjectModel/Singleton.h"
 
 heliumBegin
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Helium/HeliumPrecompiled.h"
-#include "Helium/Core/IUpdatable.h"
+#include "Helium/ObjectModel/IUpdatable.h"
 
 heliumBegin
 

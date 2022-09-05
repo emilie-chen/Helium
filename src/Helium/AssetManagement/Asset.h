@@ -2,7 +2,7 @@
 
 #include "Helium/HeliumPrecompiled.h"
 #include "Helium/AssetManagement/AssetType.h"
-#include "Helium/Core/ManagedObject.h"
+#include "Helium/ObjectModel/ManagedObject.h"
 #include <filesystem>
 
 heliumBegin

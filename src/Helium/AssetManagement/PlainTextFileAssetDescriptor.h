@@ -5,7 +5,7 @@
 
 heliumBegin
 
-class PlainTextFileAssetDescriptor final : public AssetDescriptor
+class PlainTextFileAssetDescriptor : public AssetDescriptor
 {
     MANAGED_CLASS(PlainTextFileAssetDescriptor, AssetDescriptor, true);
 public:

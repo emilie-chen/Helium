@@ -4,7 +4,7 @@
 
 #include "Helium/Platform/GL/GL.h"
 #include "Helium/Rendering/NativeWindow.h"
-#include "Helium/Core/UnsafeHandle.h"
+#include "Helium/ObjectModel/UnsafeHandle.h"
 
 heliumBegin
 

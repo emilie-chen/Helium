@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Helium/HeliumPrecompiled.h"
-#include "Helium/Core/ManagedObject.h"
+#include "Helium/ObjectModel/ManagedObject.h"
 #include "Helium/AssetManagement/AssetType.h"
 #include <filesystem>
 

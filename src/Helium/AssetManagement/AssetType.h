@@ -3,6 +3,7 @@
 #include "Helium/HeliumPrecompiled.h"
 
 #include "Helium/Utility/CRC32.h"
+#include "Helium/ObjectModel/ManagedEnum.h"
 
 heliumBegin
 
@@ -11,12 +12,14 @@ heliumBegin
 enum class AssetType : CRC32
 {
     Invalid = 0,
-    DECLARE_ASSET_TYPE_CRC32(GLSLVertexShaderSourceFile),
-    DECLARE_ASSET_TYPE_CRC32(GLSLFragmentShaderSourceFile),
+    DECLARE_ASSET_TYPE_CRC32(ShaderSourceFile),
     DECLARE_ASSET_TYPE_CRC32(PlainTextFile),
 };
 
-AssetType AssetTypeFromString(const String& assetTypeString);
-String AssetTypeToString(AssetType assetType);
+BEGIN_ENUM_REGISTRATION(AssetType)
+    REGISTER_ENUM_VALUE(Invalid)
+    REGISTER_ENUM_VALUE(ShaderSourceFile)
+    REGISTER_ENUM_VALUE(PlainTextFile)
+END_ENUM_REGISTRATION()
 
 heliumEnd

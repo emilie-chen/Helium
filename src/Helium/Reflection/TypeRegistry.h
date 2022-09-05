@@ -2,7 +2,7 @@
 
 #include "Helium/HeliumPrecompiled.h"
 #include "Helium/Utility/CRC32.h"
-#include "Helium/Core/UnsafeHandle.h"
+#include "Helium/ObjectModel/UnsafeHandle.h"
 #include "TypeDescriptor.h"
 
 heliumBegin

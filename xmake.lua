@@ -3,7 +3,7 @@ set_allowedarchs("x64")
 set_defaultarchs("x64")
 
 add_rules("mode.debug", "mode.release")
-add_requires("vcpkg::spdlog", "vcpkg::fmt", "vcpkg::glm", "opengl", "vcpkg::glad", "vcpkg::glfw3", "vcpkg::imgui[core,glfw-binding,opengl3-binding]", "vcpkg::yaml-cpp")
+add_requires("vcpkg::spdlog", "vcpkg::fmt", "vcpkg::glm", "opengl", "vcpkg::glad", "vcpkg::glfw3", "vcpkg::imgui[core,glfw-binding,opengl3-binding]", "vcpkg::yaml-cpp", "vcpkg::eastl", "vcpkg::boost-bimap")
 
 target("Helium")
     set_kind("binary")
@@ -16,7 +16,7 @@ target("Helium")
         set_symbols("debug")
         set_optimize("none")
     end
-    add_packages("vcpkg::spdlog", "vcpkg::fmt", "vcpkg::glm", "opengl", "vcpkg::glad", "vcpkg::glfw3", "vcpkg::imgui[core,glfw-binding,opengl3-binding]", "vcpkg::yaml-cpp")
+    add_packages("vcpkg::spdlog", "vcpkg::fmt", "vcpkg::glm", "opengl", "vcpkg::glad", "vcpkg::glfw3", "vcpkg::imgui[core,glfw-binding,opengl3-binding]", "vcpkg::yaml-cpp", "vcpkg::eastl", "vcpkg::boost-bimap")
     if is_plat("macosx") then
         add_frameworks("Cocoa", "IOKit")
     end

@@ -2,7 +2,7 @@
 
 #include "Helium/HeliumPrecompiled.h"
 
-#include "Helium/Core/UnsafeHandle.h"
+#include "Helium/ObjectModel/UnsafeHandle.h"
 #include "Helium/Reflection/TypeDescriptor.h"
 #include "Helium/Utility/CRC32.h"
 #include "Helium/Utility/Hex.h"
@@ -47,6 +47,7 @@ private:
     );
 
 public:
+    using self = ManagedObject;
     virtual ~ManagedObject() = default;
     NODISCARD virtual Bool IsSerializable() const;
     NODISCARD static Bool ClassIsSerializable();
@@ -72,7 +73,8 @@ public:
         StaticConstruct \
     );\
     public:                                                   \
-    using super = superClass;                                                          \
+    using super = superClass;                                \
+    using self = className; \
     NODISCARD virtual Bool IsSerializable() const override { return s_IsSerializable; } \
     NODISCARD static Bool ClassIsSerializable() { return s_IsSerializable; } \
     NODISCARD virtual String GetTypeName() const override { return s_TypeName; } \

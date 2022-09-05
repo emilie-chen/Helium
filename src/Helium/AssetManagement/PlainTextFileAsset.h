@@ -6,7 +6,7 @@
 
 heliumBegin
 
-class PlainTextFileAsset final : public Asset
+class PlainTextFileAsset : public Asset
 {
     MANAGED_CLASS(PlainTextFileAsset, Asset, true);
 public:
