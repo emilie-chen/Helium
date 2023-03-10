@@ -17,7 +17,7 @@ PlainTextFileAsset::PlainTextFileAsset(Path path) : Asset(std::move(path))
 {
     // load descriptor
     Path descriptorPath = m_Path;
-    descriptorPath.replace_extension("desc.yml");
+    descriptorPath.replace_extension(m_Path.extension().string() + ".desc.yml");
 
     Bool descriptorValid = false;
     if (std::filesystem::exists(descriptorPath))

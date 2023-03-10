@@ -11,6 +11,7 @@
 
 #include "Helium/ObjectModel/ManagedEnum.h"
 #include "Helium/AssetManagement/AssetType.h"
+#include "Helium/AssetManagement/ShaderSourceFileAsset.h"
 
 using namespace Helium;
 
@@ -18,12 +19,6 @@ int main()
 {
     std::locale::global(std::locale(""));
     HeliumRegisterClasses();
-    Reference<PlainTextFileAsset> asset = MakeManaged<PlainTextFileAsset>("Assets/testfile.txt");
-    asset->Load();
-    WString text = asset->GetText();
-    spdlog::info("{}", String(text.begin(), text.end()));
-    asset->SetText(L"Hello, Hallo, Bonjour, 你好");
-    asset->Save();
     Application app{};
     app.Execute();
     return 0;

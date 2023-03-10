@@ -50,7 +50,7 @@ void GLShaderProgram::CompileFragmentShaderFromSource(const String& frag)
     {
         GLchar infoLog[512];
         glGetShaderInfoLog(m_FragmentShader, 512, nullptr, infoLog);
-        spdlog::error("{}", infoLog);
+        Assert(false);
         throw std::runtime_error("Failed to compile fragment shader");
     }
 }
@@ -68,6 +68,7 @@ void GLShaderProgram::CreateAndLinkShaderProgram()
         GLchar infoLog[512];
         glGetProgramInfoLog(m_Program, 512, nullptr, infoLog);
         spdlog::error("{}", infoLog);
+        Assert(false);
         throw std::runtime_error("Failed to link shader program");
     }
 
@@ -80,7 +81,7 @@ String GLShaderProgram::ReadFromFile(const String& path)
     std::ifstream file(path.c_str());
     if (!file.is_open())
     {
-        return "";
+        throw_with_stacktrace<std::runtime_error>("Failed to open file: " + path);
     }
     std::stringstream buffer;
     buffer << file.rdbuf();

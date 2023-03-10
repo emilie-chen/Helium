@@ -37,13 +37,15 @@ public:
     NODISCARD CRC32 GetEnumID() const;
 
     template <typename TEnum>
-    TEnum ParseEnum(const String& enumValueString);
+    NODISCARD TEnum ParseEnum(const String& enumValueString) const;
 
     template <typename TValue> requires std::is_enum_v<TValue>
-    String GetEnumValueString(const TValue& enumValue);
+    NODISCARD String GetEnumValueString(const TValue& enumValue) const;
 
     template <typename TValue> requires std::is_enum_v<TValue>
     void AddEnumValue(const TValue& enumValue, const String& enumValueString);
+
+    NODISCARD Size GetEnumValueCount() const;
 
 private:
     String m_EnumName;
@@ -52,13 +54,13 @@ private:
 };
 
 template <typename TEnum>
-TEnum ManagedEnumDescriptor::ParseEnum(const String& enumValueString)
+TEnum ManagedEnumDescriptor::ParseEnum(const String& enumValueString) const
 {
     return static_cast<TEnum>(m_EnumValues.right.at(enumValueString));
 }
 
 template <typename TValue> requires std::is_enum_v<TValue>
-String ManagedEnumDescriptor::GetEnumValueString(const TValue& enumValue)
+String ManagedEnumDescriptor::GetEnumValueString(const TValue& enumValue) const
 {
     return m_EnumValues.left.at(static_cast<U64>(enumValue));
 }

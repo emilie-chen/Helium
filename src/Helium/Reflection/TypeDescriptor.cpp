@@ -45,4 +45,9 @@ CRC32 ManagedEnumDescriptor::GetEnumID() const
     return m_EnumID;
 }
 
+Size ManagedEnumDescriptor::GetEnumValueCount() const
+{
+    return m_EnumValues.size();
+}
+
 heliumEnd

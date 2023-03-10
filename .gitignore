@@ -34,7 +34,6 @@
 .DS_STORE
 /.xmake
 /.vscode
-CMakeLists.txt
 /xcode
 /vs
 /clion
@@ -42,3 +41,6 @@ CMakeLists.txt
 /cmake-build-debug
 /toolchain
 /.idea
+
+/build*
+imgui.ini

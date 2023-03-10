@@ -15,9 +15,12 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <stack>
 
 #include <boost/bimap.hpp>
+#include <boost/stacktrace.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <spdlog/spdlog.h>
 
 namespace Helium
@@ -45,6 +48,7 @@ typedef int8_t S8;
 typedef int16_t S16;
 typedef int32_t S32;
 typedef int64_t S64;
+typedef size_t Size;
 typedef float F32;
 typedef double F64;
 typedef std::string String;
@@ -103,15 +107,27 @@ constexpr Platform PLATFORM = Platform::Invalid;
 
 namespace Internal
 {
+std::string format_stacktrace(const boost::stacktrace::stacktrace& trace);
+
 template <typename... Args>
 inline void LogError(Args&&... args)
 {
+    auto trace = boost::stacktrace::stacktrace();
     spdlog::error(std::forward<Args>(args)...);
+    spdlog::error("At");
+    spdlog::error("{}", format_stacktrace(trace));
 }
 
 template <>
 void LogError();
 
+}
+
+template <typename T, typename... Args>
+__attribute__((noreturn)) void throw_with_stacktrace(std::string_view message, Args&&... format)
+{
+    auto trace = boost::stacktrace::stacktrace();
+    throw T(fmt::format(message, std::forward<Args>(format)...) + "\nAt\n" + Internal::format_stacktrace(trace));
 }
 
 #define Interrupt() std::raise(SIGINT)
@@ -123,6 +139,7 @@ void LogError();
         Internal::LogError(__VA_ARGS__); \
         Interrupt();               \
     }
+
 #else
 #define Assert(condition, ...)
 #endif // heliumDebug
