@@ -7,8 +7,12 @@ public class TestBindingClass
     public static void TestManagedMethod()
     {
         Actor obj = new Actor();
-        Debug.Log(obj ? "obj is still valid" : "obj is no longer valid");
+        Debug.Log(obj ? "Valid" : "Invalid");
         ManagedObject.Destroy(obj);
-        Debug.Log(obj ? "obj is still valid" : "obj is no longer valid");
+        Debug.Log(obj ? "Valid" : "Invalid");
+        
+        Debug.Log("This is a log message.");
+        Debug.LogWarning("This is a warning message.");
+        Debug.LogError("This is an error message.");
     }
 }

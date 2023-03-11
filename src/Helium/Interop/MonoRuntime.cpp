@@ -1,7 +1,7 @@
 #include "Helium/HeliumPrecompiled.h"
 
 #include "MonoRuntime.h"
-#include "Helium/Interop/Bindings/Helium/Debug.h"
+#include "Helium/CoreGame/Debug.h"
 #include "Helium/ObjectModel/ManagedObject.h"
 #include "Helium/CoreGame/Actor.h"
 

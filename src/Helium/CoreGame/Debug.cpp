@@ -6,17 +6,23 @@ heliumBegin
 
 void Debug::Log(MonoString* message)
 {
-    spdlog::info("{}", mono_string_to_utf8(message));
+    char* str = mono_string_to_utf8(message);
+    spdlog::info("{}", str);
+    mono_free(str);
 }
 
 void Debug::LogWarning(MonoString* message)
 {
-    spdlog::warn("{}", mono_string_to_utf8(message));
+    char* str = mono_string_to_utf8(message);
+    spdlog::warn("{}", str);
+    mono_free(str);
 }
 
 void Debug::LogError(MonoString* message)
 {
-    spdlog::error("{}", mono_string_to_utf8(message));
+    char* str = mono_string_to_utf8(message);
+    spdlog::error("{}", str);
+    mono_free(str);
 }
 
 void Debug::Assert2(MonoBoolean condition, MonoString* message)

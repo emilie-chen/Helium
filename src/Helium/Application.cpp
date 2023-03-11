@@ -143,7 +143,7 @@ void Application::OnGUIUpdate(float deltaTime)
         {
             ImGui::Text("Helium Editor");
             ImGui::Text("Version 0.0.1");
-            ImGui::Text("Autrice: Emilie Chen");
+            ImGui::Text("Auteure : Emilie Chen");
         }
         ImGui::End();
     }

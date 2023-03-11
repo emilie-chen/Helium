@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 
 namespace Helium;
 
+[NativelyMapped("src/Helium/CoreGame/Debug.h")]
 public static class Debug
 {
     [MethodImpl(MethodImplOptions.InternalCall)]
