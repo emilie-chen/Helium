@@ -6,9 +6,9 @@ public class TestBindingClass
 {
     public static void TestManagedMethod()
     {
-        Debug.Log("Log");
-        Debug.LogWarning("LogWarning");
-        Debug.LogError("LogError");
-        Debug.Assert(true);
+        ManagedObject obj = ManagedObject.Instantiate<ManagedObject>();
+        Debug.Log(obj ? "obj is still valid" : "obj is no longer valid");
+        ManagedObject.Destroy(obj);
+        Debug.Log(obj ? "obj is still valid" : "obj is no longer valid");
     }
 }

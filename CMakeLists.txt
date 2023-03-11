@@ -41,7 +41,6 @@ target_include_directories(Helium PRIVATE
 target_link_libraries(Helium PRIVATE
         $ENV{MONO_DIR}/lib/libmono-2.0.a
         $ENV{MONO_DIR}/lib/libmonosgen-2.0.a
-        $ENV{MONO_DIR}/lib/libmonoboehm-2.0.a
         $ENV{MONO_DIR}/lib/libMonoPosixHelper.a
         libiconv.tbd)
 

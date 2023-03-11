@@ -37,6 +37,9 @@ class ManagedObject
 private:
     static Reference<ManagedObject> StaticConstruct();
 
+protected:
+    MonoObject* m_ManagedInstance = nullptr;
+
 private:
     constexpr static Bool s_IsSerializable = true;
     constexpr static CRC32 s_TypeID = CRC32_COMPUTE(nameof(ManagedObject));
@@ -59,6 +62,10 @@ public:
     NODISCARD static UnsafeHandle<ManagedClassDescriptor> GetClassDescriptor();
     virtual void Serialize(YAML::Node& out) const;
     virtual void Deserialize(const YAML::Node& in);
+
+    static MonoObject* InternalInstantiate(MonoString* ns, MonoString* typeName);
+    static void InternalDestroy(MonoObject* instance);
+    static void RegisterInternalCalls();
 };
 
 #define MANAGED_CLASS(className, superClass, isSerializable) \

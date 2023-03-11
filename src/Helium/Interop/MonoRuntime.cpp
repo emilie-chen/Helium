@@ -2,6 +2,7 @@
 
 #include "MonoRuntime.h"
 #include "Helium/Interop/Bindings/Helium/Debug.h"
+#include "Helium/ObjectModel/ManagedObject.h"
 
 heliumBegin
 
@@ -18,6 +19,10 @@ void EngineLog(MonoString* message)
 
 MonoRuntime::MonoRuntime()
 {
+    if (s_Instance)
+    {
+        Assert(false, "MonoRuntime already exists!");
+    }
     m_Domain = mono_jit_init("Helium");
     // get all assemblies in folder
     std::string path = "Managed/bin/";
@@ -50,19 +55,24 @@ MonoRuntime::MonoRuntime()
 
     // register internal calls
     Debug::RegisterInternalCalls();
+    ManagedObject::RegisterInternalCalls();
 
-    // test method
-    MonoImage* image = mono_assembly_get_image(m_MainAssembly);
-    MonoClass* klass = mono_class_from_name(image, "Helium", "TestBindingClass");
-    MonoMethod* method = mono_class_get_method_from_name(klass, "TestManagedMethod", 0);
-
-    MonoObject* exception = nullptr;
-    mono_runtime_invoke(method, nullptr, nullptr, &exception);
+    s_Instance = this;
 }
 
 MonoRuntime::~MonoRuntime()
 {
     mono_jit_cleanup(m_Domain);
+}
+
+MonoRuntime* MonoRuntime::GetInstance()
+{
+    return s_Instance;
+}
+
+MonoAssembly* MonoRuntime::GetMainAssembly() const
+{
+    return m_MainAssembly;
 }
 
 heliumEnd
