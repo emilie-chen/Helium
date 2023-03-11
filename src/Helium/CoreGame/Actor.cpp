@@ -4,5 +4,9 @@
 
 heliumBegin
 
+void Actor::RegisterInternalCalls()
+{
+}
 
 heliumEnd
+

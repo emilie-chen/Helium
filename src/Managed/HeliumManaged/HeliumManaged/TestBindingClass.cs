@@ -6,11 +6,9 @@ public class TestBindingClass
 {
     public static void TestManagedMethod()
     {
-        Console.WriteLine("TestBindingClass.TestMethod() called");
-        TestInternalCall();
-        Exception e;
+        Debug.Log("Log");
+        Debug.LogWarning("LogWarning");
+        Debug.LogError("LogError");
+        Debug.Assert(true);
     }
-
-    [MethodImpl(MethodImplOptions.InternalCall)]
-    public static extern void TestInternalCall();
 }

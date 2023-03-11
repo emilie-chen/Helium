@@ -96,6 +96,13 @@ void Application::Loop()
     m_Window->OnUpdate(0.0f);
     OnGUIUpdate(0.0f);
     m_Window->PostUpdate(0.0f);
+
+    MonoImage* image = mono_assembly_get_image(m_MonoRuntime.m_MainAssembly);
+    MonoClass* klass = mono_class_from_name(image, "Helium", "TestBindingClass");
+    MonoMethod* method = mono_class_get_method_from_name(klass, "TestManagedMethod", 0);
+
+    MonoObject* exception = nullptr;
+    mono_runtime_invoke(method, nullptr, nullptr, &exception);
 }
 
 void Application::OnGUIUpdate(float deltaTime)

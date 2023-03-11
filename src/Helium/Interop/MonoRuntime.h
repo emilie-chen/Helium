@@ -12,7 +12,10 @@ public:
 
 private:
     MonoDomain* m_Domain;
-    MonoAssembly* m_Assembly;
+    MonoAssembly* m_MainAssembly;
+    Bimap<String, MonoAssembly*> m_LoadedAssemblies;
+
+    friend class Application;
 };
 
 heliumEnd
