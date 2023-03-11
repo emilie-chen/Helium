@@ -1,7 +1,9 @@
+#include <Helium/AssetManagement/ShaderSourceFileAsset.h>
 #include "Helium/HeliumPrecompiled.h"
 
 #include "Helium/Application.h"
 #include "Helium/Rendering/ShaderProgram.h"
+#include "Helium/ImGui/ObjectViewerWindow.h"
 
 heliumBegin
 
@@ -71,6 +73,10 @@ Application::Application()
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.begin(), GL_STATIC_DRAW);
+
+    m_ShaderSourceFileAsset = MakeReference<ShaderSourceFileAsset>("Assets/Shaders/test.vert");
+
+    AddGuiWindow(MakeReference<ObjectViewerWindow>(m_ShaderSourceFileAsset->GetAssetDescriptor()));
 }
 
 void Application::Execute()
@@ -88,8 +94,22 @@ void Application::Loop()
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     m_Window->OnRendererUpdate(0.0f);
     m_Window->OnUpdate(0.0f);
-    m_Window->OnGUIUpdate(0.0f);
+    OnGUIUpdate(0.0f);
     m_Window->PostUpdate(0.0f);
+}
+
+void Application::OnGUIUpdate(float deltaTime)
+{
+    m_Window->OnGUIUpdate(deltaTime);
+    std::for_each(std::begin(m_GuiWindows), std::end(m_GuiWindows), [deltaTime](const Reference<ImGuiWindow>& window)
+    {
+        window->OnGUIUpdate(deltaTime);
+    });
+}
+
+void Application::AddGuiWindow(const Reference<ImGuiWindow>& window)
+{
+    m_GuiWindows.push_back(window);
 }
 
 heliumEnd

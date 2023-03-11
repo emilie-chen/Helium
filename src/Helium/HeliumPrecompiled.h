@@ -130,14 +130,29 @@ __attribute__((noreturn)) void throw_with_stacktrace(std::string_view message, A
     throw T(fmt::format(message, std::forward<Args>(format)...) + "\nAt\n" + Internal::format_stacktrace(trace));
 }
 
-#define Interrupt() std::raise(SIGINT)
+template <typename T>
+__attribute__((noreturn)) void throw_with_stacktrace() {
+    auto trace = boost::stacktrace::stacktrace();
+    throw T("At\n" + Internal::format_stacktrace(trace));
+}
+
+class AssertionError : public std::runtime_error
+{
+public:
+    explicit AssertionError(const std::string& message = "Assertion failed")
+        : std::runtime_error(message)
+    {
+    }
+};
+
+#define Interrupt() __builtin_trap()
 
 #ifdef heliumDebug
 #define Assert(condition, ...) \
     if (!(condition))              \
     {                              \
         Internal::LogError(__VA_ARGS__); \
-        Interrupt();               \
+        throw_with_stacktrace<AssertionError>();               \
     }
 
 #else

@@ -23,6 +23,11 @@ public:
 
     NODISCARD WString GetText() const;
 
+    NODISCARD Reference<ShaderSourceFileAssetDescriptor> GetAssetDescriptor() const
+    {
+        return m_Descriptor;
+    }
+
 private:
     Reference<ShaderSourceFileAssetDescriptor> m_Descriptor;
     std::optional<WString> m_Text;

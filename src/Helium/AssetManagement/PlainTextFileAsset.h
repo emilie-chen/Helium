@@ -23,6 +23,11 @@ public:
     NODISCARD WString GetText() const;
     void SetText(WString text);
 
+    NODISCARD Reference<PlainTextFileAssetDescriptor> GetAssetDescriptor() const
+    {
+        return m_Descriptor;
+    }
+
 private:
     Reference<PlainTextFileAssetDescriptor> m_Descriptor;
     std::optional<WString> m_Text;
