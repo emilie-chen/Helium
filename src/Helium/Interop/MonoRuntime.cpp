@@ -7,17 +7,6 @@
 
 heliumBegin
 
-void TestInternalCall()
-{
-    spdlog::info("TestInternalCall");
-    Assert(false);
-}
-
-void EngineLog(MonoString* message)
-{
-    spdlog::info("{}", mono_string_to_utf8(message));
-}
-
 MonoRuntime::MonoRuntime()
 {
     if (s_Instance)

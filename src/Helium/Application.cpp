@@ -40,7 +40,7 @@ Application::Application()
 {
     // init
     m_TimerSystem->InitializeSingleton(m_TimerSystem);
-    m_Window = NativeWindow::CreateWindow("Helium Application", ivec2(800, 600), [this]()
+    m_Window = NativeWindow::CreateWindow("Helium Editor", ivec2(800, 600), [this]()
     {
         m_ShouldClose = true;
     });
@@ -108,6 +108,46 @@ void Application::Loop()
 void Application::OnGUIUpdate(float deltaTime)
 {
     m_Window->OnGUIUpdate(deltaTime);
+    static bool showAboutWindow = false;
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("Ficher"))
+        {
+            if (ImGui::MenuItem("Quitter", "cmd+Q"))
+            {
+                m_ShouldClose = true;
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Édition"))
+        {
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Fenêtre"))
+        {
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Aide"))
+        {
+            if (ImGui::MenuItem("À propos d'Helium Editor"))
+            {
+                showAboutWindow = true;
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+    if (showAboutWindow)
+    {
+        if (ImGui::Begin("À propos d'Helium Editor", &showAboutWindow, ImGuiWindowFlags_NoResize))
+        {
+            ImGui::Text("Helium Editor");
+            ImGui::Text("Version 0.0.1");
+            ImGui::Text("Autrice: Emilie Chen");
+        }
+        ImGui::End();
+    }
+
     std::for_each(std::begin(m_GuiWindows), std::end(m_GuiWindows), [deltaTime](const Reference<ImGuiWindow>& window)
     {
         window->OnGUIUpdate(deltaTime);

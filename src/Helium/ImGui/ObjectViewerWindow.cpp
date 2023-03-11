@@ -16,7 +16,11 @@ ObjectViewerWindow::ObjectViewerWindow(Handle<ManagedObject> objectToView)
 
 void ObjectViewerWindow::OnGUIUpdate(float deltaTime)
 {
-    ImGui::Begin("Object Viewer");
+    if (!m_IsOpen)
+    {
+        return;
+    }
+    ImGui::Begin("Object Viewer", &m_IsOpen);
     // serialize object here
     Reference<ManagedObject> obj = m_ObjectToView.lock();
     if (obj)
