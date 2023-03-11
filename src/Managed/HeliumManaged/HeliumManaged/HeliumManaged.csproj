@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="cp &quot;$(ProjectDir)bin/$(ConfigurationName)/netstandard2.1/$(ProjectName).dll&quot; &quot;$(SolutionDir)../../../Managed/bin/&quot;" />
+    </Target>
+
+</Project>

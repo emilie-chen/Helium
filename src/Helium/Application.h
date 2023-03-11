@@ -8,6 +8,7 @@
 #include "Helium/ObjectModel/Singleton.h"
 #include "Helium/Rendering/NativeWindow.h"
 #include "Helium/AssetManagement/ShaderSourceFileAsset.h"
+#include "Helium/Interop/MonoRuntime.h"
 
 heliumBegin
 
@@ -31,6 +32,7 @@ private:
     Reference<ShaderProgram> m_TestShader;
     std::vector<Reference<ImGuiWindow>> m_GuiWindows;
     Reference<ShaderSourceFileAsset> m_ShaderSourceFileAsset;
+    MonoRuntime m_MonoRuntime;
 };
 
 heliumEnd

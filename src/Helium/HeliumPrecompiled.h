@@ -23,6 +23,9 @@
 #include <glm/gtx/quaternion.hpp>
 #include <spdlog/spdlog.h>
 
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+
 namespace Helium
 {
     struct IsInHeliumNamespace : std::true_type {};

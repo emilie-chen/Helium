@@ -40,7 +40,7 @@
 /build
 /cmake-build-debug
 /toolchain
-/.idea
+.idea
 
 /build*
 imgui.ini

@@ -32,6 +32,19 @@ target_compile_options(Helium PRIVATE -g -ggdb -fno-pie)
 target_include_directories(Helium PRIVATE
     ${Boost_INCLUDE_DIRS})
 
+# mono
+message(STATUS "Mono found: $ENV{MONO_DIR}")
+
+target_include_directories(Helium PRIVATE
+        $ENV{MONO_DIR}/include/mono-2.0)
+
+target_link_libraries(Helium PRIVATE
+        $ENV{MONO_DIR}/lib/libmono-2.0.a
+        $ENV{MONO_DIR}/lib/libmonosgen-2.0.a
+        $ENV{MONO_DIR}/lib/libmonoboehm-2.0.a
+        $ENV{MONO_DIR}/lib/libMonoPosixHelper.a
+        libiconv.tbd)
+
 target_link_libraries(Helium PRIVATE fmt::fmt
     glad::glad
     glfw
