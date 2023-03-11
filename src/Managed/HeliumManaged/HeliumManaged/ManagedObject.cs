@@ -14,14 +14,8 @@ public class ManagedObject
         get { return m_NativeHandle; }
     }
 
-    public static T Instantiate<T>() where T : ManagedObject, new()
-    {
-        T managedObject = (T) InternalInstantiate(typeof(T).Namespace, typeof(T).Name);
-        return managedObject;
-    }
-
     [MethodImpl(MethodImplOptions.InternalCall)]
-    private static extern object InternalInstantiate(string ns, string typeName);
+    public extern ManagedObject();
     
     [MethodImpl(MethodImplOptions.InternalCall)]
     public static extern void Destroy(ManagedObject obj);

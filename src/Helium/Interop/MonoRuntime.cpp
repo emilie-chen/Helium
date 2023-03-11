@@ -3,6 +3,7 @@
 #include "MonoRuntime.h"
 #include "Helium/Interop/Bindings/Helium/Debug.h"
 #include "Helium/ObjectModel/ManagedObject.h"
+#include "Helium/CoreGame/Actor.h"
 
 heliumBegin
 
@@ -56,6 +57,7 @@ MonoRuntime::MonoRuntime()
     // register internal calls
     Debug::RegisterInternalCalls();
     ManagedObject::RegisterInternalCalls();
+    Actor::RegisterInternalCalls();
 
     s_Instance = this;
 }

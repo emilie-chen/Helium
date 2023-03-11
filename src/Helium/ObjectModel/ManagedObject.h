@@ -63,7 +63,8 @@ public:
     virtual void Serialize(YAML::Node& out) const;
     virtual void Deserialize(const YAML::Node& in);
 
-    static MonoObject* InternalInstantiate(MonoString* ns, MonoString* typeName);
+    static MonoObject* InternalConstructor(MonoObject* instance);
+    static void SetNativeHandle(MonoObject* instance, void* nativeHandle);
     static void InternalDestroy(MonoObject* instance);
     static void RegisterInternalCalls();
 };

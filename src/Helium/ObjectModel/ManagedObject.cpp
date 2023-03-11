@@ -65,42 +65,32 @@ Reference <ManagedObject> ManagedObject::StaticConstruct()
     return MakeManaged<ManagedObject>();
 }
 
-MonoObject* ManagedObject::InternalInstantiate(MonoString* ns, MonoString* typeName)
-{
-    // instantiate the managed object
-    char* typeNameStr = mono_string_to_utf8(typeName);
-    char* nsStr = mono_string_to_utf8(ns);
-    Reference<ManagedObject> obj = MakeManaged<ManagedObject>();
-    MonoClass* cls = mono_class_from_name(mono_assembly_get_image(MonoRuntime::GetInstance()->GetMainAssembly()), nsStr, typeNameStr);
-    //spdlog::trace("Instantiated managed object of type {} in {}. Native handle: {}", typeNameStr, nsStr, (size_t)obj.get());
-    mono_free(typeNameStr);
-    mono_free(nsStr);
-    Assert(cls != nullptr);
-    MonoObject* monoObj = mono_object_new(mono_domain_get(), cls);
-    Assert(monoObj != nullptr);
-    mono_runtime_object_init(monoObj);
-
-    // set the managed object's native pointer
-    MonoClassField* field = mono_class_get_field_from_name(cls, "m_NativeHandle");
-    Assert(field != nullptr);
-    void* ptr = obj.get();
-    mono_field_set_value(monoObj, field, &ptr);
-    obj->m_ManagedInstance = monoObj;
-
-    RuntimeObjectRegistry::GetInstance()->RegisterObject(monoObj, obj);
-
-    return monoObj;
-}
-
 void ManagedObject::RegisterInternalCalls()
 {
-    mono_add_internal_call("Helium.ManagedObject::InternalInstantiate", (void*)&ManagedObject::InternalInstantiate);
     mono_add_internal_call("Helium.ManagedObject::Destroy", (void*)&ManagedObject::InternalDestroy);
+    mono_add_internal_call("Helium.ManagedObject::.ctor", (void*)&ManagedObject::InternalConstructor);
 }
 
 void ManagedObject::InternalDestroy(MonoObject* instance)
 {
     RuntimeObjectRegistry::GetInstance()->UnregisterObject(instance);
+}
+
+MonoObject* ManagedObject::InternalConstructor(MonoObject* instance)
+{
+    Reference<ManagedObject> nativeObj = MakeManaged<ManagedObject>();
+    SetNativeHandle(instance, nativeObj.get());
+    nativeObj->m_ManagedInstance = instance;
+    RuntimeObjectRegistry::GetInstance()->RegisterObject(instance, nativeObj);
+    return instance;
+}
+
+void ManagedObject::SetNativeHandle(MonoObject* instance, void* nativeHandle)
+{
+    MonoClass* cls = mono_class_from_name(mono_assembly_get_image(MonoRuntime::GetInstance()->GetMainAssembly()), "Helium", "ManagedObject");
+    MonoClassField* field = mono_class_get_field_from_name(cls, "m_NativeHandle");
+    Assert(field != nullptr);
+    mono_field_set_value(instance, field, &nativeHandle);
 }
 
 heliumEnd
