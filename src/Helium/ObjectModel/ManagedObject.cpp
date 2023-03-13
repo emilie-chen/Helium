@@ -68,7 +68,7 @@ Reference <ManagedObject> ManagedObject::StaticConstruct()
 void ManagedObject::RegisterInternalCalls()
 {
     mono_add_internal_call("Helium.ManagedObject::Destroy", (void*)&ManagedObject::InternalDestroy);
-    mono_add_internal_call("Helium.ManagedObject::.ctor", (void*)&ManagedObject::InternalConstructor);
+    mono_add_internal_call("Helium.ManagedObject::.ctor", (void*) &ManagedObject::ctor);
 }
 
 void ManagedObject::InternalDestroy(MonoObject* instance)
@@ -76,7 +76,7 @@ void ManagedObject::InternalDestroy(MonoObject* instance)
     RuntimeObjectRegistry::GetInstance()->UnregisterObject(instance);
 }
 
-MonoObject* ManagedObject::InternalConstructor(MonoObject* instance)
+MonoObject* ManagedObject::ctor(MonoObject* instance)
 {
     Reference<ManagedObject> nativeObj = MakeManaged<ManagedObject>();
     SetNativeHandle(instance, nativeObj.get());
@@ -91,6 +91,16 @@ void ManagedObject::SetNativeHandle(MonoObject* instance, void* nativeHandle)
     MonoClassField* field = mono_class_get_field_from_name(cls, "m_NativeHandle");
     Assert(field != nullptr);
     mono_field_set_value(instance, field, &nativeHandle);
+}
+
+void* ManagedObject::GetNativeHandle(MonoObject* instance)
+{
+    MonoClass* cls = mono_class_from_name(mono_assembly_get_image(MonoRuntime::GetInstance()->GetMainAssembly()), "Helium", "ManagedObject");
+    MonoClassField* field = mono_class_get_field_from_name(cls, "m_NativeHandle");
+    Assert(field != nullptr);
+    void* nativeHandle = nullptr;
+    mono_field_get_value(instance, field, &nativeHandle);
+    return nativeHandle;
 }
 
 heliumEnd

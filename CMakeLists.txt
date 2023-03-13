@@ -34,15 +34,22 @@ target_include_directories(Helium PRIVATE
 
 # mono
 message(STATUS "Mono found: $ENV{MONO_DIR}")
+set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:$ENV{MONO_DIR}/lib/pkgconfig")
 
 target_include_directories(Helium PRIVATE
         $ENV{MONO_DIR}/include/mono-2.0)
 
-target_link_libraries(Helium PRIVATE
-        $ENV{MONO_DIR}/lib/libmono-2.0.a
-        $ENV{MONO_DIR}/lib/libmonosgen-2.0.a
-        $ENV{MONO_DIR}/lib/libMonoPosixHelper.a
-        libiconv.tbd)
+message(STATUS "PKG_CONFIG_PATH: $ENV{PKG_CONFIG_PATH}")
+execute_process(COMMAND pkg-config --cflags monosgen-2 OUTPUT_VARIABLE MONO_CFLAGS)
+execute_process(COMMAND pkg-config --libs monosgen-2 OUTPUT_VARIABLE MONO_LIBS)
+# remove trailing whitespace
+string(STRIP ${MONO_CFLAGS} MONO_CFLAGS)
+string(STRIP ${MONO_LIBS} MONO_LIBS)
+target_compile_options(Helium PRIVATE ${MONO_CFLAGS})
+target_link_libraries(Helium PRIVATE ${MONO_LIBS})
+target_link_libraries(Helium PRIVATE $ENV{MONO_DIR}/lib/libmono-native-compat.dylib)
+message(STATUS "MONO_CFLAGS: ${MONO_CFLAGS}")
+message(STATUS "MONO_LIBS: ${MONO_LIBS}")
 
 target_link_libraries(Helium PRIVATE fmt::fmt
     glad::glad

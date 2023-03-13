@@ -7,10 +7,10 @@ heliumBegin
 
 void Actor::RegisterInternalCalls()
 {
-    mono_add_internal_call("Helium.Actor::.ctor", (void*)&Actor::InternalConstructor);
+    mono_add_internal_call("Helium.Actor::.ctor", (void*) &Actor::ctor);
 }
 
-MonoObject* Actor::InternalConstructor(MonoObject* instance)
+MonoObject* Actor::ctor(MonoObject* instance)
 {
     Reference<Actor> nativeObj = MakeManaged<Actor>();
     ManagedObject::SetNativeHandle(instance, nativeObj.get());

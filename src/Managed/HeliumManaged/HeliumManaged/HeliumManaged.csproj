@@ -1,14 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net48</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DebugType>embedded</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="GlmSharp" Version="0.9.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Net" />
+      <Reference Include="System.Net.Http" />
+      <Reference Include="System.Net.Http.WebRequest" />
+    </ItemGroup>
+
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="cp &quot;$(ProjectDir)bin/$(ConfigurationName)/netstandard2.1/$(ProjectName).dll&quot; &quot;$(SolutionDir)../../../Managed/bin/&quot;" />
+      <Exec Command="cp -r &quot;$(TargetDir)&quot; &quot;$(SolutionDir)../../../Managed/bin/&quot;" />
     </Target>
 
 </Project>

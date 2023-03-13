@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Globalization;
+using System.Runtime.CompilerServices;
+using GlmSharp;
 
 namespace Helium;
 
@@ -6,13 +8,8 @@ public class TestBindingClass
 {
     public static void TestManagedMethod()
     {
-        Actor obj = new Actor();
-        Debug.Log(obj ? "Valid" : "Invalid");
-        ManagedObject.Destroy(obj);
-        Debug.Log(obj ? "Valid" : "Invalid");
-        
-        Debug.Log("This is a log message.");
-        Debug.LogWarning("This is a warning message.");
-        Debug.LogError("This is an error message.");
+        Transform t = new Transform();
+        t.localTranslation = new vec3(1.0f, 3.0f, 5.0f);
+        Debug.Log("TestManagedMethod: " + t.localTranslation);
     }
 }

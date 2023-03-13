@@ -11,7 +11,7 @@ class Actor : public ManagedObject
 public:
     Actor() = default;
 
-    static MonoObject* InternalConstructor(MonoObject* instance);
+    static MonoObject* ctor(MonoObject* instance);
 
     static void RegisterInternalCalls();
 };

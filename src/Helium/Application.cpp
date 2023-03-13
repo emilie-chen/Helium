@@ -5,6 +5,9 @@
 #include "Helium/Rendering/ShaderProgram.h"
 #include "Helium/ImGui/ObjectViewerWindow.h"
 
+#include <mono/metadata/exception.h>
+#include <mono/metadata/debug-helpers.h>
+
 heliumBegin
 
 static String VERTEX_SHADER_SRC = R"(
@@ -103,6 +106,19 @@ void Application::Loop()
 
     MonoObject* exception = nullptr;
     mono_runtime_invoke(method, nullptr, nullptr, &exception);
+    if (exception)
+    {
+        MonoClass* exceptionClass = mono_get_exception_class();
+        MonoProperty* messageProperty = mono_class_get_property_from_name(exceptionClass, "StackTrace");
+        MonoMethod* messageGetter = mono_property_get_get_method(messageProperty);
+        MonoString* message = (MonoString*)mono_runtime_invoke(messageGetter, exception, nullptr, nullptr);
+        char* msg = mono_string_to_utf8(message);
+        //spdlog::info("Exception: {}", msg);
+        mono_free(msg);
+
+        MonoException* e = mono_get_exception_runtime_wrapped(exception);
+        mono_print_unhandled_exception(exception);
+    }
 }
 
 void Application::OnGUIUpdate(float deltaTime)
@@ -111,25 +127,25 @@ void Application::OnGUIUpdate(float deltaTime)
     static bool showAboutWindow = false;
     if (ImGui::BeginMainMenuBar())
     {
-        if (ImGui::BeginMenu("Ficher"))
+        if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Quitter", "cmd+Q"))
+            if (ImGui::MenuItem("Quit", "cmd+Q"))
             {
                 m_ShouldClose = true;
             }
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Édition"))
+        if (ImGui::BeginMenu("Edit"))
         {
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Fenêtre"))
+        if (ImGui::BeginMenu("Window"))
         {
             ImGui::EndMenu();
         }
-        if (ImGui::BeginMenu("Aide"))
+        if (ImGui::BeginMenu("Help"))
         {
-            if (ImGui::MenuItem("À propos d'Helium Editor"))
+            if (ImGui::MenuItem("About Helium Editor"))
             {
                 showAboutWindow = true;
             }
@@ -139,11 +155,11 @@ void Application::OnGUIUpdate(float deltaTime)
     }
     if (showAboutWindow)
     {
-        if (ImGui::Begin("À propos d'Helium Editor", &showAboutWindow, ImGuiWindowFlags_NoResize))
+        if (ImGui::Begin("About", &showAboutWindow, ImGuiWindowFlags_NoResize))
         {
             ImGui::Text("Helium Editor");
             ImGui::Text("Version 0.0.1");
-            ImGui::Text("Auteure : Emilie Chen");
+            ImGui::Text("Author: Emilie Chen");
         }
         ImGui::End();
     }

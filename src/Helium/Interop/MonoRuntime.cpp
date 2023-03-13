@@ -4,6 +4,9 @@
 #include "Helium/CoreGame/Debug.h"
 #include "Helium/ObjectModel/ManagedObject.h"
 #include "Helium/CoreGame/Actor.h"
+#include "Helium/CoreGame/Transform.h"
+
+#include <mono/metadata/mono-config.h>
 
 heliumBegin
 
@@ -13,6 +16,8 @@ MonoRuntime::MonoRuntime()
     {
         Assert(false, "MonoRuntime already exists!");
     }
+    mono_set_dirs("/Library/Frameworks/Mono.framework/Home/lib", "/Library/Frameworks/Mono.framework/Home/etc");
+    mono_config_parse(nullptr);
     m_Domain = mono_jit_init("Helium");
     // get all assemblies in folder
     std::string path = "Managed/bin/";
@@ -26,6 +31,7 @@ MonoRuntime::MonoRuntime()
             MonoAssembly* assembly = mono_domain_assembly_open(m_Domain, assemblyPath.c_str());
             if (assembly == nullptr)
             {
+                // mono print why the assembly failed to load
                 spdlog::error("Failed to load assembly: {}", assemblyPath);
                 continue;
             }
@@ -47,7 +53,7 @@ MonoRuntime::MonoRuntime()
     Debug::RegisterInternalCalls();
     ManagedObject::RegisterInternalCalls();
     Actor::RegisterInternalCalls();
-
+    Transform::RegisterInternalCalls();
     s_Instance = this;
 }
 

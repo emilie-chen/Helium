@@ -44,3 +44,6 @@
 
 /build*
 imgui.ini
+*.DotSettings.user
+/src/Managed/HeliumManaged/HeliumManaged/bin
+/src/Managed/HeliumManaged/HeliumManaged/obj
