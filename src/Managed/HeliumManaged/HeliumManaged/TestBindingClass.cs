@@ -10,6 +10,7 @@ public class TestBindingClass
     {
         Transform t = new Transform();
         t.localTranslation = new vec3(1.0f, 3.0f, 5.0f);
-        Debug.Log("TestManagedMethod: " + t.localTranslation);
+        t.localScale = new vec3(2.0f, 4.0f, 6.0f);
+        ManagedObject.Destroy(t);
     }
 }

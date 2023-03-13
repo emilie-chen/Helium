@@ -47,7 +47,7 @@ string(STRIP ${MONO_CFLAGS} MONO_CFLAGS)
 string(STRIP ${MONO_LIBS} MONO_LIBS)
 target_compile_options(Helium PRIVATE ${MONO_CFLAGS})
 target_link_libraries(Helium PRIVATE ${MONO_LIBS})
-target_link_libraries(Helium PRIVATE $ENV{MONO_DIR}/lib/libmono-native-compat.dylib)
+#target_link_libraries(Helium PRIVATE $ENV{MONO_DIR}/lib/libmono-native-compat.dylib)
 message(STATUS "MONO_CFLAGS: ${MONO_CFLAGS}")
 message(STATUS "MONO_LIBS: ${MONO_LIBS}")
 

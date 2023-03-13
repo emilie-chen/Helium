@@ -100,6 +100,10 @@ void* ManagedObject::GetNativeHandle(MonoObject* instance)
     Assert(field != nullptr);
     void* nativeHandle = nullptr;
     mono_field_get_value(instance, field, &nativeHandle);
+    if (nativeHandle == nullptr)
+    {
+        spdlog::error("Attempting to get native handle from an invalid managed object");
+    }
     return nativeHandle;
 }
 

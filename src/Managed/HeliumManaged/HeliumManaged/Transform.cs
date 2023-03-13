@@ -54,4 +54,15 @@ public class Transform : ActorComponent
     [MethodImpl(MethodImplOptions.InternalCall)]
     private extern void _SetLocalScale(in vec3 value);
     
+    public mat4 localMatrix
+    {
+        get
+        {
+            _GetLocalMatrix(out mat4 result);
+            return result;
+        }
+    }
+    
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    private extern void _GetLocalMatrix(out mat4 result);
 }
