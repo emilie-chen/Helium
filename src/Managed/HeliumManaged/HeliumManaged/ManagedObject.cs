@@ -6,10 +6,10 @@ namespace Helium;
 public class ManagedObject
 {
     #pragma warning disable 649
-    private IntPtr m_NativeHandle; // will be assigned by native code
+    private nint m_NativeHandle; // will be assigned by native code
     #pragma warning restore 649
     
-    public IntPtr NativeHandle
+    public nint NativeHandle
     {
         get { return m_NativeHandle; }
     }
@@ -22,6 +22,6 @@ public class ManagedObject
     
     public static implicit operator bool(ManagedObject obj)
     {
-        return obj.m_NativeHandle != IntPtr.Zero;
+        return obj.m_NativeHandle != 0;
     }
 }

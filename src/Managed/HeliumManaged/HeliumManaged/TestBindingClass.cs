@@ -9,8 +9,8 @@ public class TestBindingClass
     public static void TestManagedMethod()
     {
         Transform t = new Transform();
-        t.localTranslation = new vec3(1.0f, 3.0f, 5.0f);
-        t.localScale = new vec3(2.0f, 4.0f, 6.0f);
+        t.localTranslation = new vec3(1.2f, 3.6f, 5.7f);
+        t.localScale = new vec3(2.3f, 4.4f, 6.5f);
         ManagedObject.Destroy(t);
     }
 }

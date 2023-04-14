@@ -7,6 +7,7 @@
 
 #include <mono/metadata/exception.h>
 #include <mono/metadata/debug-helpers.h>
+#include <Helium/Utility/Stopwatch.h>
 
 heliumBegin
 
@@ -42,7 +43,6 @@ Application::Application()
     : m_TimerSystem(MakeReference<TimerSystem>())
 {
     // init
-    m_TimerSystem->InitializeSingleton(m_TimerSystem);
     m_Window = NativeWindow::CreateWindow("Helium Editor", ivec2(800, 600), [this]()
     {
         m_ShouldClose = true;
@@ -84,10 +84,21 @@ Application::Application()
 
 void Application::Execute()
 {
+    m_TimerSystem->SetFrameTime(std::chrono::milliseconds(8));
+    m_TimerSystem->StartPulsing();
     while (!m_ShouldClose)
     {
+        //Stopwatch sw;
+        //sw.Start();
+        m_TimerSystem->WaitForSignal();
         Loop();
+        m_TimerSystem->ReportFrameEnd();
+        //sw.Stop();
+        //spdlog::info("Frame time: {} ms", std::chrono::duration_cast<std::chrono::milliseconds>(sw.GetElapsedTime()).count());
     }
+
+    m_TimerSystem->OnApplicationStop();
+    m_TimerSystem->ReportFrameEnd();
 }
 
 void Application::Loop()

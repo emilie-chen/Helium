@@ -12,12 +12,16 @@
 #include <set>
 #include <string>
 #include <type_traits>
+#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 #include <stack>
+#include <semaphore>
+#include <valarray>
 
 #include <boost/bimap.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/stacktrace.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -43,6 +47,9 @@ heliumBegin
 #define nameof(x) #x
 
 using namespace glm;
+using Clock = std::chrono::high_resolution_clock;
+using TimePoint = std::chrono::high_resolution_clock::time_point;
+using Duration = std::chrono::high_resolution_clock::duration;
 typedef uint8_t U8;
 typedef uint16_t U16;
 typedef uint32_t U32;
