@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
 namespace Helium;
 
@@ -15,13 +16,47 @@ public class Object
     }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern Object();
+    private extern Object();
     
     [MethodImpl(MethodImplOptions.InternalCall)]
     public static extern void Destroy(Object obj);
     
-    public static implicit operator bool(Object obj)
+    [ContractAnnotation("obj:null => false")]
+    public static bool IsValid(Object? obj)
     {
-        return obj.m_NativeHandle != 0;
+        return obj != null && obj.m_NativeHandle != 0;
+    }
+    
+    public static implicit operator bool(Object? obj)
+    {
+        return IsValid(obj);
+    }
+
+    public static bool operator ==(Object? lhs, Object? rhs)
+    {
+        bool lhsValid = IsValid(lhs);
+        bool rhsValid = IsValid(rhs);
+
+        if (lhsValid && rhsValid)
+        {
+            return lhs!.m_NativeHandle == rhs!.m_NativeHandle;
+        }
+        
+        return lhsValid == rhsValid;
+    }
+    
+    public static bool operator !=(Object? lhs, Object? rhs)
+    {
+        return !(lhs == rhs);
+    }
+    
+    public override bool Equals(object? obj)
+    {
+        return obj is Object other && this == other;
+    }
+    
+    public override int GetHashCode()
+    {
+        return m_NativeHandle.GetHashCode();
     }
 }

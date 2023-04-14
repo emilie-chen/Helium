@@ -7,14 +7,13 @@ namespace Helium;
 
 public class TestBindingClass
 {
-    private static ulong s_Counter = 0;
+    private static DateTime s_StartTime = DateTime.Now;
     
     public static void TestManagedMethod()
     {
-        Transform t = new Transform();
-        t.localTranslation = new vec3(1.2f, 3.6f, 5.7f);
-        t.localScale = new vec3(2.3f, 4.4f, 6.5f);
-        Object.Destroy(t);
-        s_Counter++;
+        DateTime now = DateTime.Now;
+        TimeSpan elapsed = now - s_StartTime;
+        Debug.Log($"Time elapsed: {elapsed.TotalMilliseconds}");
+        s_StartTime = now;
     }
 }

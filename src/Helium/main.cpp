@@ -12,11 +12,42 @@
 #include "Helium/ObjectModel/ManagedEnum.h"
 #include "Helium/AssetManagement/AssetType.h"
 #include "Helium/AssetManagement/ShaderSourceFileAsset.h"
+#include "Helium/EnginePref.h"
+#include <argparse/argparse.hpp>
 
 using namespace Helium;
 
-int main()
+int main(int argc, char** argv)
 {
+    // parse args
+    /**
+     * -d, --debug
+     */
+    argparse::ArgumentParser program("Helium Engine");
+    program.add_argument("-d", "--debug")
+        .help("Enable managed debugging")
+        .default_value(false)
+        .implicit_value(true);
+
+    try
+    {
+        program.parse_args(argc, argv);
+    }
+    catch (const std::runtime_error& err)
+    {
+        spdlog::error(err.what());
+        return 1;
+    }
+
+    if (program["--debug"] == true)
+    {
+        EnginePref::Set(PreferenceEntry::ManagedDebug, true);
+    }
+    else
+    {
+        EnginePref::Set(PreferenceEntry::ManagedDebug, false);
+    }
+
     std::locale::global(std::locale(""));
     HeliumRegisterClasses();
     Application app{};

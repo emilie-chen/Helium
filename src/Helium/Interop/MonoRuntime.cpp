@@ -6,6 +6,7 @@
 #include "Helium/ObjectModel/ManagedObject.h"
 #include "Helium/CoreGame/Actor.h"
 #include "Helium/CoreGame/Transform.h"
+#include "Helium/EnginePref.h"
 
 #include <mono/metadata/mono-config.h>
 #include <mono/metadata/mono-debug.h>
@@ -20,16 +21,24 @@ MonoRuntime::MonoRuntime()
     }
     mono_set_dirs("/Library/Frameworks/Mono.framework/Home/lib", "/Library/Frameworks/Mono.framework/Home/etc");
     mono_config_parse(nullptr);
-    int port = 51025;
-    std::string portString = std::to_string(port);
-    std::string portOption = "--debugger-agent=transport=dt_socket,address=127.0.0.1:" + portString;
-    const char* options[] = {
-            "--soft-breakpoints",
-            portOption.c_str()
-    };
-    spdlog::info("Mono debugger listening on port {}", port);
-    mono_jit_parse_options(sizeof(options)/sizeof(char*), (char**)options);
-    mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+
+    if (any_cast<bool>(EnginePref::Get(PreferenceEntry::ManagedDebug)))
+    {
+        int port = 51025;
+        std::string portString = std::to_string(port);
+        std::string portOption = "--debugger-agent=transport=dt_socket,address=127.0.0.1:" + portString;
+        const char* options[] = {
+                "--soft-breakpoints",
+                portOption.c_str()
+        };
+        mono_jit_parse_options(sizeof(options)/sizeof(char*), (char**)options);
+        spdlog::info("Mono debugger connecting on port {}", port);
+        mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+    }
+    else
+    {
+        spdlog::info("Mono debugger disabled");
+    }
     m_Domain = mono_jit_init("Helium");
     // get all assemblies in folder
     std::string path = "Managed/bin/";

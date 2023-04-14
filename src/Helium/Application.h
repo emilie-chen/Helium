@@ -23,8 +23,8 @@ public:
     void AddGuiWindow(const Reference<ImGuiWindow>& window);
 
 private:
-    void Loop();
-    void FixedLoop();
+    void Loop(float deltaTime);
+    void FixedLoop(float deltaTime);
 
 private:
     Reference<TimerSystem> m_TimerSystem;

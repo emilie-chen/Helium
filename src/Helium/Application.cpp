@@ -84,32 +84,35 @@ Application::Application()
 
 void Application::Execute()
 {
-    m_TimerSystem->SetFrameTime(std::chrono::milliseconds(8));
+    m_TimerSystem->SetFrameTime(std::chrono::milliseconds(16));
     m_TimerSystem->StartPulsing();
+    float dt = 0.01f;
+    Stopwatch sw;
+    sw.Start();
     while (!m_ShouldClose)
     {
-        //Stopwatch sw;
-        //sw.Start();
+        sw.Reset();
+        sw.Start();
         m_TimerSystem->WaitForSignal();
-        Loop();
+        Loop(dt);
         m_TimerSystem->ReportFrameEnd();
-        //sw.Stop();
-        //spdlog::info("Frame time: {} ms", std::chrono::duration_cast<std::chrono::milliseconds>(sw.GetElapsedTime()).count());
+        dt = (float)(std::chrono::duration_cast<std::chrono::microseconds>(sw.GetElapsedTime()).count() / 1000000.0);
+        //spdlog::info("Frame time: {} s", dt);
     }
 
     m_TimerSystem->OnApplicationStop();
     m_TimerSystem->ReportFrameEnd();
 }
 
-void Application::Loop()
+void Application::Loop(float deltaTime)
 {
-    m_Window->PreUpdate(0.0f);
+    m_Window->PreUpdate(deltaTime);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-    m_Window->OnRendererUpdate(0.0f);
-    m_Window->OnUpdate(0.0f);
-    OnGUIUpdate(0.0f);
-    m_Window->PostUpdate(0.0f);
+    m_Window->OnRendererUpdate(deltaTime);
+    m_Window->OnUpdate(deltaTime);
+    OnGUIUpdate(deltaTime);
+    m_Window->PostUpdate(deltaTime);
 
     MonoImage* image = mono_assembly_get_image(m_MonoRuntime.m_MainAssembly);
     MonoClass* klass = mono_class_from_name(image, "Helium", "TestBindingClass");
@@ -132,7 +135,7 @@ void Application::Loop()
     }
 }
 
-void FixedLoop()
+void Application::FixedLoop(float deltaTime)
 {
 
 }

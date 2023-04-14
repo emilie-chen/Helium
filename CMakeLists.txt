@@ -18,6 +18,7 @@ find_package(imgui CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 find_package(EASTL CONFIG REQUIRED)
 find_package(Boost REQUIRED)
+find_package(argparse REQUIRED)
 
 target_compile_definitions(
         Helium
@@ -56,9 +57,10 @@ target_link_libraries(Helium PRIVATE fmt::fmt
     glfw
     imgui::imgui
     yaml-cpp
+    argparse::argparse
     EASTL
-        dl
-        l
+    dl
+    l
     "-framework Cocoa"
     "-framework IOKit"
     "-framework OpenGL"
