@@ -132,6 +132,11 @@ void Application::Loop()
     }
 }
 
+void FixedLoop()
+{
+
+}
+
 void Application::OnGUIUpdate(float deltaTime)
 {
     m_Window->OnGUIUpdate(deltaTime);

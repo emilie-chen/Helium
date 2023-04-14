@@ -42,7 +42,7 @@ void RuntimeObjectRegistry::InitializeMonoCache()
     MonoRuntime* monoRuntime = MonoRuntime::GetInstance();
     MonoAssembly* mainAssembly = monoRuntime->GetMainAssembly();
     MonoImage* mainImage = mono_assembly_get_image(mainAssembly);
-    m_MonoCache.m_ManagedObjectClass = mono_class_from_name(mainImage, "Helium", "ManagedObject");
+    m_MonoCache.m_ManagedObjectClass = mono_class_from_name(mainImage, "Helium", "Object");
     m_MonoCache.m_ManagedObjectNativeHandleField = mono_class_get_field_from_name(m_MonoCache.m_ManagedObjectClass, "m_NativeHandle");
 
     m_MonoCacheInitialized = true;

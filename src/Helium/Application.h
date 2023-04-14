@@ -24,6 +24,7 @@ public:
 
 private:
     void Loop();
+    void FixedLoop();
 
 private:
     Reference<TimerSystem> m_TimerSystem;

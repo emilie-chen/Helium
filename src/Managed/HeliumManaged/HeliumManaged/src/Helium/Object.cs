@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 namespace Helium;
 
 [NativelyMapped("src/Helium/ObjectModel/ManagedObject.h")]
-public class ManagedObject
+public class Object
 {
     #pragma warning disable 649
     private nint m_NativeHandle; // will be assigned by native code
@@ -15,12 +15,12 @@ public class ManagedObject
     }
 
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern ManagedObject();
+    public extern Object();
     
     [MethodImpl(MethodImplOptions.InternalCall)]
-    public static extern void Destroy(ManagedObject obj);
+    public static extern void Destroy(Object obj);
     
-    public static implicit operator bool(ManagedObject obj)
+    public static implicit operator bool(Object obj)
     {
         return obj.m_NativeHandle != 0;
     }

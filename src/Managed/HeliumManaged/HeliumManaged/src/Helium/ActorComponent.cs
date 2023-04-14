@@ -1,6 +1,6 @@
 namespace Helium;
 
-public class ActorComponent : ManagedObject
+public class ActorComponent : Object
 {
     protected ActorComponent() { }
 }

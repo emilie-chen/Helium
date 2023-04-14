@@ -16,4 +16,7 @@ public static class Debug
 
     [MethodImpl(MethodImplOptions.InternalCall)]
     public static extern void Assert(bool condition, string message = "");
+    
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    public static extern void BuiltinTrap();
 }
