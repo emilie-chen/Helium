@@ -8,7 +8,7 @@
 
 heliumBegin
 
-ObjectViewerWindow::ObjectViewerWindow(Handle<ManagedObject> objectToView)
+ObjectViewerWindow::ObjectViewerWindow(std::weak_ptr<ManagedObject> objectToView)
     : m_ObjectToView(std::move(objectToView))
 {
     Assert(!m_ObjectToView.expired());

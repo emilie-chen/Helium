@@ -15,12 +15,16 @@ public class Object
         get { return m_NativeHandle; }
     }
 
-    [MethodImpl(MethodImplOptions.InternalCall)]
-    private extern Object();
+    protected Object()
+    {
+    }
     
     [MethodImpl(MethodImplOptions.InternalCall)]
     public static extern void Destroy(Object obj);
     
+    /**
+     * Nullability is not the same as validity. A null object is not valid, but a non-null object may be invalid if it has no native handle.
+     */
     [ContractAnnotation("obj:null => false")]
     public static bool IsValid(Object? obj)
     {
@@ -31,7 +35,7 @@ public class Object
     {
         return IsValid(obj);
     }
-
+    
     public static bool operator ==(Object? lhs, Object? rhs)
     {
         bool lhsValid = IsValid(lhs);

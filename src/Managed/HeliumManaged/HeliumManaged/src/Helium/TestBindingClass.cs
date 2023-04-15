@@ -7,13 +7,8 @@ namespace Helium;
 
 public class TestBindingClass
 {
-    private static DateTime s_StartTime = DateTime.Now;
-    
-    public static void TestManagedMethod()
+    public static unsafe void TestManagedMethod()
     {
-        DateTime now = DateTime.Now;
-        TimeSpan elapsed = now - s_StartTime;
-        Debug.Log($"Time elapsed: {elapsed.TotalMilliseconds}");
-        s_StartTime = now;
+        
     }
 }

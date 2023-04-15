@@ -5,8 +5,7 @@ namespace Helium;
 [NativelyMapped("src/Helium/CoreGame/ActorComponent.h")]
 public class ActorComponent : Object
 {
-    [MethodImpl(MethodImplOptions.InternalCall)]
-    protected extern ActorComponent();
+    protected ActorComponent() { }
     
     public virtual void Awake() { }
     public virtual void Start() { }

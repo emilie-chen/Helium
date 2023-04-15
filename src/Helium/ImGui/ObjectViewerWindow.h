@@ -10,12 +10,12 @@ class ObjectViewerWindow final : public ImGuiWindow
     MANAGED_CLASS(ObjectViewerWindow, ImGuiWindow, false);
 public:
     ObjectViewerWindow() = default;
-    explicit ObjectViewerWindow(Handle<ManagedObject> objectToView);
+    explicit ObjectViewerWindow(std::weak_ptr<ManagedObject> objectToView);
 
     void OnGUIUpdate(float deltaTime) override;
 
 private:
-    Handle<ManagedObject> m_ObjectToView;
+    std::weak_ptr<ManagedObject> m_ObjectToView;
 };
 
 heliumEnd

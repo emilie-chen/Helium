@@ -8,6 +8,8 @@
 #include <mono/metadata/exception.h>
 #include <mono/metadata/debug-helpers.h>
 #include <Helium/Utility/Stopwatch.h>
+#include <Helium/ObjectModel/RuntimeObjectRegistry.h>
+#include "Helium/CoreGame/Transform.h"
 
 heliumBegin
 
@@ -80,6 +82,9 @@ Application::Application()
     m_ShaderSourceFileAsset = MakeReference<ShaderSourceFileAsset>("Assets/Shaders/test.vert");
 
     AddGuiWindow(MakeReference<ObjectViewerWindow>(m_ShaderSourceFileAsset->GetAssetDescriptor()));
+
+    m_MonoRuntime.LateInit();
+    RuntimeObjectRegistry::GetInstance()->InitializeMonoCache();
 }
 
 void Application::Execute()
@@ -95,6 +100,7 @@ void Application::Execute()
         sw.Start();
         m_TimerSystem->WaitForSignal();
         Loop(dt);
+        RuntimeObjectRegistry::GetInstance()->ReportFrameEnd();
         m_TimerSystem->ReportFrameEnd();
         dt = (float)(std::chrono::duration_cast<std::chrono::microseconds>(sw.GetElapsedTime()).count() / 1000000.0);
         //spdlog::info("Frame time: {} s", dt);
@@ -119,6 +125,7 @@ void Application::Loop(float deltaTime)
     MonoMethod* method = mono_class_get_method_from_name(klass, "TestManagedMethod", 0);
 
     MonoObject* exception = nullptr;
+    Handle<Transform> t = CreateObject<Transform>();
     mono_runtime_invoke(method, nullptr, nullptr, &exception);
     if (exception)
     {

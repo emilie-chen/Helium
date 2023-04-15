@@ -77,9 +77,6 @@ using Bimap = boost::bimap<T1, T2>;
 template <typename T>
 using Reference = std::shared_ptr<T>;
 
-template <typename T>
-using Handle = std::weak_ptr<T>;
-
 template <typename T, typename ... Args>
 inline Reference<T> MakeReference(Args&& ... args)
 {

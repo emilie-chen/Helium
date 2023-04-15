@@ -7,8 +7,7 @@ namespace Helium;
 [NativelyMapped("src/Helium/CoreGame/Transform.h")]
 public class Transform : ActorComponent
 {
-    [MethodImpl(MethodImplOptions.InternalCall)]
-    public extern Transform();
+    private Transform() { }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public vec3 localTranslation
