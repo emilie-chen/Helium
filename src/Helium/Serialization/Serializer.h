@@ -49,7 +49,7 @@ struct Serializer final
     template<typename T> requires std::is_base_of_v<ManagedObject, T>
     static Reference<T> Deserialize(const Path& path)
     {
-        return Deserialize<T>(YAML::LoadFile(path));
+        return Deserialize<T>(YAML::LoadFile(path.string()));
     }
 
     static void Serialize(const Reference<ManagedObject>& object, const Path& path);
