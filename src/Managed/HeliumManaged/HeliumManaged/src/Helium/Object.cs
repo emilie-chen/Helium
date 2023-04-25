@@ -63,4 +63,12 @@ public class Object
     {
         return m_NativeHandle.GetHashCode();
     }
+    
+    public static T Instantiate<T>(T prefab) where T : Object
+    {
+        return (T) Instantiate_Injected(prefab);
+    }
+
+    [MethodImpl(MethodImplOptions.InternalCall)]
+    private static extern Object Instantiate_Injected(Object prefab);
 }

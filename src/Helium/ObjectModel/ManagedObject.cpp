@@ -67,22 +67,13 @@ Reference <ManagedObject> ManagedObject::StaticConstruct()
 
 void ManagedObject::RegisterInternalCalls()
 {
-    mono_add_internal_call("Helium.Object::Destroy", (void*)&ManagedObject::InternalDestroy);
-    mono_add_internal_call("Helium.Object::.ctor", (void*) &ManagedObject::ctor);
+    mono_add_internal_call("Helium.Object::Destroy", (void*) &ManagedObject::Destroy_Injected);
+    LINK_MANAGED_CLASS();
 }
 
-void ManagedObject::InternalDestroy(MonoObject* instance)
+void ManagedObject::Destroy_Injected(MonoObject* instance)
 {
-    RuntimeObjectRegistry::GetInstance()->UnregisterObject(instance);
-}
-
-MonoObject* ManagedObject::ctor(MonoObject* instance)
-{
-    Reference<ManagedObject> nativeObj = MakeManaged<ManagedObject>();
-    SetNativeHandle(instance, nativeObj.get());
-    nativeObj->m_ManagedInstance = instance;
-    RuntimeObjectRegistry::GetInstance()->RegisterObject(instance, nativeObj);
-    return instance;
+    QueueDestroyForEndOfFrame(instance);
 }
 
 void ManagedObject::SetNativeHandle(MonoObject* instance, void* nativeHandle)

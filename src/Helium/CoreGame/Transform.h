@@ -8,13 +8,13 @@ heliumBegin
 class Transform final : public ActorComponent
 {
     MANAGED_CLASS(Transform, ActorComponent, false);
+    MONO_CLASS_DEFINE(Transform)
 public:
     Transform() = default;
 
     static void RegisterInternalCalls();
 
 #pragma region internal calls
-    static MonoObject* ctor(MonoObject* instance);
     static void _GetLocalTranslation(MonoObject* instance, glm::vec3& value);
     static void _SetLocalTranslation(MonoObject* instance, const glm::vec3& value);
     static void _GetLocalRotation(MonoObject* instance, glm::quat& value);
