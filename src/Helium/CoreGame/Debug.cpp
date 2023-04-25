@@ -32,7 +32,7 @@ void Debug::Assert2(MonoBoolean condition, MonoString* message)
 
 void Debug::BuiltinTrap()
 {
-#if PLATFORM == Platform::Windows
+#if HELIUM_WINDOWS
     __debugbreak();
 #else
     __builtin_trap();

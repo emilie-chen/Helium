@@ -107,10 +107,13 @@ constexpr GraphicsAPI GRAPHICS_API = GraphicsAPI::OpenGL;
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 constexpr Platform PLATFORM = Platform::Windows;
+#define HELIUM_WINDOWS
 #elif defined(__APPLE__) || defined(__MACH__)
 constexpr Platform PLATFORM = Platform::MacOS;
+#define HELIUM_MACOS
 #elif defined(__linux__) || defined(__linux)
 constexpr Platform PLATFORM = Platform::Linux;
+#define HELIUM_LINUX
 #else
 constexpr Platform PLATFORM = Platform::Invalid;
 #error "Unsupported platform"
@@ -118,7 +121,7 @@ constexpr Platform PLATFORM = Platform::Invalid;
 
 namespace Internal
 {
-#if BOOST_STACKTRACE_IN_USE
+#ifdef BOOST_STACKTRACE_IN_USE
 std::string format_stacktrace(const boost::stacktrace::stacktrace& trace);
 #endif
 
@@ -140,7 +143,7 @@ void LogError();
 
 }
 
-#if PLATFORM == Platform::Windows
+#if HELIUM_WINDOWS
 #define NORETURN _declspec(noreturn)
 #else
 #define NORETURN __attribute__((noreturn))
