@@ -6,7 +6,7 @@ heliumBegin
 
 String Asset::GetPath() const
 {
-    return m_Path;
+    return m_Path.string();
 }
 
 Asset::Asset(Path path)

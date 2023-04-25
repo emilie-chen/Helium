@@ -32,7 +32,11 @@ void Debug::Assert2(MonoBoolean condition, MonoString* message)
 
 void Debug::BuiltinTrap()
 {
+#if PLATFORM == Platform::Windows
+    __debugbreak();
+#else
     __builtin_trap();
+#endif
 }
 
 void Debug::RegisterInternalCalls()

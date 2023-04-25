@@ -29,8 +29,8 @@ private:
 
     std::thread m_PulsingThread;
 
-    std::atomic_flag m_IsPulsing = false;
-    std::atomic_flag m_ShouldStop = false;
+    std::atomic_flag m_IsPulsing;
+    std::atomic_flag m_ShouldStop;
 
 private:
     static constexpr Duration s_DefaultFrameTime{std::chrono::milliseconds(16)};

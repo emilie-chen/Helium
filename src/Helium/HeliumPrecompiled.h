@@ -23,7 +23,10 @@
 
 #include <boost/bimap.hpp>
 #include <boost/intrusive_ptr.hpp>
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
 #include <boost/stacktrace.hpp>
+#define BOOST_STACKTRACE_IN_USE
+#endif
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <spdlog/spdlog.h>
@@ -115,15 +118,21 @@ constexpr Platform PLATFORM = Platform::Invalid;
 
 namespace Internal
 {
+#if BOOST_STACKTRACE_IN_USE
 std::string format_stacktrace(const boost::stacktrace::stacktrace& trace);
+#endif
 
 template <typename... Args>
 inline void LogError(Args&&... args)
 {
+#ifdef BOOST_STACKTRACE_IN_USE
     auto trace = boost::stacktrace::stacktrace();
+#endif
     spdlog::error(std::forward<Args>(args)...);
+#ifdef BOOST_STACKTRACE_IN_USE
     spdlog::error("At");
     spdlog::error("{}", format_stacktrace(trace));
+#endif
 }
 
 template <>
@@ -131,17 +140,31 @@ void LogError();
 
 }
 
+#if PLATFORM == Platform::Windows
+#define NORETURN _declspec(noreturn)
+#else
+#define NORETURN __attribute__((noreturn))
+#endif
+
 template <typename T, typename... Args>
-__attribute__((noreturn)) void throw_with_stacktrace(std::string_view message, Args&&... format)
+NORETURN void throw_with_stacktrace(std::string_view message, Args&&... format)
 {
+#ifdef BOOST_STACKTRACE_IN_USE
     auto trace = boost::stacktrace::stacktrace();
     throw T(fmt::format(message, std::forward<Args>(format)...) + "\nAt\n" + Internal::format_stacktrace(trace));
+#else
+    throw T(fmt::format(message, std::forward<Args>(format)...));
+#endif
 }
 
 template <typename T>
-__attribute__((noreturn)) void throw_with_stacktrace() {
+NORETURN void throw_with_stacktrace() {
+#ifdef BOOST_STACKTRACE_IN_USE
     auto trace = boost::stacktrace::stacktrace();
     throw T("At\n" + Internal::format_stacktrace(trace));
+#else
+    throw T();
+#endif
 }
 
 class AssertionError : public std::runtime_error
