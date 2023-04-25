@@ -7,13 +7,14 @@ heliumBegin
 
 class ActorComponent;
 
+using ActorID = size_t;
+
 class Actor : public ManagedObject
 {
     MANAGED_CLASS(Actor, ManagedObject, false);
 public:
-    Actor() = default;
-
-    static MonoObject* ctor(MonoObject* instance);
+    Actor();
+    ~Actor() override;
 
     static void RegisterInternalCalls();
 
@@ -25,9 +26,13 @@ public:
     void Update();
     void FixedUpdate();
     void OnDestroy();
+    void DestroyChildObjects() override;
 
 private:
     bool m_Active = true;
+    ActorID m_ID = 0;
+
+    MONO_CLASS_DEFINE(Actor)
 
 private:
     static MonoObject* GetComponent_Injected(MonoObject* actorInstance, MonoReflectionType* type);

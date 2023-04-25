@@ -10,9 +10,12 @@ public:
     MonoRuntime();
     ~MonoRuntime();
 
+    void LateInit();
+
     static MonoRuntime* GetInstance();
 
     NODISCARD MonoAssembly* GetMainAssembly() const;
+    NODISCARD MonoImage* GetMainImage() const;
 
 private:
     MonoDomain* m_Domain;

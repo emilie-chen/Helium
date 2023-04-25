@@ -10,6 +10,7 @@
 
 #include <mono/metadata/mono-config.h>
 #include <mono/metadata/mono-debug.h>
+#include <Helium/ObjectModel/RuntimeObjectRegistry.h>
 
 heliumBegin
 
@@ -70,11 +71,6 @@ MonoRuntime::MonoRuntime()
     }
     Assert(m_MainAssembly != nullptr);
 
-    // register internal calls
-    Debug::RegisterInternalCalls();
-    ManagedObject::RegisterInternalCalls();
-    Actor::RegisterInternalCalls();
-    Transform::RegisterInternalCalls();
     s_Instance = this;
 }
 
@@ -91,6 +87,20 @@ MonoRuntime* MonoRuntime::GetInstance()
 MonoAssembly* MonoRuntime::GetMainAssembly() const
 {
     return m_MainAssembly;
+}
+
+MonoImage* MonoRuntime::GetMainImage() const
+{
+    return mono_assembly_get_image(m_MainAssembly);
+}
+
+void MonoRuntime::LateInit()
+{
+    // register internal calls
+    Debug::RegisterInternalCalls();
+    ManagedObject::RegisterInternalCalls();
+    Actor::RegisterInternalCalls();
+    Transform::RegisterInternalCalls();
 }
 
 heliumEnd

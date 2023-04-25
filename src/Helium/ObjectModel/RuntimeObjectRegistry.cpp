@@ -36,8 +36,9 @@ void RuntimeObjectRegistry::ReportFrameEnd()
     m_DestroyQueue.clear();
 }
 
-void RuntimeObjectRegistry::UnregisterAndDestroyObject(Handle<ManagedObject> object) const
+void RuntimeObjectRegistry::UnregisterAndDestroyObject(Handle<ManagedObject> object)
 {
+    m_ActiveObjects.erase(object);
     MonoObject* monoObject = object->m_ManagedInstance;
     mono_field_set_value(monoObject, m_MonoCache.m_ManagedObjectNativeHandleField, nullptr);
     delete object.Get();
@@ -48,6 +49,12 @@ void RuntimeObjectRegistry::ObjectQueueDestroyForEndOfFrame(MonoObject* monoObje
     Handle<ManagedObject> handle = (ManagedObject*)ManagedObject::GetNativeHandle(monoObject);
     RuntimeObjectRegistry::GetInstance()->ObjectQueueDestroyForEndOfFrame(handle);
 }
+
+void QueueDestroyForEndOfFrame(MonoObject *monoObject)
+{
+    RuntimeObjectRegistry::GetInstance()->ObjectQueueDestroyForEndOfFrame(monoObject);
+}
+
 
 heliumEnd
 

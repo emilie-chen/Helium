@@ -93,3 +93,16 @@ private:
 };
 
 heliumEnd
+
+namespace std {
+
+template <typename T> requires std::is_base_of_v<Helium::ManagedObject, T>
+struct hash<Helium::Handle<T>>
+{
+    std::size_t operator()(const Helium::Handle<T>& k) const
+    {
+        return std::hash<T*>()(k.Get());
+    }
+};
+
+}

@@ -32,6 +32,13 @@ Reference <T> MakeManagedConditional(Args&& ... args)
 }
 }
 
+#define MONO_CLASS_DEFINE(managedClassName) \
+    private:                              \
+    inline static MonoClass* s_Class = nullptr; \
+    inline static const char* s_ManagedName = #managedClassName; \
+    public: \
+    NODISCARD static MonoClass* GetManagedClass() { return s_Class; }
+
 class ManagedObject
 {
 private:
@@ -49,6 +56,8 @@ private:
         StaticConstruct
     );
 
+    friend class RuntimeObjectRegistry;
+
 public:
     using self = ManagedObject;
     virtual ~ManagedObject() = default;
@@ -60,15 +69,21 @@ public:
     NODISCARD static CRC32 GetClassTypeID();
     NODISCARD virtual UnsafeHandle<ManagedClassDescriptor> GetDescriptor() const;
     NODISCARD static UnsafeHandle<ManagedClassDescriptor> GetClassDescriptor();
+    NODISCARD MonoObject* GetManagedInstance() const { return m_ManagedInstance; }
     virtual void Serialize(YAML::Node& out) const;
     virtual void Deserialize(const YAML::Node& in);
+    virtual void DestroyChildObjects() {}
 
-    static MonoObject* ctor(MonoObject* instance);
     static void SetNativeHandle(MonoObject* instance, void* nativeHandle);
     static void* GetNativeHandle(MonoObject* instance);
-    static void InternalDestroy(MonoObject* instance);
+    static void Destroy_Injected(MonoObject* instance);
     static void RegisterInternalCalls();
+
+    MONO_CLASS_DEFINE(Object)
 };
+
+#define LINK_MANAGED_CLASS() \
+    s_Class = mono_class_from_name(MonoRuntime::GetInstance()->GetMainImage(), "Helium", s_ManagedName);
 
 #define MANAGED_CLASS(className, superClass, isSerializable) \
     private:                                                  \
@@ -82,7 +97,7 @@ public:
         StaticConstruct \
     );\
     public:                                                   \
-    using super = superClass;                                \
+    using base = superClass;                                \
     using self = className; \
     NODISCARD virtual Bool IsSerializable() const override { return s_IsSerializable; } \
     NODISCARD static Bool ClassIsSerializable() { return s_IsSerializable; } \
@@ -107,7 +122,7 @@ Reference<T> MakeManaged(Args&& ... args)
 #define BEGIN_IMPLEMENT_SERIALIZE() \
     {                               \
         YAML::Node superNode;       \
-        super::Serialize(superNode);\
+        base::Serialize(superNode);\
         out["Super"] = superNode;   \
         out["TypeID"] = GetClassTypeID(); \
     }
@@ -133,7 +148,7 @@ Reference<T> MakeManaged(Args&& ... args)
 
 #define BEGIN_IMPLEMENT_DESERIALIZE() \
     {                                 \
-        super::Deserialize(in["Super"]); \
+        base::Deserialize(in["Super"]); \
         if (in["TypeID"].as<CRC32>() != GetClassTypeID()) \
         { \
             Assert(false, "Type mismatch"); \
