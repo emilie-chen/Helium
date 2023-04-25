@@ -143,7 +143,7 @@ void LogError();
 
 }
 
-#if HELIUM_WINDOWS
+#ifdef HELIUM_WINDOWS
 #define NORETURN _declspec(noreturn)
 #else
 #define NORETURN __attribute__((noreturn))
