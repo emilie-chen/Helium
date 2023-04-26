@@ -16,8 +16,6 @@ public:
     Actor();
     ~Actor() override;
 
-    static void RegisterInternalCalls();
-
     NODISCARD bool IsActive() const { return m_Active; }
     void SetActive(bool value) { m_Active = value; }
 
@@ -31,11 +29,6 @@ public:
 private:
     bool m_Active = true;
     ActorID m_ID = 0;
-
-    MONO_CLASS_DEFINE(Actor)
-
-private:
-    static MonoObject* GetComponent_Injected(MonoObject* actorInstance, MonoReflectionType* type);
 };
 
 heliumEnd

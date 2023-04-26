@@ -20,6 +20,7 @@
 #include <stack>
 #include <semaphore>
 #include <valarray>
+#include <exception>
 
 #include <boost/bimap.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -30,9 +31,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <spdlog/spdlog.h>
-
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
 
 namespace Helium
 {
@@ -156,7 +154,9 @@ NORETURN void throw_with_stacktrace(std::string_view message, Args&&... format)
     auto trace = boost::stacktrace::stacktrace();
     throw T(fmt::format(message, std::forward<Args>(format)...) + "\nAt\n" + Internal::format_stacktrace(trace));
 #else
-    throw T(fmt::format(message, std::forward<Args>(format)...));
+    //throw T(fmt::format(message, std::forward<Args>(format)...));
+    //throw T(message);
+    throw std::runtime_error("");
 #endif
 }
 

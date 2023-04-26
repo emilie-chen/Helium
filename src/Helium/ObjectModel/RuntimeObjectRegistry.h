@@ -35,11 +35,8 @@ private:
         m_DestroyQueue.push_back(object);
     }
 
-    void ObjectQueueDestroyForEndOfFrame(MonoObject* monoObject);
 
     void ReportFrameEnd();
-
-    void InitializeMonoCache();
 
 private:
     void UnregisterAndDestroyObject(Handle<ManagedObject> object);
@@ -49,11 +46,6 @@ private:
     {
         Handle<T> object = new T(std::forward<TArgs>(args)...);
         Handle<ManagedObject> managedObject = object;
-        MonoClass* cls = T::GetManagedClass();
-        MonoObject* monoObject = mono_object_new(mono_domain_get(), cls);
-        mono_runtime_object_init(monoObject);
-        managedObject->m_ManagedInstance = monoObject;
-        mono_field_set_value(monoObject, m_MonoCache.m_ManagedObjectNativeHandleField, &managedObject);
         m_ActiveObjects.insert(managedObject);
         return object;
     }
@@ -61,24 +53,14 @@ private:
 private:
     std::deque<Handle<ManagedObject>> m_DestroyQueue;
     std::unordered_set<Handle<ManagedObject>> m_ActiveObjects;
-    bool m_MonoCacheInitialized = false;
-    struct
-    {
-        MonoClass* m_ManagedObjectClass = nullptr;
-        MonoClassField* m_ManagedObjectNativeHandleField = nullptr;
-    } m_MonoCache;
 
 private:
     template<typename T, typename ... TArgs> requires std::is_base_of_v<ManagedObject, T>
     friend Handle<T> CreateObject(TArgs&& ... args);
 
-    template<typename T> requires std::is_base_of_v<ManagedObject, T>
-    friend void QueueDestroyForEndOfFrame(Handle<T> object);
-
-    friend void QueueDestroyForEndOfFrame(MonoObject* monoObject);
+    friend void QueueDestroyForEndOfFrame(Handle<ManagedObject> object);
 
     friend class ManagedObject;
-    friend class MonoRuntime;
     friend class Application;
 };
 
@@ -88,12 +70,7 @@ Handle<T> CreateObject(TArgs&& ... args)
     return RuntimeObjectRegistry::GetInstance()->CreateObject<T>(std::forward<TArgs>(args)...);
 }
 
-template<typename T> requires std::is_base_of_v<ManagedObject, T>
-void QueueDestroyForEndOfFrame(Handle<T> object)
-{
-    RuntimeObjectRegistry::GetInstance()->ObjectQueueDestroyForEndOfFrame(object);
-}
 
-void QueueDestroyForEndOfFrame(MonoObject* monoObject);
+void QueueDestroyForEndOfFrame(Handle<ManagedObject> object);
 
 heliumEnd

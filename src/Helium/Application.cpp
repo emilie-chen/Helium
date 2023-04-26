@@ -4,9 +4,6 @@
 #include "Helium/Application.h"
 #include "Helium/Rendering/ShaderProgram.h"
 #include "Helium/ImGui/ObjectViewerWindow.h"
-
-#include <mono/metadata/exception.h>
-#include <mono/metadata/debug-helpers.h>
 #include <Helium/Utility/Stopwatch.h>
 #include <Helium/ObjectModel/RuntimeObjectRegistry.h>
 #include "Helium/CoreGame/Transform.h"
@@ -66,7 +63,7 @@ Application::Application()
     1.0f, 1.0f, 0.0f, 1.0f,
     -1.0f, 1.0f, 0.0f, 1.0f,
     };
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.begin(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(F32) * 4, nullptr);
@@ -77,14 +74,11 @@ Application::Application()
     GLuint indexBuffer = 0;
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.begin(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
 
     m_ShaderSourceFileAsset = MakeReference<ShaderSourceFileAsset>("Assets/Shaders/test.vert");
 
     AddGuiWindow(MakeReference<ObjectViewerWindow>(m_ShaderSourceFileAsset->GetAssetDescriptor()));
-
-    m_MonoRuntime.LateInit();
-    RuntimeObjectRegistry::GetInstance()->InitializeMonoCache();
 }
 
 void Application::Execute()
@@ -119,27 +113,6 @@ void Application::Loop(float deltaTime)
     m_Window->OnUpdate(deltaTime);
     OnGUIUpdate(deltaTime);
     m_Window->PostUpdate(deltaTime);
-
-    MonoImage* image = mono_assembly_get_image(m_MonoRuntime.m_MainAssembly);
-    MonoClass* klass = mono_class_from_name(image, "Helium", "TestBindingClass");
-    MonoMethod* method = mono_class_get_method_from_name(klass, "TestManagedMethod", 0);
-
-    MonoObject* exception = nullptr;
-    Handle<Transform> t = CreateObject<Transform>();
-    mono_runtime_invoke(method, nullptr, nullptr, &exception);
-    if (exception)
-    {
-        MonoClass* exceptionClass = mono_get_exception_class();
-        MonoProperty* messageProperty = mono_class_get_property_from_name(exceptionClass, "StackTrace");
-        MonoMethod* messageGetter = mono_property_get_get_method(messageProperty);
-        MonoString* message = (MonoString*)mono_runtime_invoke(messageGetter, exception, nullptr, nullptr);
-        char* msg = mono_string_to_utf8(message);
-        //spdlog::info("Exception: {}", msg);
-        mono_free(msg);
-
-        MonoException* e = mono_get_exception_runtime_wrapped(exception);
-        mono_print_unhandled_exception(exception);
-    }
 }
 
 void Application::FixedLoop(float deltaTime)

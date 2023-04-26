@@ -1,7 +1,6 @@
 #include "Helium/HeliumPrecompiled.h"
 
 #include "ManagedObject.h"
-#include "Helium/Interop/MonoRuntime.h"
 #include "Helium/ObjectModel/RuntimeObjectRegistry.h"
 
 heliumBegin
@@ -65,37 +64,5 @@ Reference <ManagedObject> ManagedObject::StaticConstruct()
     return MakeManaged<ManagedObject>();
 }
 
-void ManagedObject::RegisterInternalCalls()
-{
-    mono_add_internal_call("Helium.Object::Destroy", (void*) &ManagedObject::Destroy_Injected);
-    LINK_MANAGED_CLASS();
-}
-
-void ManagedObject::Destroy_Injected(MonoObject* instance)
-{
-    QueueDestroyForEndOfFrame(instance);
-}
-
-void ManagedObject::SetNativeHandle(MonoObject* instance, void* nativeHandle)
-{
-    MonoClass* cls = mono_class_from_name(mono_assembly_get_image(MonoRuntime::GetInstance()->GetMainAssembly()), "Helium", "Object");
-    MonoClassField* field = mono_class_get_field_from_name(cls, "m_NativeHandle");
-    Assert(field != nullptr);
-    mono_field_set_value(instance, field, &nativeHandle);
-}
-
-void* ManagedObject::GetNativeHandle(MonoObject* instance)
-{
-    MonoClass* cls = mono_class_from_name(mono_assembly_get_image(MonoRuntime::GetInstance()->GetMainAssembly()), "Helium", "Object");
-    MonoClassField* field = mono_class_get_field_from_name(cls, "m_NativeHandle");
-    Assert(field != nullptr);
-    void* nativeHandle = nullptr;
-    mono_field_get_value(instance, field, &nativeHandle);
-    if (nativeHandle == nullptr)
-    {
-        spdlog::error("Attempting to get native handle from an invalid managed object");
-    }
-    return nativeHandle;
-}
 
 heliumEnd
