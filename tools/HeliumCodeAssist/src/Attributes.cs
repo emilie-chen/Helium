@@ -2,7 +2,7 @@ using System;
 
 namespace Helium;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum)]
 public class NativePathAttribute : Attribute
 {
     public string path { get; set; }
@@ -11,4 +11,9 @@ public class NativePathAttribute : Attribute
     {
         this.path = path;
     }
+}
+
+[AttributeUsage(AttributeTargets.Method)]
+public class ConstAttribute : Attribute
+{
 }

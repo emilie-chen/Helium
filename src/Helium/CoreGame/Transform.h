@@ -8,7 +8,14 @@ heliumBegin
 class Transform final : public ActorComponent
 {
 #pragma region Generated
-	MANAGED_CLASS(Transform, ActorComponent, false);
+    MANAGED_CLASS(Transform, ActorComponent, false);
+public:
+private:
+    vec3 m_LocalPosition;
+public:
+    void SetLocalPosition(const vec3& value) { m_LocalPosition = value; }
+public:
+    vec3 GetLocalPosition() const { return m_LocalPosition; }
 #pragma endregion
 public:
     Transform() = default;

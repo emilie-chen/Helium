@@ -10,6 +10,7 @@
 #include "Helium/Platform/GL/GLVertexArray.h"
 #include "Helium/Platform/GL/GLVertexBuffer.h"
 #include "Helium/Platform/GL/GLIndexBuffer.h"
+#include "Helium/CoreGame/CameraType.h"
 
 heliumBegin
 
@@ -57,6 +58,8 @@ Application::Application()
     m_IndexBuffer = MakeReference<GLIndexBuffer>(indices);
     m_IndexBuffer->Bind();
     m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+
+    UnsafeHandle<ManagedEnumDescriptor> descriptor = CameraTypeHelper::GetDescriptor();
 }
 
 void Application::Execute()

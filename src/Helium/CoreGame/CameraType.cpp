@@ -1,6 +1,6 @@
 #include "Helium/HeliumPrecompiled.h"
 
-#include "Camera.h"
+#include "CameraType.h"
 
 heliumBegin
 
