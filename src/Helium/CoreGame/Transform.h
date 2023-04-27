@@ -10,24 +10,21 @@ class Transform final : public ActorComponent
 #pragma region Generated
     MANAGED_CLASS(Transform, ActorComponent, false);
 public:
-private:
-    vec3 m_LocalPosition;
 public:
-    void SetLocalPosition(const vec3& value) { m_LocalPosition = value; }
+    void SetLocalTranslation(const vec3& value);
 public:
-    vec3 GetLocalPosition() const { return m_LocalPosition; }
+    vec3 GetLocalTranslation();
+public:
+    void SetLocalRotation(const quat& value);
+public:
+    quat GetLocalRotation();
+public:
+    void SetLocalScale(const vec3& value);
+public:
+    vec3 GetLocalScale();
 #pragma endregion
 public:
     Transform() = default;
-
-    [[nodiscard]] glm::vec3 GetLocalTranslation() const { return m_LocalTranslation; }
-    void SetLocalTranslation(const glm::vec3& value) { m_LocalTranslation = value; m_IsDirty = true; }
-
-    [[nodiscard]] glm::quat GetLocalRotation() const { return m_LocalRotation; }
-    void SetLocalRotation(const glm::quat& value) { m_LocalRotation = value; m_IsDirty = true; }
-
-    [[nodiscard]] glm::vec3 GetLocalScale() const { return m_LocalScale; }
-    void SetLocalScale(const glm::vec3& value) { m_LocalScale = value; m_IsDirty = true; }
 
     [[nodiscard]] glm::mat4 GetLocalMatrix();
 private:

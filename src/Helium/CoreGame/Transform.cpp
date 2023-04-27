@@ -19,6 +19,39 @@ void Transform::UpdateLocalMatrix()
     m_IsDirty = false;
 }
 
+void Transform::SetLocalTranslation(const vec3& value)
+{
+    m_LocalTranslation = value;
+	m_IsDirty = true;
+}
+
+vec3 Transform::GetLocalTranslation()
+{
+    return m_LocalTranslation;
+}
+
+void Transform::SetLocalRotation(const quat& value)
+{
+    m_LocalRotation = value;
+	m_IsDirty = true;
+}
+
+quat Transform::GetLocalRotation()
+{
+   return m_LocalRotation;
+}
+
+void Transform::SetLocalScale(const vec3& value)
+{
+    m_LocalScale = value;
+	m_IsDirty = true;
+}
+
+vec3 Transform::GetLocalScale()
+{
+    return m_LocalScale;
+}
+
 glm::mat4 Transform::GetLocalMatrix()
 {
     if (m_IsDirty)

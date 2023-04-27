@@ -31,8 +31,6 @@ target_compile_definitions(
         BOOST_STACKTRACE_USE_ADDR2LINE
 )
 
-target_compile_options(Helium PUBLIC -g -ggdb -fno-pie)
-
 target_include_directories(Helium PUBLIC
     ${Boost_INCLUDE_DIRS})
 
@@ -61,8 +59,6 @@ target_link_libraries(Helium PUBLIC fmt::fmt
     z
 )
 ENDIF()
-
-target_link_options(Helium PUBLIC -rdynamic)
 
 target_link_libraries(Helium PUBLIC spdlog::spdlog spdlog::spdlog_header_only)
 
