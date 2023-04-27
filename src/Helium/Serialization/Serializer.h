@@ -38,7 +38,7 @@ struct Serializer final
         const auto descriptor = TypeRegistry::GetInstance()->GetClassDescriptor(typeID);
         if (descriptor)
         {
-            Reference<T> ref = std::static_pointer_cast<T>(descriptor->CreateInstance());
+            Reference<T> ref = std::dynamic_pointer_cast<T>(Reference<ManagedObject>(descriptor->CreateInstance()));
             ref->Deserialize(in);
             return ref;
         }

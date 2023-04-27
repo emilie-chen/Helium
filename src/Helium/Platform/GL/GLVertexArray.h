@@ -7,7 +7,7 @@
 
 heliumBegin
 
-class GLVertexArray final : public VertexArray
+class GLVertexArray final : public implements<IVertexArray>
 {
 public:
     GLVertexArray();
@@ -16,14 +16,14 @@ public:
     void Bind() const override;
     void Unbind() const override;
 
-    void AddVertexBuffer(const Reference<VertexBuffer>& vertexBuffer) override;
-    void SetIndexBuffer(const Reference<IndexBuffer>& indexBuffer) override;
+    void AddVertexBuffer(const Reference<IVertexBuffer>& vertexBuffer) override;
+    void SetIndexBuffer(const Reference<IIndexBuffer>& indexBuffer) override;
 
 private:
     GLuint m_Handle{0};
     U32 m_VertexBufferIndex{0};
-    Reference<IndexBuffer> m_IndexBuffer;
-    Reference<VertexBuffer> m_VertexBuffers;
+    Reference<IIndexBuffer> m_IndexBuffer;
+    Reference<IVertexBuffer> m_VertexBuffers;
 };
 
 inline constexpr GLenum GetGLType(const GraphicsDataType type)

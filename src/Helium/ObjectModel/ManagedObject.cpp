@@ -59,9 +59,9 @@ UnsafeHandle<ManagedClassDescriptor> ManagedObject::GetClassDescriptor()
     return UnsafeHandle<ManagedClassDescriptor>(const_cast<ManagedClassDescriptor*>(&s_TypeDescriptor));
 }
 
-Reference <ManagedObject> ManagedObject::StaticConstruct()
+ManagedObject* ManagedObject::StaticConstruct()
 {
-    return MakeManaged<ManagedObject>();
+    return new ManagedObject;
 }
 
 

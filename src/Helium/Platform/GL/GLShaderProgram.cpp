@@ -78,7 +78,7 @@ void GLShaderProgram::CreateAndLinkShaderProgram()
 
 String GLShaderProgram::ReadFromFile(const String& path)
 {
-    std::ifstream file(path.c_str());
+    std::ifstream file(path);
     if (!file.is_open())
     {
         throw_with_stacktrace<std::runtime_error>("Failed to open file: " + path);

@@ -9,7 +9,7 @@ heliumBegin
  * @brief A handle to a managed object. Managed objects are not reference counted and are destroyed via Object::Destroy()
  * @tparam T
  */
-template <typename T> requires std::is_base_of_v<ManagedObject, T>
+template <typename T>
 class Handle final
 {
 public:

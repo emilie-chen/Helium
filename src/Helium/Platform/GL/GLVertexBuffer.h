@@ -9,7 +9,7 @@
 
 heliumBegin
 
-class GLVertexBuffer final : public VertexBuffer
+class GLVertexBuffer final : public implements<IVertexBuffer>
 {
 public:
     GLVertexBuffer(const std::span<F32>& vertices, VertexBufferLayout layout);

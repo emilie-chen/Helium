@@ -5,7 +5,7 @@
 
 heliumBegin
 
-Reference<ShaderProgram> ShaderProgram::Create(const String& vertexShaderPath, const String& fragmentShaderPath)
+Reference<IShaderProgram> IShaderProgram::Create(const String& vertexShaderPath, const String& fragmentShaderPath)
 {
     return MakeReference<GLShaderProgram>(vertexShaderPath, fragmentShaderPath);
 }

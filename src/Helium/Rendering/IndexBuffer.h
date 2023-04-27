@@ -4,10 +4,10 @@
 
 heliumBegin
 
-class IndexBuffer
+interface IIndexBuffer
 {
 public:
-    ~IndexBuffer() = default;
+    ~IIndexBuffer() = default;
 
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;

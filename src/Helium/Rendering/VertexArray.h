@@ -6,17 +6,16 @@
 
 heliumBegin
 
-class VertexArray
+interface IVertexArray
 {
-public:
-    VertexArray() = default;
-    virtual ~VertexArray() = default;
-    DELETE_COPY_AND_MOVE(VertexArray);
+    IVertexArray() = default;
+    virtual ~IVertexArray() = default;
+    DELETE_COPY_AND_MOVE(IVertexArray);
 
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;
-    virtual void AddVertexBuffer(const Reference<VertexBuffer>& vertexBuffer) = 0;
-    virtual void SetIndexBuffer(const Reference<IndexBuffer>& indexBuffer) = 0;
+    virtual void AddVertexBuffer(const Reference<IVertexBuffer>& vertexBuffer) = 0;
+    virtual void SetIndexBuffer(const Reference<IIndexBuffer>& indexBuffer) = 0;
 };
 
 heliumEnd

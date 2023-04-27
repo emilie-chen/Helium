@@ -7,7 +7,7 @@
 
 heliumBegin
 
-class GLShaderProgram final : public ShaderProgram
+class GLShaderProgram final : public implements<IShaderProgram>
 {
 public:
     GLShaderProgram(const String& vertexShaderPath, const String& fragmentShaderPath);

@@ -85,7 +85,7 @@ GLWindow::~GLWindow()
 
 void GLWindow::PreUpdate(F32 dt)
 {
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
     if (glfwWindowShouldClose(m_Window.GetObject()))
     {
         spdlog::info("Window should close");
@@ -101,7 +101,7 @@ void GLWindow::PreUpdate(F32 dt)
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+    glClearColor(0.1f, 0.3f, 0.2f, 1.0f);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();

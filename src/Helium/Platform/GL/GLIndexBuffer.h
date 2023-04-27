@@ -9,7 +9,7 @@
 
 heliumBegin
 
-class GLIndexBuffer final : public IndexBuffer
+class GLIndexBuffer final : public implements<IIndexBuffer>
 {
 public:
     explicit GLIndexBuffer(const std::span<U32>& indices);

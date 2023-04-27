@@ -8,10 +8,12 @@
 #include "Helium/ObjectModel/Singleton.h"
 #include "Helium/Rendering/NativeWindow.h"
 #include "Helium/AssetManagement/ShaderSourceFileAsset.h"
+#include "Helium/Rendering/VertexBuffer.h"
+#include "Helium/Rendering/VertexArray.h"
 
 heliumBegin
 
-class ShaderProgram;
+interface IShaderProgram;
 
 class Application final
 {
@@ -29,9 +31,12 @@ private:
     Reference<TimerSystem> m_TimerSystem;
     Reference<NativeWindow> m_Window;
     Bool m_ShouldClose = false;
-    Reference<ShaderProgram> m_TestShader;
+    Reference<IShaderProgram> m_TestShader;
     std::vector<Reference<ImGuiWindow>> m_GuiWindows;
     Reference<ShaderSourceFileAsset> m_ShaderSourceFileAsset;
+    Reference<IVertexArray> m_VertexArray;
+    Reference<IVertexBuffer> m_VertexBuffer;
+    Reference<IIndexBuffer> m_IndexBuffer;
 };
 
 heliumEnd

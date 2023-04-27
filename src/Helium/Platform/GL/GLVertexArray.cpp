@@ -24,7 +24,7 @@ void GLVertexArray::Unbind() const
     glBindVertexArray(0);
 }
 
-void GLVertexArray::AddVertexBuffer(const Reference<VertexBuffer>& vertexBuffer)
+void GLVertexArray::AddVertexBuffer(const Reference<IVertexBuffer>& vertexBuffer)
 {
     Bind();
     vertexBuffer->Bind();
@@ -42,7 +42,7 @@ void GLVertexArray::AddVertexBuffer(const Reference<VertexBuffer>& vertexBuffer)
     }
 }
 
-void GLVertexArray::SetIndexBuffer(const Reference <IndexBuffer>& indexBuffer)
+void GLVertexArray::SetIndexBuffer(const Reference<IIndexBuffer>& indexBuffer)
 {
     Bind();
     indexBuffer->Bind();

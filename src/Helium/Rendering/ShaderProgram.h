@@ -4,12 +4,11 @@
 
 heliumBegin
 
-class ShaderProgram
+interface IShaderProgram
 {
-public:
-    static Reference<ShaderProgram> Create(const String& vertexShaderPath, const String& fragmentShaderPath);
+    static Reference<IShaderProgram> Create(const String& vertexShaderPath, const String& fragmentShaderPath);
 
-    virtual ~ShaderProgram() = default;
+    virtual ~IShaderProgram() = default;
 
     virtual void Use() const = 0;
 };

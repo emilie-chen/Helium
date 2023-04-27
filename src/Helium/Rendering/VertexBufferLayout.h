@@ -140,11 +140,12 @@ class VertexBufferLayout final
 public:
     VertexBufferLayout() = default;
 
-    void AddElement(const VertexBufferElement& element);
+    void AddElement(VertexBufferElement element);
 
     NODISCARD U32 GetStride() const;
     NODISCARD const std::vector<VertexBufferElement>& GetElements() const;
 private:
+    U32 m_CurrentOffset{ 0 };
     U32 m_Stride{0};
     std::vector<VertexBufferElement> m_Elements;
 };

@@ -87,28 +87,13 @@ target_sources(Helium PUBLIC
 
 message(STATUS ${CMAKE_CURRENT_LIST_DIR})
 
+set_property(TARGET Helium PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+
 IF(WIN32)
-foreach(FILE ${HELIUM_SOURCES})
-  get_filename_component(PARENT_DIR "${FILE}" PATH)
 
-  file(RELATIVE_PATH PARENT_DIR_RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${PARENT_DIR})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/src FILES ${HELIUM_HEADERS} ${HELIUM_SOURCES} PREFIX src)
 
-  string(REPLACE "/" "\\" GROUP "${PARENT_DIR_RELATIVE}")
-
-  set(GROUP "File Tree\\${GROUP}")
-
-  source_group("${GROUP}" FILES "${FILE}")
-endforeach()
-
-foreach(FILE ${HELIUM_HEADERS})
-  get_filename_component(PARENT_DIR "${FILE}" PATH)
-
-  file(RELATIVE_PATH PARENT_DIR_RELATIVE ${CMAKE_CURRENT_LIST_DIR}  ${PARENT_DIR})
-
-  string(REPLACE "/" "\\" GROUP "${PARENT_DIR_RELATIVE}")
-
-  set(GROUP "File Tree\\${GROUP}")
-
-  source_group("${GROUP}" FILES "${FILE}")
-endforeach()
+file(GLOB_RECURSE HELIUM_ASSETS Assets/*)
+target_sources(Helium PUBLIC ${HELIUM_ASSETS})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/Assets FILES ${HELIUM_ASSETS} PREFIX Assets)
 ENDIF()

@@ -5,10 +5,10 @@
 
 heliumBegin
 
-class VertexBuffer
+interface IVertexBuffer
 {
 public:
-    virtual ~VertexBuffer() = default;
+    virtual ~IVertexBuffer() = default;
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;
     NODISCARD virtual const VertexBufferLayout& GetLayout() const = 0;

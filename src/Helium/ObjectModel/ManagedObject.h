@@ -19,14 +19,14 @@ namespace Internal
 {
 template<typename T, typename ... Args>
 requires std::is_base_of_v<ManagedObject, T> && (!std::is_abstract_v<T>)
-Reference <T> MakeManagedConditional(Args&& ... args)
+Reference<T> MakeManagedConditional(Args&& ... args)
 {
     return MakeManaged<T>(std::forward<Args>(args)...);
 }
 
 template<typename T, typename ... Args>
 requires std::is_base_of_v<ManagedObject, T> && std::is_abstract_v<T>
-Reference <T> MakeManagedConditional(Args&& ... args)
+Reference<T> MakeManagedConditional(Args&& ... args)
 {
     return nullptr;
 }
@@ -36,7 +36,7 @@ Reference <T> MakeManagedConditional(Args&& ... args)
 class ManagedObject
 {
 private:
-    static Reference<ManagedObject> StaticConstruct();
+    static ManagedObject* StaticConstruct();
 
 private:
     constexpr static Bool s_IsSerializable = true;
@@ -66,10 +66,22 @@ public:
 
 };
 
+template <typename T> requires std::is_abstract_v<T>
+T* ConstructRawConditional()
+{
+    return nullptr;
+}
+
+template <typename T> requires (!std::is_abstract_v<T>)
+T* ConstructRawConditional()
+{
+    return new T;
+}
+
 
 #define MANAGED_CLASS(className, superClass, isSerializable) \
     private:                                                  \
-    static Reference<className> StaticConstruct() { return Internal::MakeManagedConditional<className>(); } \
+    static className* StaticConstruct() { return ConstructRawConditional<className>(); } \
     private:                                      \
     constexpr static Bool s_IsSerializable = (isSerializable); \
     constexpr static CRC32 s_TypeID = CRC32_COMPUTE(nameof(className)); \
