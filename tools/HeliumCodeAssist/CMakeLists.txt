@@ -12,3 +12,4 @@ add_executable(HeliumCodeAssist
 
 target_compile_options(HeliumCodeAssist PRIVATE "/langversion:11")
 
+set_property(TARGET HeliumCodeAssist PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${HELIUM_WORKING_DIR})

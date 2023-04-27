@@ -19,6 +19,8 @@ find_package(EASTL CONFIG REQUIRED)
 find_package(Boost REQUIRED)
 find_package(argparse REQUIRED)
 
+set(HELIUM_WORKING_DIR ${CMAKE_CURRENT_LIST_DIR})
+
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/lib/imgui)
 
 target_compile_definitions(

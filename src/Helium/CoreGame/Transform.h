@@ -7,7 +7,9 @@ heliumBegin
 
 class Transform final : public ActorComponent
 {
-    MANAGED_CLASS(Transform, ActorComponent, false);
+#pragma region Generated
+	MANAGED_CLASS(Transform, ActorComponent, false);
+#pragma endregion
 public:
     Transform() = default;
 

@@ -4,10 +4,10 @@ public struct U8 { }
 public struct U16 { }
 public struct U32 { }
 public struct U64 { }
-public struct I8 { }
-public struct I16 { }
-public struct I32 { }
-public struct I64 { }
+public struct S8 { }
+public struct S16 { }
+public struct S32 { }
+public struct S64 { }
 public struct F32 { }
 public struct F64 { }
 public struct Bool { }
