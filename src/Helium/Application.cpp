@@ -112,7 +112,7 @@ void Application::OnGUIUpdate(float deltaTime)
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Quit", "cmd+Q"))
+            if (ImGui::MenuItem("Quit", "alt+F4"))
             {
                 m_ShouldClose = true;
             }

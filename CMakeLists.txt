@@ -66,7 +66,8 @@ target_link_libraries(Helium PUBLIC spdlog::spdlog spdlog::spdlog_header_only)
 
 # find all headers and source files
 file(GLOB_RECURSE HELIUM_HEADERS CONFIGURE_DEPENDS src/Helium/*.h)
-file(GLOB_RECURSE HELIUM_SOURCES CONFIGURE_DEPENDS src/Helium/*.cpp)
+file(GLOB_RECURSE HELIUM_SOURCES CONFIGURE_DEPENDS src/Helium/*.cpp src/Helium/*.declaration.cs)
+set(HELIUM_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/src/Helium)
 
 # pch
 target_precompile_headers(Helium PUBLIC src/Helium/HeliumPrecompiled.h)
@@ -97,3 +98,5 @@ file(GLOB_RECURSE HELIUM_ASSETS Assets/*)
 target_sources(Helium PUBLIC ${HELIUM_ASSETS})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/Assets FILES ${HELIUM_ASSETS} PREFIX Assets)
 ENDIF()
+
+add_subdirectory(tools/HeliumCodeAssist)
