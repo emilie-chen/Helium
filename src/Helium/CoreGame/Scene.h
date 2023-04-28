@@ -16,8 +16,10 @@ public:
     Scene();
     ~Scene() override;
 
+    void DestroyChildObjects() override;
+
 private:
-    Handle<Actor> m_RootActor;
+    std::vector<Handle<Actor>> m_RootActors;
 };
 
 heliumEnd

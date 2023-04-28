@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Helium/ObjectModel/ManagedObject.h>
+#include "Helium/ObjectModel/ManagedObject.h"
 #include "Helium/HeliumPrecompiled.h"
 
 heliumBegin

@@ -1,16 +1,19 @@
-#include <Helium/AssetManagement/ShaderSourceFileAsset.h>
 #include "Helium/HeliumPrecompiled.h"
 
 #include "Helium/Application.h"
-#include "Helium/Rendering/ShaderProgram.h"
-#include "Helium/ImGui/ObjectViewerWindow.h"
-#include <Helium/Utility/Stopwatch.h>
-#include <Helium/ObjectModel/RuntimeObjectRegistry.h>
+
+#include "Helium/AssetManagement/ShaderSourceFileAsset.h"
+#include "Helium/CoreGame/Actor.h"
+#include "Helium/CoreGame/CameraType.h"
 #include "Helium/CoreGame/Transform.h"
+#include "Helium/ImGui/ObjectViewerWindow.h"
+#include "Helium/ObjectModel/EnumHandle.h"
+#include "Helium/ObjectModel/RuntimeObjectRegistry.h"
+#include "Helium/Platform/GL/GLIndexBuffer.h"
 #include "Helium/Platform/GL/GLVertexArray.h"
 #include "Helium/Platform/GL/GLVertexBuffer.h"
-#include "Helium/Platform/GL/GLIndexBuffer.h"
-#include "Helium/CoreGame/CameraType.h"
+#include "Helium/Rendering/ShaderProgram.h"
+#include "Helium/Utility/Stopwatch.h"
 
 heliumBegin
 
@@ -59,7 +62,12 @@ Application::Application()
     m_IndexBuffer->Bind();
     m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-    UnsafeHandle<ManagedEnumDescriptor> descriptor = CameraTypeHelper::GetDescriptor();
+    EnumHandle<CameraType> h = CameraType::Perspective;
+    h = CameraType::Orthographic;
+    h = CameraType::Perspective;
+    EnumHandleRef ref = h.ToRef();
+    U64 value = ref.GetValue();
+    UnsafeHandle<ManagedEnumDescriptor> enumDescriptor = ref.GetDescriptor();
 }
 
 void Application::Execute()

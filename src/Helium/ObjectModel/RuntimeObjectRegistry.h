@@ -1,10 +1,9 @@
 #pragma once
 
-#include <Helium/CoreGame/Actor.h>
 #include "Helium/HeliumPrecompiled.h"
 #include "Helium/ObjectModel/Singleton.h"
 #include "Helium/ObjectModel/Handle.h"
-
+#include "Helium/ObjectModel/ManagedObject.h"
 
 heliumBegin
 

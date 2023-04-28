@@ -3,10 +3,10 @@
 #include "Helium/HeliumPrecompiled.h"
 
 #include "Helium/ObjectModel/UnsafeHandle.h"
-#include "Helium/Reflection/TypeDescriptor.h"
 #include "Helium/Utility/CRC32.h"
 #include "Helium/Utility/Hex.h"
 #include "Helium/Reflection/TypeRegistry.h"
+#include "Helium/Reflection/TypeDescriptor.h"
 
 #include "yaml-cpp/yaml.h"
 
@@ -32,6 +32,7 @@ Reference<T> MakeManagedConditional(Args&& ... args)
 }
 }
 
+class ManagedClassDescriptor;
 
 class ManagedObject
 {
@@ -42,16 +43,14 @@ private:
     constexpr static Bool s_IsSerializable = true;
     constexpr static CRC32 s_TypeID = CRC32_COMPUTE(nameof(ManagedObject));
     constexpr static const char* s_TypeName = nameof(ManagedObject);
-    inline static const ManagedClassDescriptor s_TypeDescriptor = ManagedClassDescriptor(
-        s_TypeName,
-        StaticConstruct
-    );
+    static ManagedClassDescriptor s_TypeDescriptor;
 
     friend class RuntimeObjectRegistry;
 
 public:
     using self = ManagedObject;
     virtual ~ManagedObject() = default;
+    static void RegisterMembers();
     NODISCARD virtual Bool IsSerializable() const;
     NODISCARD static Bool ClassIsSerializable();
     NODISCARD virtual String ToString() const;
@@ -78,6 +77,7 @@ T* ConstructRawConditional()
     return new T;
 }
 
+using StaticConstructType = ManagedObject* (*)();
 
 #define MANAGED_CLASS(className, superClass, isSerializable) \
     private:                                                  \
@@ -88,11 +88,12 @@ T* ConstructRawConditional()
     constexpr static const char* s_TypeName = nameof(className);        \
     inline static const ManagedClassDescriptor s_TypeDescriptor = ManagedClassDescriptor( \
         s_TypeName, \
-        StaticConstruct \
+        reinterpret_cast<StaticConstructType>(reinterpret_cast<void*>(StaticConstruct)) \
     );\
     public:                                                   \
     using base = superClass;                                \
     using self = className; \
+    static void RegisterMembers(); \
     NODISCARD virtual Bool IsSerializable() const override { return s_IsSerializable; } \
     NODISCARD static Bool ClassIsSerializable() { return s_IsSerializable; } \
     NODISCARD virtual String GetTypeName() const override { return s_TypeName; } \

@@ -4,6 +4,8 @@
 
 #include <utility>
 
+#include "Helium/Reflection/ManagedPropertyDescriptor.h"
+
 heliumBegin
 
 ManagedClassDescriptor::ManagedClassDescriptor(const String& className, std::function<ManagedObject*()> factory)
@@ -28,6 +30,11 @@ ManagedObject* ManagedClassDescriptor::CreateInstance() const
     return m_Factory();
 }
 
+void ManagedClassDescriptor::AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter)
+{
+    m_Properties.emplace_back(new ManagedPropertyDescriptor(this, propertyName, propertyType, getter, setter));
+}
+
 ManagedEnumDescriptor::ManagedEnumDescriptor(const String& enumName)
     : m_EnumName(enumName)
     , m_EnumID(CRC32Compute(enumName.c_str(), enumName.length()))
@@ -48,6 +55,16 @@ CRC32 ManagedEnumDescriptor::GetEnumID() const
 Size ManagedEnumDescriptor::GetEnumValueCount() const
 {
     return m_EnumValues.size();
+}
+
+NODISCARD std::vector<std::pair<String, U64>> ManagedEnumDescriptor::GetEnumPairs() const
+{
+    std::vector<std::pair<String, U64>> pairs;
+    for (const auto& pair : m_EnumValues)
+    {
+		pairs.emplace_back(pair.right, pair.left);
+	}
+	return pairs;
 }
 
 heliumEnd

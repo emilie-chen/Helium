@@ -49,13 +49,20 @@ public:
 
     template <typename T> requires std::is_base_of_v<ActorComponent, T>
     Handle<T> TryAddComponent();
+
+    void AddChild(Handle<Actor> child);
+    void RemoveChild(Handle<Actor> child);
+    void SetParent(Handle<Actor> parent);
+    Handle<Actor> GetParent() const { return m_Parent; }
     
 private:
     bool m_Active = true;
-    ActorID m_ID = 0;
 
     // component array
     ActorComponentStore m_ComponentStore;
+
+    std::vector<Handle<Actor>> m_Children;
+    Handle<Actor> m_Parent;
 };
 
 template <typename T> requires std::is_base_of_v<ActorComponent, T>

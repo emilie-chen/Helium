@@ -124,7 +124,7 @@ struct VertexBufferElement final
     GraphicsDataType Type;
     VertexBufferElementUsage Usage;
     bool Normalized;
-    U32 Offset;
+    U64 Offset;
 
     VertexBufferElement(GraphicsDataType type, VertexBufferElementUsage usage, bool normalized = false)
         : Type(type)
@@ -142,11 +142,11 @@ public:
 
     void AddElement(VertexBufferElement element);
 
-    NODISCARD U32 GetStride() const;
+    NODISCARD U64 GetStride() const;
     NODISCARD const std::vector<VertexBufferElement>& GetElements() const;
 private:
-    U32 m_CurrentOffset{ 0 };
-    U32 m_Stride{0};
+    U64 m_CurrentOffset{ 0 };
+    U64 m_Stride{0};
     std::vector<VertexBufferElement> m_Elements;
 };
 

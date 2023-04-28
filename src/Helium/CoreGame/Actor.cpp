@@ -6,6 +6,16 @@
 
 heliumBegin
 
+Actor::Actor()
+{
+	// immediately add a transform component, which is mandatory for all actors
+	TryAddComponent<Transform>();
+}
+
+Actor::~Actor()
+{
+
+}
 
 void Actor::Awake()
 {
@@ -42,16 +52,40 @@ void Actor::DestroyChildObjects()
     }
 }
 
-Actor::Actor()
+void Actor::AddChild(Handle<Actor> child)
 {
-    // immediately add a transform component, which is mandatory for all actors
-    TryAddComponent<Transform>();
+    if (child->GetParent() == this)
+    {
+        return;
+    }
+    child->SetParent(this);
+	m_Children.emplace_back(child);
 }
 
-Actor::~Actor()
+void Actor::RemoveChild(Handle<Actor> child)
 {
-
+    if (child->GetParent() != this)
+    {
+        throw std::runtime_error("Cannot remove child from actor that is not its parent");
+		return;
+	}
+    child->SetParent(nullptr);
+    m_Children.erase(std::find(m_Children.begin(), m_Children.end(), child));
 }
+
+void Actor::SetParent(Handle<Actor> parent)
+{
+    if (m_Parent == parent)
+    {
+		return;
+	}
+    if (m_Parent)
+    {
+		m_Parent->RemoveChild(this);
+    }
+    m_Parent = parent;
+}
+
 
 Handle<ActorComponent> ActorComponentStore::GetComponentByTypeID(const CRC32 typeID)
 {

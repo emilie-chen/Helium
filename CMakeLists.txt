@@ -18,6 +18,7 @@ find_package(yaml-cpp CONFIG REQUIRED)
 find_package(EASTL CONFIG REQUIRED)
 find_package(Boost REQUIRED)
 find_package(argparse REQUIRED)
+find_package(cppcoro REQUIRED)
 
 set(HELIUM_WORKING_DIR ${CMAKE_CURRENT_LIST_DIR})
 
@@ -42,6 +43,7 @@ target_link_libraries(Helium PUBLIC fmt::fmt
     yaml-cpp
     argparse::argparse
     EASTL
+    cppcoro
 )
 ELSE()
 target_link_libraries(Helium PUBLIC fmt::fmt
@@ -98,3 +100,18 @@ source_group(TREE ${CMAKE_CURRENT_LIST_DIR}/Assets FILES ${HELIUM_ASSETS} PREFIX
 ENDIF()
 
 add_subdirectory(tools/HeliumCodeAssist)
+
+target_compile_options(Helium PUBLIC "/arch:AVX2")
+target_compile_options(Helium PUBLIC
+    "$<$<CONFIG:RELEASE>:/Oi>"
+    "$<$<CONFIG:RELEASE>:/Oy>"
+    "$<$<CONFIG:RELEASE>:/GL>"
+    "$<$<CONFIG:RELEASE>:/GT>"
+    "$<$<CONFIG:RELEASE>:/guard:cf>"
+    "$<$<CONFIG:RELEASE>:/Gy>"
+    "$<$<CONFIG:RELEASE>:/Qpar>"
+)
+
+target_link_options(Helium PUBLIC
+    "$<$<CONFIG:RELEASE>:/LTCG:incremental>"
+)

@@ -2,6 +2,8 @@
 
 #include "RuntimeObjectRegistry.h"
 
+#include "Helium/ObjectModel/ManagedObject.h"
+
 heliumBegin
 
 RuntimeObjectRegistry* RuntimeObjectRegistry::GetInstance()

@@ -8,12 +8,21 @@ heliumBegin
 
 Scene::Scene()
 {
-    m_RootActor = CreateObject<Actor>();
+    
 }
 
 Scene::~Scene()
 {
-    QueueDestroyForEndOfFrame(m_RootActor);
+    
+}
+
+void Scene::DestroyChildObjects()
+{
+    for (Handle<Actor> actor : m_RootActors)
+    {
+        QueueDestroyForEndOfFrame(actor);
+    }
+    m_RootActors.clear();
 }
 
 heliumEnd

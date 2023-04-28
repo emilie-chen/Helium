@@ -3,10 +3,17 @@
 #include "Helium/HeliumPrecompiled.h"
 
 #include "Helium/Utility/CRC32.h"
+#include "Helium/ObjectModel/UnsafeHandle.h"
+#include "Helium/ObjectModel/Handle.h"
 
 heliumBegin
 
 class ManagedObject;
+class ManagedPropertyDescriptor;
+enum class PropertyType;
+
+using TypeErasedGetAccessor = std::function<std::any(Handle<ManagedObject>)>;
+using TypeErasedSetAccessor = std::function<void(Handle<ManagedObject>, std::any)>;
 
 class ManagedClassDescriptor final
 {
@@ -17,10 +24,13 @@ public:
     NODISCARD CRC32 GetClassID() const;
     NODISCARD ManagedObject* CreateInstance() const;
 
+    void AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter);
+
 private:
     String m_ClassName;
     CRC32 m_ClassID;
     std::function<ManagedObject*()> m_Factory;
+    std::vector<UnsafeHandle<ManagedPropertyDescriptor>> m_Properties;
 };
 
 class ManagedInterfaceDescriptor final
@@ -46,6 +56,8 @@ public:
     void AddEnumValue(const TValue& enumValue, const String& enumValueString);
 
     NODISCARD Size GetEnumValueCount() const;
+
+    NODISCARD std::vector<std::pair<String, U64>> GetEnumPairs() const;
 
 private:
     String m_EnumName;

@@ -2,9 +2,13 @@
 
 #include "ManagedObject.h"
 #include "Helium/ObjectModel/RuntimeObjectRegistry.h"
+#include "Helium/Reflection/TypeDescriptor.h"
 
 heliumBegin
 
+void ManagedObject::RegisterMembers()
+{
+}
 
 Bool ManagedObject::IsSerializable() const
 {
@@ -63,6 +67,11 @@ ManagedObject* ManagedObject::StaticConstruct()
 {
     return new ManagedObject;
 }
+
+ManagedClassDescriptor ManagedObject::s_TypeDescriptor = ManagedClassDescriptor(
+	s_TypeName,
+	StaticConstruct
+);;
 
 
 heliumEnd

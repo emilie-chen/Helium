@@ -4,7 +4,7 @@
 
 heliumBegin
 
-U32 VertexBufferLayout::GetStride() const
+U64 VertexBufferLayout::GetStride() const
 {
     return m_Stride;
 }
@@ -12,7 +12,7 @@ U32 VertexBufferLayout::GetStride() const
 void VertexBufferLayout::AddElement(VertexBufferElement element)
 {
     element.Offset = m_CurrentOffset;
-    const U32 elementSize = GetElementSizeInBytes(element.Type);
+    const U64 elementSize = GetElementSizeInBytes(element.Type);
     m_CurrentOffset += elementSize;
     m_Elements.push_back(element);
     m_Stride += elementSize;

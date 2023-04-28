@@ -33,6 +33,7 @@ typedef size_t Size;
 typedef float F32;
 typedef double F64;
 typedef std::string String;
+typedef std::string_view StringView;
 typedef std::u8string UString;
 typedef std::wstring WString;
 typedef std::filesystem::path Path;

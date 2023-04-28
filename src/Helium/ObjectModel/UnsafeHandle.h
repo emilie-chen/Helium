@@ -11,7 +11,7 @@ class UnsafeHandle final
 {
 public:
     UnsafeHandle();
-    explicit UnsafeHandle(T* value);
+    UnsafeHandle(T* value);
 
     virtual ~UnsafeHandle();
 

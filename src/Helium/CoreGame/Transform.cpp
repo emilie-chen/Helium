@@ -8,6 +8,11 @@
 
 heliumBegin
 
+#pragma region Generated
+void Transform::RegisterMembers()
+{
+}
+#pragma endregion
 
 void Transform::UpdateLocalMatrix()
 {
@@ -16,16 +21,16 @@ void Transform::UpdateLocalMatrix()
     mat = glm::mat4_cast(m_LocalRotation) * mat;
     mat = glm::translate(mat, m_LocalTranslation);
     m_LocalMatrix = mat;
-    m_IsDirty = false;
+    m_LocalMatrixIsDirty = false;
 }
 
 void Transform::SetLocalTranslation(const vec3& value)
 {
     m_LocalTranslation = value;
-	m_IsDirty = true;
+	m_LocalMatrixIsDirty = true;
 }
 
-vec3 Transform::GetLocalTranslation()
+vec3 Transform::GetLocalTranslation() const
 {
     return m_LocalTranslation;
 }
@@ -33,10 +38,10 @@ vec3 Transform::GetLocalTranslation()
 void Transform::SetLocalRotation(const quat& value)
 {
     m_LocalRotation = value;
-	m_IsDirty = true;
+	m_LocalMatrixIsDirty = true;
 }
 
-quat Transform::GetLocalRotation()
+quat Transform::GetLocalRotation() const
 {
    return m_LocalRotation;
 }
@@ -44,17 +49,17 @@ quat Transform::GetLocalRotation()
 void Transform::SetLocalScale(const vec3& value)
 {
     m_LocalScale = value;
-	m_IsDirty = true;
+	m_LocalMatrixIsDirty = true;
 }
 
-vec3 Transform::GetLocalScale()
+vec3 Transform::GetLocalScale() const
 {
     return m_LocalScale;
 }
 
 glm::mat4 Transform::GetLocalMatrix()
 {
-    if (m_IsDirty)
+    if (m_LocalMatrixIsDirty)
     {
         UpdateLocalMatrix();
     }

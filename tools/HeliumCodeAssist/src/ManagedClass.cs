@@ -81,6 +81,9 @@ heliumEnd
 
 heliumBegin
 
+#pragma region Generated
+#pragma endregion
+
 heliumEnd
 
 """;
@@ -134,7 +137,42 @@ heliumEnd
 
     private static void ProcessManagedClassSource(string sourcePath, ManagedClassData typeData)
     {
-        // skipped
+        List<string> linesModified = new List<string>();
+        string[] lines = File.ReadAllLines(sourcePath);
+
+        int generatedRegionStart = SeekRegionStart(lines, "Generated");
+        if (generatedRegionStart == -1)
+        {
+            Console.WriteLine("Generated region not found for type " + typeData.typeName);
+            return;
+        }
+
+        int lineIndex = 0;
+        bool codeGenCompleted = false;
+        while (true)
+        {
+            if (lineIndex >= lines.Length)
+            {
+                break;
+            }
+
+            if (lineIndex <= generatedRegionStart || codeGenCompleted)
+            {
+                linesModified.Add(lines[lineIndex]);
+                lineIndex++;
+                continue;
+            }
+
+            // insert generated code
+            linesModified.Add($"void {typeData.typeName}::RegisterMembers()");
+            linesModified.Add("{");
+            linesModified.Add("}");
+
+            codeGenCompleted = true;
+            lineIndex = SeekRegionEnd(lines, "Generated");
+        }
+
+        File.WriteAllLines(sourcePath, linesModified);
     }
 
     private static void ProcessManagedClassHeader(string headerPath, ManagedClassData typeData)

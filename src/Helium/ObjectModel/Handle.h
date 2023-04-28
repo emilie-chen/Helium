@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Helium/HeliumPrecompiled.h"
-#include "Helium/ObjectModel/ManagedObject.h"
 
 heliumBegin
 
@@ -58,22 +57,40 @@ public:
         return m_Object;
     }
 
-    template <typename U> requires std::is_base_of_v<ManagedObject, U>
+    template <typename U>
     Handle<U> As() const
     {
         return Handle<U>(dynamic_cast<U*>(m_Object));
     }
 
-    template <typename U> requires std::is_base_of_v<ManagedObject, U>
+    template <typename U>
     Handle<U> As()
     {
         return Handle<U>(dynamic_cast<U*>(m_Object));
     }
 
-    template <typename U> requires std::is_base_of_v<ManagedObject, U>
+    template <typename U>
     bool operator==(const Handle<U>& other) const
     {
         return m_Object == other.m_Object;
+    }
+
+    template <typename U>
+    bool operator!=(const Handle<U>& other) const
+    {
+		return m_Object != other.m_Object;
+	}
+
+    template <typename U>
+    bool operator==(const U* other) const
+    {
+		return m_Object == other;
+	}
+
+    template <typename U>
+    bool operator!=(const U* other) const
+    {
+        return m_Object != other;
     }
 
     template <typename U> requires std::is_base_of_v<U, T>
@@ -96,7 +113,7 @@ heliumEnd
 
 namespace std {
 
-template <typename T> requires std::is_base_of_v<Helium::ManagedObject, T>
+template <typename T>
 struct hash<Helium::Handle<T>>
 {
     std::size_t operator()(const Helium::Handle<T>& k) const

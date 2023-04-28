@@ -2,11 +2,18 @@
 
 #include "TypeRegistry.h"
 
+#include "Helium/Reflection/TypeDescriptor.h"
+
 heliumBegin
 
 void TypeRegistry::RegisterClass(const UnsafeHandle<ManagedClassDescriptor>& classDescriptor)
 {
     m_ManagedClasses[classDescriptor->GetClassID()] = classDescriptor;
+}
+
+void TypeRegistry::RegisterEnum(const UnsafeHandle<ManagedEnumDescriptor>& enumDescriptor)
+{
+    m_ManagedEnums[enumDescriptor->GetEnumID()] = enumDescriptor;
 }
 
 UnsafeHandle<TypeRegistry> TypeRegistry::GetInstance()
@@ -26,6 +33,16 @@ UnsafeHandle<ManagedClassDescriptor> TypeRegistry::GetClassDescriptor(const CRC3
     }
 
     return UnsafeHandle<ManagedClassDescriptor>(nullptr);
+}
+
+NODISCARD UnsafeHandle<ManagedEnumDescriptor> TypeRegistry::GetEnumDescriptor(const CRC32& enumID) const
+{
+    if (m_ManagedEnums.contains(enumID))
+    {
+		return m_ManagedEnums.at(enumID);
+	}
+
+    return UnsafeHandle<ManagedEnumDescriptor>(nullptr);
 }
 
 heliumEnd

@@ -21,6 +21,12 @@
 #include <semaphore>
 #include <valarray>
 #include <exception>
+#include <algorithm>
+#include <string_view>
+
+using namespace std::literals::string_literals;
+using namespace std::literals::chrono_literals;
+using namespace std::literals::string_view_literals;
 
 #include <boost/bimap.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -31,5 +37,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <spdlog/spdlog.h>
+#include <cppcoro/sync_wait.hpp>
+#include <cppcoro/task.hpp>
+#include <cppcoro/static_thread_pool.hpp>
+#include <cppcoro/when_all.hpp>
+#include <cppcoro/async_latch.hpp>
+#include <cppcoro/async_mutex.hpp>
+#include <cppcoro/generator.hpp>
 
 #include "Helium/Core.h"

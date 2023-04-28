@@ -1,8 +1,7 @@
 #include "Helium/HeliumPrecompiled.h"
 
-#include "ManagedField.h"
+#include "PropertyType.h"
 
 heliumBegin
-
 
 heliumEnd
