@@ -30,9 +30,14 @@ ManagedObject* ManagedClassDescriptor::CreateInstance() const
     return m_Factory();
 }
 
-void ManagedClassDescriptor::AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter)
+void ManagedClassDescriptor::AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter, std::variant<nullptr_t, UnsafeHandle<ManagedClassDescriptor>, UnsafeHandle<ManagedEnumDescriptor>> descriptor)
 {
-    m_Properties.emplace_back(new ManagedPropertyDescriptor(this, propertyName, propertyType, getter, setter));
+    m_Properties.emplace_back(new ManagedPropertyDescriptor(this, propertyName, propertyType, getter, setter, descriptor));
+}
+
+std::vector<UnsafeHandle<ManagedPropertyDescriptor>> ManagedClassDescriptor::GetProperties() const
+{
+    return m_Properties;
 }
 
 ManagedEnumDescriptor::ManagedEnumDescriptor(const String& enumName)

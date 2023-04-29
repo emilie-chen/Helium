@@ -15,53 +15,60 @@ void Transform::RegisterMembers()
     descriptor->AddProperty(nameof(LocalTranslation), PropertyType::Vec3,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Transform>()->GetLocalTranslation();
+    	return  instance.As<Transform>()->GetLocalTranslation();
     },
     [](Handle<ManagedObject> instance, std::any value)
     {
     	instance.As<Transform>()->SetLocalTranslation(std::any_cast<vec3>(value));
-    });
+    },
+    nullptr);
     descriptor->AddProperty(nameof(LocalRotation), PropertyType::Quat,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Transform>()->GetLocalRotation();
+    	return  instance.As<Transform>()->GetLocalRotation();
     },
     [](Handle<ManagedObject> instance, std::any value)
     {
     	instance.As<Transform>()->SetLocalRotation(std::any_cast<quat>(value));
-    });
+    },
+    nullptr);
     descriptor->AddProperty(nameof(LocalScale), PropertyType::Vec3,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Transform>()->GetLocalScale();
+    	return  instance.As<Transform>()->GetLocalScale();
     },
     [](Handle<ManagedObject> instance, std::any value)
     {
     	instance.As<Transform>()->SetLocalScale(std::any_cast<vec3>(value));
-    });
+    },
+    nullptr);
     descriptor->AddProperty(nameof(LocalMatrix), PropertyType::Mat4,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Transform>()->GetLocalMatrix();
+    	return  instance.As<Transform>()->GetLocalMatrix();
     },
+    std::nullopt,
     nullptr);
     descriptor->AddProperty(nameof(WorldTranslation), PropertyType::Vec3,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Transform>()->GetWorldTranslation();
+    	return  instance.As<Transform>()->GetWorldTranslation();
     },
+    std::nullopt,
     nullptr);
     descriptor->AddProperty(nameof(WorldRotation), PropertyType::Quat,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Transform>()->GetWorldRotation();
+    	return  instance.As<Transform>()->GetWorldRotation();
     },
+    std::nullopt,
     nullptr);
     descriptor->AddProperty(nameof(WorldScale), PropertyType::Vec3,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Transform>()->GetWorldScale();
+    	return  instance.As<Transform>()->GetWorldScale();
     },
+    std::nullopt,
     nullptr);
 }
 #pragma endregion

@@ -4,9 +4,10 @@
 
 #include "Helium/AssetManagement/ShaderSourceFileAsset.h"
 #include "Helium/CoreGame/Actor.h"
+#include "Helium/CoreGame/Camera.h"
 #include "Helium/CoreGame/CameraType.h"
 #include "Helium/CoreGame/Transform.h"
-#include "Helium/ImGui/ObjectViewerWindow.h"
+#include "Helium/ImGui/ObjectInspectorWindow.h"
 #include "Helium/ObjectModel/EnumHandle.h"
 #include "Helium/ObjectModel/RuntimeObjectRegistry.h"
 #include "Helium/Platform/GL/GLIndexBuffer.h"
@@ -42,9 +43,16 @@ Application::Application()
 		0, 1, 2, 2, 3, 0
 	};
 
-    m_ShaderSourceFileAsset = MakeReference<ShaderSourceFileAsset>("Assets/Shaders/test.vert");
+    Handle<Camera> camera = CreateObject<Camera>();
+    Reference<ObjectInspectorWindow> cameraInspector = MakeReference<ObjectInspectorWindow>(camera);
+    AddGuiWindow(cameraInspector);
 
-    AddGuiWindow(MakeReference<ObjectViewerWindow>(m_ShaderSourceFileAsset->GetAssetDescriptor()));
+    Handle<Actor> actor = CreateObject<Actor>();
+    Handle<Transform> actorTransform = actor->GetComponent<Transform>();
+    Reference<ObjectInspectorWindow> actorTransformInspector = MakeReference<ObjectInspectorWindow>(actorTransform);
+    AddGuiWindow(actorTransformInspector);
+
+    UnsafeHandle<ManagedClassDescriptor> transformClassDescriptor = actorTransform->GetDescriptor();
 
     m_VertexArray = MakeReference<GLVertexArray>();
     m_VertexArray->Bind();

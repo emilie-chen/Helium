@@ -12,12 +12,13 @@ void Camera::RegisterMembers()
     descriptor->AddProperty(nameof(CameraType), PropertyType::Enum,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<Camera>()->GetCameraType();
+    	return (U64) instance.As<Camera>()->GetCameraType();
     },
     [](Handle<ManagedObject> instance, std::any value)
     {
-    	instance.As<Camera>()->SetCameraType(std::any_cast<CameraType>(value));
-    });
+    	instance.As<Camera>()->SetCameraType(static_cast<CameraType>(std::any_cast<U64>(value)));
+    },
+    CameraTypeHelper::GetDescriptor());
 }
 #pragma endregion
 

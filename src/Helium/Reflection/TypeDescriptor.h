@@ -10,6 +10,8 @@ heliumBegin
 
 class ManagedObject;
 class ManagedPropertyDescriptor;
+class ManagedClassDescriptor;
+class ManagedEnumDescriptor;
 enum class PropertyType;
 
 using TypeErasedGetAccessor = std::function<std::any(Handle<ManagedObject>)>;
@@ -24,7 +26,8 @@ public:
     NODISCARD CRC32 GetClassID() const;
     NODISCARD ManagedObject* CreateInstance() const;
 
-    void AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter);
+    void AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter, std::variant<nullptr_t, UnsafeHandle<ManagedClassDescriptor>, UnsafeHandle<ManagedEnumDescriptor>> descriptor);
+    std::vector<UnsafeHandle<ManagedPropertyDescriptor>> GetProperties() const;
 
 private:
     String m_ClassName;
@@ -49,10 +52,10 @@ public:
     template <typename TEnum>
     NODISCARD TEnum ParseEnum(const String& enumValueString) const;
 
-    template <typename TValue> requires std::is_enum_v<TValue>
+    template <typename TValue>
     NODISCARD String GetEnumValueString(const TValue& enumValue) const;
 
-    template <typename TValue> requires std::is_enum_v<TValue>
+    template <typename TValue>
     void AddEnumValue(const TValue& enumValue, const String& enumValueString);
 
     NODISCARD Size GetEnumValueCount() const;
@@ -71,13 +74,13 @@ TEnum ManagedEnumDescriptor::ParseEnum(const String& enumValueString) const
     return static_cast<TEnum>(m_EnumValues.right.at(enumValueString));
 }
 
-template <typename TValue> requires std::is_enum_v<TValue>
+template <typename TValue>
 String ManagedEnumDescriptor::GetEnumValueString(const TValue& enumValue) const
 {
     return m_EnumValues.left.at(static_cast<U64>(enumValue));
 }
 
-template <typename TValue> requires std::is_enum_v<TValue>
+template <typename TValue>
 void ManagedEnumDescriptor::AddEnumValue(const TValue& enumValue, const String& enumValueString)
 {
     m_EnumValues.insert({ static_cast<U64>(enumValue), enumValueString });
