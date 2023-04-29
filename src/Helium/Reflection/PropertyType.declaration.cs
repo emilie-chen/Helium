@@ -3,6 +3,7 @@ namespace Helium;
 [NativePath("Helium/Reflection/PropertyType")]
 public enum PropertyType
 {
+    Invalid = 0,
     U8,
     U16,
     U32,
@@ -19,5 +20,9 @@ public enum PropertyType
     Vec2,
     Vec3,
     Vec4,
-    Handle
+    Quat,
+    Mat3,
+    Mat4,
+    Handle,
+    Enum
 }

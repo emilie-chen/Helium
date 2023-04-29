@@ -6,5 +6,10 @@
 
 heliumBegin
 
+#pragma region Generated
+void ActorComponent::RegisterMembers()
+{
+}
+#pragma endregion
 
 heliumEnd

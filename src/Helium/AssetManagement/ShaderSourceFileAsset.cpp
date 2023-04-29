@@ -9,6 +9,10 @@
 
 heliumBegin
 
+void ShaderSourceFileAsset::RegisterMembers()
+{
+}
+
 AssetType ShaderSourceFileAsset::GetType() const
 {
     return AssetType::ShaderSourceFile;

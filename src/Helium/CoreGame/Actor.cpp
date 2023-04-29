@@ -12,6 +12,13 @@ Actor::Actor()
 	TryAddComponent<Transform>();
 }
 
+#pragma region Generated
+void Actor::RegisterMembers()
+{
+
+}
+#pragma endregion
+
 Actor::~Actor()
 {
 

@@ -4,6 +4,10 @@
 
 heliumBegin
 
+void ShaderSourceFileAssetDescriptor::RegisterMembers()
+{
+}
+
 void ShaderSourceFileAssetDescriptor::Serialize(YAML::Node& out) const
 {
     BEGIN_IMPLEMENT_SERIALIZE();

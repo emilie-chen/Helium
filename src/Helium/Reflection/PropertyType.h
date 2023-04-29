@@ -8,26 +8,32 @@ heliumBegin
 #pragma region Generated
 enum class PropertyType
 {
-    U8 = 0,
-    U16 = 1,
-    U32 = 2,
-    U64 = 3,
-    S8 = 4,
-    S16 = 5,
-    S32 = 6,
-    S64 = 7,
-    F32 = 8,
-    F64 = 9,
-    Bool = 10,
-    Char = 11,
-    String = 12,
-    Vec2 = 13,
-    Vec3 = 14,
-    Vec4 = 15,
-    Handle = 16,
+    Invalid = 0,
+    U8 = 1,
+    U16 = 2,
+    U32 = 3,
+    U64 = 4,
+    S8 = 5,
+    S16 = 6,
+    S32 = 7,
+    S64 = 8,
+    F32 = 9,
+    F64 = 10,
+    Bool = 11,
+    Char = 12,
+    String = 13,
+    Vec2 = 14,
+    Vec3 = 15,
+    Vec4 = 16,
+    Quat = 17,
+    Mat3 = 18,
+    Mat4 = 19,
+    Handle = 20,
+    Enum = 21,
 };
 
 BEGIN_ENUM_REGISTRATION(PropertyType)
+    REGISTER_ENUM_VALUE(Invalid)
     REGISTER_ENUM_VALUE(U8)
     REGISTER_ENUM_VALUE(U16)
     REGISTER_ENUM_VALUE(U32)
@@ -44,7 +50,11 @@ BEGIN_ENUM_REGISTRATION(PropertyType)
     REGISTER_ENUM_VALUE(Vec2)
     REGISTER_ENUM_VALUE(Vec3)
     REGISTER_ENUM_VALUE(Vec4)
+    REGISTER_ENUM_VALUE(Quat)
+    REGISTER_ENUM_VALUE(Mat3)
+    REGISTER_ENUM_VALUE(Mat4)
     REGISTER_ENUM_VALUE(Handle)
+    REGISTER_ENUM_VALUE(Enum)
 END_ENUM_REGISTRATION()
 #pragma endregion
 

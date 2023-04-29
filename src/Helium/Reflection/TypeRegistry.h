@@ -31,7 +31,8 @@ private:
 };
 
 #define REGISTER_CLASS(className) \
-    TypeRegistry::GetInstance()->RegisterClass(className :: GetClassDescriptor())
+    TypeRegistry::GetInstance()->RegisterClass(className :: GetClassDescriptor()); \
+    className :: RegisterMembers();
 
 #define REGISTER_ENUM(enumName) \
     TypeRegistry::GetInstance()->RegisterEnum(enumName##Helper :: GetDescriptor())

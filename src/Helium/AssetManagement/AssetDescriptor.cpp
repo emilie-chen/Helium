@@ -9,6 +9,11 @@ AssetDescriptor::AssetDescriptor(AssetType type)
 {
 }
 
+void AssetDescriptor::RegisterMembers()
+{
+
+}
+
 AssetType AssetDescriptor::GetType() const
 {
     return m_Type;

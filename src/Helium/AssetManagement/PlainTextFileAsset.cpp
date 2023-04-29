@@ -8,6 +8,10 @@
 
 heliumBegin
 
+void PlainTextFileAsset::RegisterMembers()
+{
+}
+
 AssetType PlainTextFileAsset::GetType() const
 {
     return AssetType::PlainTextFile;

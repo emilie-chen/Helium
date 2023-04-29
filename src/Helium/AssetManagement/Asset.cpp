@@ -9,6 +9,11 @@ String Asset::GetPath() const
     return m_Path.string();
 }
 
+void Asset::RegisterMembers()
+{
+
+}
+
 Asset::Asset(Path path)
     : m_Path(std::move(path))
 {

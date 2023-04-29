@@ -4,6 +4,10 @@
 
 heliumBegin
 
+void PlainTextFileAssetDescriptor::RegisterMembers()
+{
+}
+
 void PlainTextFileAssetDescriptor::Serialize(YAML::Node& out) const
 {
     BEGIN_IMPLEMENT_SERIALIZE();

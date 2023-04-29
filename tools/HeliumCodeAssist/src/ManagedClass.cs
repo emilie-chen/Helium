@@ -78,6 +78,7 @@ heliumEnd
 #include "Helium/HeliumPrecompiled.h"
 
 #include "$header"
+#include "Helium/Reflection/PropertyType.h"
 
 heliumBegin
 
@@ -135,6 +136,63 @@ heliumEnd
         ProcessManagedClassSource(sourcePath, typeData);
     }
 
+    private static PropertyType ParsePropertyType(string name)
+    {
+        switch (name)
+        {
+            case "U8":
+                return PropertyType.U8;
+            case "U16":
+                return PropertyType.U16;
+            case "U32":
+                return PropertyType.U32;
+            case "U64":
+                return PropertyType.U64;
+            case "S8":
+                return PropertyType.S8;
+            case "S16":
+                return PropertyType.S16;
+            case "S32":
+                return PropertyType.S32;
+            case "S64":
+                return PropertyType.S64;
+            case "F32":
+                return PropertyType.F32;
+            case "F64":
+                return PropertyType.F64;
+            case "Bool":
+                return PropertyType.Bool;
+            case "Char":
+                return PropertyType.Char;
+            case "String":
+                return PropertyType.String;
+            case "vec2":
+                return PropertyType.Vec2;
+            case "vec3":
+                return PropertyType.Vec3;
+            case "vec4":
+                return PropertyType.Vec4;
+            case "quat":
+                return PropertyType.Quat;
+            case "mat4":
+                return PropertyType.Mat4;
+            case "mat3":
+                return PropertyType.Mat3;
+        }
+
+        if (name.StartsWith("Handle"))
+        {
+            return PropertyType.Handle;
+        }
+
+        if (Type.GetType($"Helium.{name}").IsEnum)
+        {
+            return PropertyType.Enum;
+        }
+
+        return PropertyType.Invalid;
+    }
+
     private static void ProcessManagedClassSource(string sourcePath, ManagedClassData typeData)
     {
         List<string> linesModified = new List<string>();
@@ -166,6 +224,31 @@ heliumEnd
             // insert generated code
             linesModified.Add($"void {typeData.typeName}::RegisterMembers()");
             linesModified.Add("{");
+            linesModified.Add("    UnsafeHandle<ManagedClassDescriptor> descriptor = GetClassDescriptor();");
+            foreach (PropertyData property in typeData.properties)
+            {
+                linesModified.Add("""
+    descriptor->AddProperty(nameof($propertyName), PropertyType::$propertyType,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<$typeName>()->$getterName();
+    },
+    $setterOptional);
+"""
+                .Replace("$setterOptional", property.hasSetter ?
+                """
+                [](Handle<ManagedObject> instance, std::any value)
+                    {
+                    	instance.As<$typeName>()->$setterName(std::any_cast<$propertyNativeType>(value));
+                    }
+                """ : "nullptr")
+                .Replace("$propertyNativeType", property.type)
+                .Replace("$typeName", typeData.typeName)
+                .Replace("$propertyName", property.name)
+                .Replace("$propertyType", ParsePropertyType(property.type).ToString())
+                .Replace("$getterName", $"Get{property.name}")
+                .Replace("$setterName", $"Set{property.name}"));
+            }
             linesModified.Add("}");
 
             codeGenCompleted = true;

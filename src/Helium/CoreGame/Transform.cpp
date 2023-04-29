@@ -4,13 +4,65 @@
 
 #include "Helium/ObjectModel/RuntimeObjectRegistry.h"
 #include "Helium/ObjectModel/ManagedObject.h"
-
+#include "Helium/Reflection/PropertyType.h"
 
 heliumBegin
 
 #pragma region Generated
 void Transform::RegisterMembers()
 {
+    UnsafeHandle<ManagedClassDescriptor> descriptor = GetClassDescriptor();
+    descriptor->AddProperty(nameof(LocalTranslation), PropertyType::Vec3,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<Transform>()->GetLocalTranslation();
+    },
+    [](Handle<ManagedObject> instance, std::any value)
+    {
+    	instance.As<Transform>()->SetLocalTranslation(std::any_cast<vec3>(value));
+    });
+    descriptor->AddProperty(nameof(LocalRotation), PropertyType::Quat,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<Transform>()->GetLocalRotation();
+    },
+    [](Handle<ManagedObject> instance, std::any value)
+    {
+    	instance.As<Transform>()->SetLocalRotation(std::any_cast<quat>(value));
+    });
+    descriptor->AddProperty(nameof(LocalScale), PropertyType::Vec3,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<Transform>()->GetLocalScale();
+    },
+    [](Handle<ManagedObject> instance, std::any value)
+    {
+    	instance.As<Transform>()->SetLocalScale(std::any_cast<vec3>(value));
+    });
+    descriptor->AddProperty(nameof(LocalMatrix), PropertyType::Mat4,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<Transform>()->GetLocalMatrix();
+    },
+    nullptr);
+    descriptor->AddProperty(nameof(WorldTranslation), PropertyType::Vec3,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<Transform>()->GetWorldTranslation();
+    },
+    nullptr);
+    descriptor->AddProperty(nameof(WorldRotation), PropertyType::Quat,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<Transform>()->GetWorldRotation();
+    },
+    nullptr);
+    descriptor->AddProperty(nameof(WorldScale), PropertyType::Vec3,
+    [](Handle<ManagedObject> instance)
+    {
+    	return instance.As<Transform>()->GetWorldScale();
+    },
+    nullptr);
 }
 #pragma endregion
 
@@ -66,6 +118,20 @@ glm::mat4 Transform::GetLocalMatrix()
     return m_LocalMatrix;
 }
 
+vec3 Transform::GetWorldTranslation() const
+{
+    return vec3();
+}
+
+quat Transform::GetWorldRotation() const
+{
+    return quat();
+}
+
+vec3 Transform::GetWorldScale() const
+{
+    return vec3();
+}
 
 heliumEnd
 
