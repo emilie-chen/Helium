@@ -7,7 +7,8 @@
 #include "Helium/CoreGame/Camera.h"
 #include "Helium/CoreGame/CameraType.h"
 #include "Helium/CoreGame/Transform.h"
-#include "Helium/ImGui/ObjectInspectorWindow.h"
+#include "Helium/ImGui/ActorInspectorWindow.h"
+#include "Helium/ImGui/ObjectInspector.h"
 #include "Helium/ObjectModel/EnumHandle.h"
 #include "Helium/ObjectModel/RuntimeObjectRegistry.h"
 #include "Helium/Platform/GL/GL.h"
@@ -45,14 +46,12 @@ Application::Application()
 		0, 1, 2, 2, 3, 0
 	};
 
-    Handle<Camera> camera = CreateObject<Camera>();
-    Reference<ObjectInspectorWindow> cameraInspector = MakeReference<ObjectInspectorWindow>(camera);
-    AddGuiWindow(cameraInspector);
 
     Handle<Actor> actor = CreateObject<Actor>();
     Handle<Transform> actorTransform = actor->GetComponent<Transform>();
-    Reference<ObjectInspectorWindow> actorTransformInspector = MakeReference<ObjectInspectorWindow>(actorTransform);
-    AddGuiWindow(actorTransformInspector);
+    Reference<ActorInspectorWindow> actorInspector = MakeReference<ActorInspectorWindow>(actor);
+    AddGuiWindow(actorInspector);
+    actor->TryAddComponent<Camera>();
 
     UnsafeHandle<ManagedClassDescriptor> transformClassDescriptor = actorTransform->GetDescriptor();
 
@@ -94,10 +93,10 @@ void Application::Execute()
     {
         sw.Reset();
         sw.Start();
-        m_TimerSystem->WaitForSignal();
+        //m_TimerSystem->WaitForSignal();
         Loop(dt);
         RuntimeObjectRegistry::GetInstance()->ReportFrameEnd();
-        m_TimerSystem->ReportFrameEnd();
+        //m_TimerSystem->ReportFrameEnd();
         dt = (float)(std::chrono::duration_cast<std::chrono::microseconds>(sw.GetElapsedTime()).count() / 1000000.0);
         //spdlog::info("Frame time: {} s", dt);
     }
@@ -180,7 +179,7 @@ void Application::OnGUIUpdate(float deltaTime)
     }
     if (showAboutWindow)
     {
-        if (ImGui::Begin("About", &showAboutWindow, ImGuiWindowFlags_NoResize))
+        if (ImGui::Begin("About", &showAboutWindow))
         {
             ImGui::Text("Helium Editor");
             ImGui::Text("Version 0.0.1");

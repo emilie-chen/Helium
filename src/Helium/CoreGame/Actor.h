@@ -25,6 +25,7 @@ private:
 
 private:
     friend class Actor;
+    friend class ActorInspectorWindow;
 };
 
 class Actor : public ManagedObject
@@ -63,6 +64,8 @@ private:
 
     std::vector<Handle<Actor>> m_Children;
     Handle<Actor> m_Parent;
+
+    friend class ActorInspectorWindow;
 };
 
 template <typename T> requires std::is_base_of_v<ActorComponent, T>

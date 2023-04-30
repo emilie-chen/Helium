@@ -1,6 +1,6 @@
 #include "Helium/HeliumPrecompiled.h"
 
-#include "ObjectInspectorWindow.h"
+#include "ObjectInspector.h"
 #include "Helium/Serialization/Serializer.h"
 #include "Helium/Reflection/ManagedPropertyDescriptor.h"
 
@@ -10,12 +10,8 @@
 
 heliumBegin
 
-ObjectInspectorWindow::ObjectInspectorWindow(Handle<ManagedObject> objectToView)
-    : m_ObjectToView(objectToView)
-{
-}
 
-String LabelPrefix(const char* const label)
+static String LabelPrefix(const char* const label)
 {
 	float width = ImGui::CalcItemWidth();
 
@@ -31,19 +27,11 @@ String LabelPrefix(const char* const label)
 	return labelID;
 }
 
-void ObjectInspectorWindow::OnGUIUpdate(float deltaTime)
+void ObjectInspector::Inspect(Handle<ManagedObject> object)
 {
-    if (!m_IsOpen)
+    if (object)
     {
-        return;
-    }
-
-    ImGui::Begin(("Inspector: "s + m_ObjectToView->ToString()).c_str(), &m_IsOpen);
-
-    if (m_ObjectToView)
-    {
-        UnsafeHandle<ManagedClassDescriptor> classDescriptor = m_ObjectToView->GetDescriptor();
-        ImGui::Text(classDescriptor->GetClassName().c_str());
+        UnsafeHandle<ManagedClassDescriptor> classDescriptor = object->GetDescriptor();
         const std::vector<UnsafeHandle<ManagedPropertyDescriptor>>& properties = classDescriptor->GetProperties();
         for (const UnsafeHandle<ManagedPropertyDescriptor> property : properties)
         {
@@ -54,7 +42,7 @@ void ObjectInspectorWindow::OnGUIUpdate(float deltaTime)
             case PropertyType::Enum:
             {
                 UnsafeHandle<ManagedEnumDescriptor> enumDescriptor = property->GetEnumDescriptor();
-                String currentValue = enumDescriptor->GetEnumValueString<U64>(property->GetValue<U64>(m_ObjectToView));
+                String currentValue = enumDescriptor->GetEnumValueString<U64>(property->GetValue<U64>(object));
                 std::vector<std::pair<String, U64>> enumValues = enumDescriptor->GetEnumPairs();
                 if (ImGui::BeginCombo(LabelPrefix(property->GetName().c_str()).c_str(), currentValue.c_str()))
                 {
@@ -65,7 +53,7 @@ void ObjectInspectorWindow::OnGUIUpdate(float deltaTime)
                             if (!propertyIsReadOnly)
                             {
 								const U64 value = enumValue.second;
-								property->SetValue(m_ObjectToView, value);
+								property->SetValue(object, value);
                             }
 						}
 					}
@@ -75,31 +63,31 @@ void ObjectInspectorWindow::OnGUIUpdate(float deltaTime)
             }
             case PropertyType::Bool:
             {
-				bool currentValue = property->GetValue<bool>(m_ObjectToView);
+				bool currentValue = property->GetValue<bool>(object);
                 if (ImGui::Checkbox(LabelPrefix(property->GetName().c_str()).c_str(), &currentValue))
                 {
                     if (!propertyIsReadOnly)
                     {
-						property->SetValue(m_ObjectToView, currentValue);
+						property->SetValue(object, currentValue);
                     }
 				}
 				break;
             }
             case PropertyType::Vec3:
             {
-                vec3 currentValue = property->GetValue<vec3>(m_ObjectToView);
+                vec3 currentValue = property->GetValue<vec3>(object);
                 if (ImGui::DragFloat3(LabelPrefix(property->GetName().c_str()).c_str(), &currentValue.x, 0.1f, 0.0f, 0.0f, "%.3f", propertyIsReadOnly ? ImGuiSliderFlags_ReadOnly : 0))
                 {
                     if (!propertyIsReadOnly)
                     {
-                        property->SetValue(m_ObjectToView, currentValue);
+                        property->SetValue(object, currentValue);
                     }
 				}
                 break;
             }
             case PropertyType::Quat:
             {
-                quat currentValue = property->GetValue<quat>(m_ObjectToView);
+                quat currentValue = property->GetValue<quat>(object);
                 // convert to euler angles
                 vec3 euler = glm::degrees(glm::eulerAngles(currentValue));
                 if (ImGui::DragFloat3(LabelPrefix(property->GetName().c_str()).c_str(), &euler.x, 0.1f, 0.0f, 0.0f, "%.3f", propertyIsReadOnly ? ImGuiSliderFlags_ReadOnly : 0))
@@ -108,7 +96,7 @@ void ObjectInspectorWindow::OnGUIUpdate(float deltaTime)
                     {
 						// convert back to quaternion
 						currentValue = glm::quat(glm::radians(euler));
-						property->SetValue(m_ObjectToView, currentValue);
+						property->SetValue(object, currentValue);
 					}
                 }
                 break;
@@ -121,8 +109,6 @@ void ObjectInspectorWindow::OnGUIUpdate(float deltaTime)
             }
         }
 	}
-
-    ImGui::End();
 }
 
 heliumEnd
