@@ -14,6 +14,7 @@
 heliumBegin
 
 interface IShaderProgram;
+interface IFrameBuffer;
 
 class Application final
 {
@@ -37,7 +38,7 @@ private:
     Reference<IVertexArray> m_VertexArray;
     Reference<IVertexBuffer> m_VertexBuffer;
     Reference<IIndexBuffer> m_IndexBuffer;
-    GLuint m_FBO, m_FBTexture;
+    Reference<IFrameBuffer> m_FrameBuffer;
 };
 
 heliumEnd

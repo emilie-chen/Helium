@@ -10,13 +10,13 @@
 #include "Helium/ImGui/ObjectInspectorWindow.h"
 #include "Helium/ObjectModel/EnumHandle.h"
 #include "Helium/ObjectModel/RuntimeObjectRegistry.h"
+#include "Helium/Platform/GL/GL.h"
+#include "Helium/Platform/GL/GLFrameBuffer.h"
 #include "Helium/Platform/GL/GLIndexBuffer.h"
 #include "Helium/Platform/GL/GLVertexArray.h"
 #include "Helium/Platform/GL/GLVertexBuffer.h"
 #include "Helium/Rendering/ShaderProgram.h"
 #include "Helium/Utility/Stopwatch.h"
-
-#include "Helium/Platform/GL/GL.h"
 
 heliumBegin
 
@@ -79,9 +79,8 @@ Application::Application()
     U64 value = ref.GetValue();
     UnsafeHandle<ManagedEnumDescriptor> enumDescriptor = ref.GetDescriptor();
 
-    glGenFramebuffers(1, &m_FBO);
-    //glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 
+    m_FrameBuffer = MakeReference<GLFrameBuffer>(vec2{100, 100});
 }
 
 void Application::Execute()
@@ -111,34 +110,24 @@ void Application::Loop(float deltaTime)
 {
     m_Window->PreUpdate(deltaTime);
 
-    ImGui::Begin("Custom OpenGL Viewport");
+    ImGui::Begin("Scene");
     ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-	glGenTextures(1, &m_FBTexture);
-	glBindTexture(GL_TEXTURE_2D, m_FBTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewportSize.x, viewportSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_FBTexture, 0);
-
-    glViewport(0, 0, (int)viewportSize.x, (int)viewportSize.y);
-    glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    m_FrameBuffer->Resize({viewportSize.x, viewportSize.y});
+    m_FrameBuffer->Bind();
 
     m_TestShader->Use();
 	m_VertexArray->Bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     ImGui::Image(
-        (ImTextureID)(uintptr_t)m_FBTexture,
+        (ImTextureID)m_FrameBuffer->GetFrameBufferTexture(),
         ImVec2(viewportSize.x, viewportSize.y),
         ImVec2(0, 1),
         ImVec2(1, 0)
     );
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    m_FrameBuffer->Unbind();
 
     ImGui::End();
 
