@@ -16,6 +16,8 @@
 #include "Helium/Rendering/ShaderProgram.h"
 #include "Helium/Utility/Stopwatch.h"
 
+#include "Helium/Platform/GL/GL.h"
+
 heliumBegin
 
 
@@ -76,6 +78,10 @@ Application::Application()
     EnumHandleRef ref = h.ToRef();
     U64 value = ref.GetValue();
     UnsafeHandle<ManagedEnumDescriptor> enumDescriptor = ref.GetDescriptor();
+
+    glGenFramebuffers(1, &m_FBO);
+    //glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+
 }
 
 void Application::Execute()
@@ -104,14 +110,38 @@ void Application::Execute()
 void Application::Loop(float deltaTime)
 {
     m_Window->PreUpdate(deltaTime);
-    for (int i = 0; i < 100; i++)
-    {
-        Handle<Actor> actor = CreateObject<Actor>();
-        QueueDestroyForEndOfFrame(actor);
-    }
-    //QueueDestroyForEndOfFrame(actor);
-    m_VertexArray->Bind();
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+    ImGui::Begin("Custom OpenGL Viewport");
+    ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+	glGenTextures(1, &m_FBTexture);
+	glBindTexture(GL_TEXTURE_2D, m_FBTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, viewportSize.x, viewportSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_FBTexture, 0);
+
+    glViewport(0, 0, (int)viewportSize.x, (int)viewportSize.y);
+    glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    m_TestShader->Use();
+	m_VertexArray->Bind();
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+    ImGui::Image(
+        (ImTextureID)(uintptr_t)m_FBTexture,
+        ImVec2(viewportSize.x, viewportSize.y),
+        ImVec2(0, 1),
+        ImVec2(1, 0)
+    );
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    ImGui::End();
+
     m_Window->OnRendererUpdate(deltaTime);
     m_Window->OnUpdate(deltaTime);
     OnGUIUpdate(deltaTime);

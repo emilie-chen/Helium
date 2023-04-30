@@ -4,6 +4,8 @@
 
 #include <utility>
 
+#include <imgui_internal.h>
+
 heliumBegin
 
 GLWindow::GLWindow(const String& title, const glm::ivec2& dim, WindowCloseCallback closeCallback)
@@ -20,7 +22,7 @@ GLWindow::GLWindow(const String& title, const glm::ivec2& dim, WindowCloseCallba
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 #ifdef heliumDebug
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);;
 #endif // heliumDebug
@@ -52,9 +54,31 @@ GLWindow::GLWindow(const String& title, const glm::ivec2& dim, WindowCloseCallba
         glViewport(0, 0, frameBufferSize.x, frameBufferSize.y);
     });
 
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+    ImGui::StyleColorsDark();
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}
+
+	ImGui_ImplGlfw_InitForOpenGL(m_Window.GetObject(), true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+
     ivec2 frameBufferSize;
     glfwGetFramebufferSize(m_Window.GetObject(), &frameBufferSize.x, &frameBufferSize.y);
-    glViewport(0, 0, frameBufferSize.x, frameBufferSize.y);
+    const ImVec2 viewportPos = ImGui::GetMainViewport()->Pos;
+    glViewport(viewportPos.x, viewportPos.y, frameBufferSize.x, frameBufferSize.y);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
 #ifdef heliumDebug
@@ -62,15 +86,6 @@ GLWindow::GLWindow(const String& title, const glm::ivec2& dim, WindowCloseCallba
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     //glDebugMessageCallback(MessageCallback, nullptr);
 #endif // heliumDebug
-
-    // imgui context
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
-    ImGui_ImplGlfw_InitForOpenGL(m_Window.GetObject(), true);
-    ImGui_ImplOpenGL3_Init("#version 410");
-    ImGui::StyleColorsLight();
 }
 
 GLWindow::~GLWindow()
@@ -85,6 +100,7 @@ GLWindow::~GLWindow()
 
 void GLWindow::PreUpdate(F32 dt)
 {
+    glfwPollEvents();
     glfwSwapInterval(0);
     if (glfwWindowShouldClose(m_Window.GetObject()))
     {
@@ -100,21 +116,29 @@ void GLWindow::PreUpdate(F32 dt)
         }
     }
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0.1f, 0.3f, 0.2f, 1.0f);
-
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+	ImGui::DockSpaceOverViewport();
 }
 
 void GLWindow::PostUpdate(F32 dt)
 {
     ImGui::Render();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.1f, 0.3f, 0.2f, 1.0f);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+	if(ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		GLFWwindow* backup_current_context = glfwGetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(backup_current_context);
+	}
+
     glfwSwapBuffers(m_Window.GetObject());
-    glfwPollEvents();
 }
 
 void

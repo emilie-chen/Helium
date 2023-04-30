@@ -37,6 +37,7 @@ private:
     Reference<IVertexArray> m_VertexArray;
     Reference<IVertexBuffer> m_VertexBuffer;
     Reference<IIndexBuffer> m_IndexBuffer;
+    GLuint m_FBO, m_FBTexture;
 };
 
 heliumEnd

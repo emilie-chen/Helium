@@ -231,23 +231,29 @@ heliumEnd
     descriptor->AddProperty(nameof($propertyName), PropertyType::$propertyType,
     [](Handle<ManagedObject> instance)
     {
-    	return instance.As<$typeName>()->$getterName();
+    	return $optionalTypeErasedCast instance.As<$typeName>()->$getterName();
     },
-    $setterOptional);
+    $setterOptional,
+    $typeDescriptor);
 """
                 .Replace("$setterOptional", property.hasSetter ?
                 """
                 [](Handle<ManagedObject> instance, std::any value)
                     {
-                    	instance.As<$typeName>()->$setterName(std::any_cast<$propertyNativeType>(value));
+                    	instance.As<$typeName>()->$setterName($setterOptionalTypeErasure);
                     }
-                """ : "nullptr")
-                .Replace("$propertyNativeType", property.type)
+                """ : "std::nullopt")
                 .Replace("$typeName", typeData.typeName)
                 .Replace("$propertyName", property.name)
                 .Replace("$propertyType", ParsePropertyType(property.type).ToString())
                 .Replace("$getterName", $"Get{property.name}")
-                .Replace("$setterName", $"Set{property.name}"));
+                .Replace("$setterName", $"Set{property.name}")
+                .Replace("$setterOptionalTypeErasure", ParsePropertyType(property.type) == PropertyType.Enum ? "static_cast<$propertyNativeType>(std::any_cast<U64>(value))" : "std::any_cast<$propertyNativeType>(value)")
+                .Replace("$optionalTypeErasedCast", ParsePropertyType(property.type) == PropertyType.Enum ? "(U64)" : "")
+                .Replace("$propertyNativeType", property.type)
+                .Replace("$typeDescriptor", ParsePropertyType(property.type) == PropertyType.Handle ? $"{property.type}::GetClassDescriptor()" : (
+                    ParsePropertyType(property.type) == PropertyType.Enum ? $"{property.type}Helper::GetDescriptor()" : "nullptr"
+                )));
             }
             linesModified.Add("}");
 
