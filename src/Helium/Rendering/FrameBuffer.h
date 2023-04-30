@@ -12,6 +12,7 @@ interface IFrameBuffer
 	virtual void Unbind() const = 0;
 	virtual void Resize(const vec2& viewportSize) = 0;
 	virtual U64 GetFrameBufferTexture() const = 0;
+	virtual vec2 GetViewportSize() const = 0;
 };
 
 heliumEnd

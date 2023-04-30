@@ -5,6 +5,7 @@
 heliumBegin
 
 GLFrameBuffer::GLFrameBuffer(const vec2& viewportSize)
+	: m_ViewportSize(viewportSize)
 {
 	glGenFramebuffers(1, &m_FrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer);
@@ -36,6 +37,12 @@ void GLFrameBuffer::Unbind() const
 
 void GLFrameBuffer::Resize(const vec2& viewportSize)
 {
+	if (viewportSize == m_ViewportSize)
+	{
+		return;
+	}
+
+	m_ViewportSize = viewportSize;
 	Bind();
 	glDeleteTextures(1, &m_FrameBufferTexture);
 	m_FrameBufferTexture = 0;

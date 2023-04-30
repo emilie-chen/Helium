@@ -17,8 +17,10 @@ public:
 	void Unbind() const override;
 	void Resize(const vec2& viewportSize) override;
 	U64 GetFrameBufferTexture() const override { return static_cast<U64>(m_FrameBufferTexture); }
+	vec2 GetViewportSize() const override { return m_ViewportSize; }
 
 private:
+	vec2 m_ViewportSize;
 	GLuint m_FrameBuffer;
 	GLuint m_FrameBufferTexture;
 };
