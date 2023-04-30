@@ -11,6 +11,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
+
 heliumBegin
 
 ActorInspectorWindow::ActorInspectorWindow(Handle<Actor> actor)
@@ -20,18 +21,15 @@ ActorInspectorWindow::ActorInspectorWindow(Handle<Actor> actor)
 
 static String LabelPrefix(const char* const label)
 {
-	float width = ImGui::CalcItemWidth();
+	const float width = ImGui::CalcItemWidth();
 
-	float x = ImGui::GetCursorPosX();
+	const float x = ImGui::GetCursorPosX();
 	ImGui::Text(label);
 	ImGui::SameLine();
 	ImGui::SetCursorPosX(x + width * 0.5f + ImGui::GetStyle().ItemInnerSpacing.x);
 	ImGui::SetNextItemWidth(-1);
 
-	std::string labelID = "##";
-	labelID += label;
-
-	return labelID;
+	return "##"s + label;
 }
 
 void ActorInspectorWindow::OnGUIUpdate(float deltaTime)
@@ -47,8 +45,24 @@ void ActorInspectorWindow::OnGUIUpdate(float deltaTime)
 		{
 			for (Handle<ActorComponent> component : m_Actor->m_ComponentStore.m_Components)
 			{
-				if (ImGui::CollapsingHeader(component->GetDescriptor()->GetClassName().c_str()))
+				const String className = component->GetDescriptor()->GetClassName();
+				const String id = "##"s + className;
+				const String contextMenuID = "##Menu"s + className;
+				
+				if (ImGui::CollapsingHeader(className.c_str()))
 				{
+					ImGui::OpenPopupOnItemClick(contextMenuID.c_str(), ImGuiPopupFlags_MouseButtonRight);
+					if (ImGui::BeginPopup(contextMenuID.c_str()))
+					{
+						if (component->GetDescriptor() != Transform::GetClassDescriptor())
+						{
+							if (ImGui::MenuItem("Delete Component"))
+							{
+								m_Actor->RemoveComponentByTypeID(component->GetTypeID());
+							}
+						}
+						ImGui::EndPopup();
+					}
 					ObjectInspector::Inspect(component);
 				}
 			}

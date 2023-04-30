@@ -49,7 +49,12 @@ public:
     Handle<T> GetComponent();
 
     template <typename T> requires std::is_base_of_v<ActorComponent, T>
-    Handle<T> TryAddComponent();
+    Handle<T> AddOrGetComponent();
+
+    template <typename T> requires std::is_base_of_v<ActorComponent, T>
+    void RemoveComponent();
+
+    void RemoveComponentByTypeID(const CRC32 typeID);
 
     void AddChild(Handle<Actor> child);
     void RemoveChild(Handle<Actor> child);
@@ -69,7 +74,7 @@ private:
 };
 
 template <typename T> requires std::is_base_of_v<ActorComponent, T>
-Handle<T> Actor::TryAddComponent()
+Handle<T> Actor::AddOrGetComponent()
 {
     const CRC32 targetTypeID = T::GetClassTypeID();
     if (m_ComponentStore.HasComponentByTypeID(targetTypeID))
@@ -81,6 +86,12 @@ Handle<T> Actor::TryAddComponent()
     component->m_OwnerActor = this;
     m_ComponentStore.AddComponent(component);
     return component;
+}
+
+template<typename T> requires std::is_base_of_v<ActorComponent, T>
+void Actor::RemoveComponent()
+{
+    RemoveComponentByTypeID(T::GetClassTypeID());
 }
 
 template <typename T> requires std::is_base_of_v<ActorComponent, T>

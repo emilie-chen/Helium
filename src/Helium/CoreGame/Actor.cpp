@@ -9,7 +9,7 @@ heliumBegin
 Actor::Actor()
 {
 	// immediately add a transform component, which is mandatory for all actors
-	TryAddComponent<Transform>();
+	AddOrGetComponent<Transform>();
 }
 
 #pragma region Generated
@@ -57,6 +57,11 @@ void Actor::DestroyChildObjects()
     {
         QueueDestroyForEndOfFrame(component);
     }
+}
+
+void Actor::RemoveComponentByTypeID(const CRC32 typeID)
+{
+    m_ComponentStore.RemoveComponentByTypeID(typeID);
 }
 
 void Actor::AddChild(Handle<Actor> child)

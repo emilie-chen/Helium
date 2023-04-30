@@ -13,8 +13,6 @@ public:
     UnsafeHandle();
     UnsafeHandle(T* value);
 
-    virtual ~UnsafeHandle();
-
     T* GetObject();
     const T* GetObject() const;
 
@@ -22,6 +20,16 @@ public:
     const T* operator->() const;
 
     operator Bool() const;
+
+    Bool operator==(const UnsafeHandle<T>& rhs) const
+    {
+		return m_Pointer == rhs.m_Pointer;
+	}
+
+    Bool operator!=(const UnsafeHandle<T>& rhs) const
+    {
+		return m_Pointer != rhs.m_Pointer;
+	}
 
 private:
     T* m_Pointer;
@@ -61,12 +69,6 @@ template<typename T>
 UnsafeHandle<T>::operator Bool() const
 {
     return static_cast<Bool>(m_Pointer);
-}
-
-template<typename T>
-UnsafeHandle<T>::~UnsafeHandle()
-{
-
 }
 
 template<typename T>

@@ -51,7 +51,7 @@ Application::Application()
     Handle<Transform> actorTransform = actor->GetComponent<Transform>();
     Reference<ActorInspectorWindow> actorInspector = MakeReference<ActorInspectorWindow>(actor);
     AddGuiWindow(actorInspector);
-    actor->TryAddComponent<Camera>();
+    actor->AddOrGetComponent<Camera>();
 
     UnsafeHandle<ManagedClassDescriptor> transformClassDescriptor = actorTransform->GetDescriptor();
 
