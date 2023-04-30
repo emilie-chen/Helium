@@ -9,7 +9,8 @@ public class Transform : ActorComponent
     public extern quat LocalRotation { [MethodImpl(MethodImplOptions.InternalCall), Const] get; [MethodImpl(MethodImplOptions.InternalCall)] set; }
     public extern vec3 LocalScale { [MethodImpl(MethodImplOptions.InternalCall), Const] get; [MethodImpl(MethodImplOptions.InternalCall)] set; }
     public mat4 LocalMatrix { get; }
-    public extern vec3 WorldTranslation { [MethodImpl(MethodImplOptions.InternalCall), Const] get; }
-    public extern quat WorldRotation { [MethodImpl(MethodImplOptions.InternalCall), Const] get; }
-    public extern vec3 WorldScale { [MethodImpl(MethodImplOptions.InternalCall), Const] get; }
+    public extern vec3 WorldTranslation { [MethodImpl(MethodImplOptions.InternalCall)] get; [MethodImpl(MethodImplOptions.InternalCall)] set; }
+    public extern quat WorldRotation { [MethodImpl(MethodImplOptions.InternalCall)] get; [MethodImpl(MethodImplOptions.InternalCall)] set; }
+    public extern vec3 WorldScale { [MethodImpl(MethodImplOptions.InternalCall)] get; [MethodImpl(MethodImplOptions.InternalCall)] set; }
+    public mat4 WorldMatrix { get; }
 }

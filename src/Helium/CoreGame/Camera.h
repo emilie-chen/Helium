@@ -18,6 +18,8 @@ public:
     void SetCameraType(const CameraType& value) { m_CameraType = value; }
 public:
     CameraType GetCameraType() const { return m_CameraType; }
+public:
+    mat4 GetProjectionMatrix();
 #pragma endregion
 };
 

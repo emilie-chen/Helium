@@ -25,17 +25,28 @@ public:
 public:
     mat4 GetLocalMatrix();
 public:
-    vec3 GetWorldTranslation() const;
+    void SetWorldTranslation(const vec3& value);
 public:
-    quat GetWorldRotation() const;
+    vec3 GetWorldTranslation();
 public:
-    vec3 GetWorldScale() const;
+    void SetWorldRotation(const quat& value);
+public:
+    quat GetWorldRotation();
+public:
+    void SetWorldScale(const vec3& value);
+public:
+    vec3 GetWorldScale();
+public:
+    mat4 GetWorldMatrix();
 #pragma endregion
 public:
     Transform() = default;
 
 private:
     void UpdateLocalMatrix();
+    void UpdateWorldMatrixAndDecompose();
+    void MarkWorldTransformAsDirty();
+    void MarkChildWorldTransformsAsDirty();
 
 private:
     glm::vec3 m_LocalTranslation{};
@@ -43,6 +54,11 @@ private:
     glm::vec3 m_LocalScale{ 1.0f, 1.0f, 1.0f };
     bool m_LocalMatrixIsDirty = true;
     glm::mat4 m_LocalMatrix = glm::identity<glm::mat4>();
+    bool m_WorldMatrixIsDirty = true;
+    glm::mat4 m_WorldMatrix = glm::identity<glm::mat4>();
+    glm::vec3 m_WorldTranslation{};
+    glm::quat m_WorldRotation = glm::identity<glm::quat>();
+    glm::vec3 m_WorldScale{ 1.0f, 1.0f, 1.0f };
 };
 
 heliumEnd

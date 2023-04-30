@@ -60,6 +60,7 @@ public:
     void RemoveChild(Handle<Actor> child);
     void SetParent(Handle<Actor> parent);
     Handle<Actor> GetParent() const { return m_Parent; }
+    const std::vector<Handle<Actor>>& GetChildren() { return m_Children; }
     
 private:
     bool m_Active = true;

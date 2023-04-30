@@ -4,4 +4,5 @@ namespace Helium;
 public class Camera : ActorComponent
 {
     public CameraType CameraType { get; set; }
+    public mat4 ProjectionMatrix { get; }
 }
