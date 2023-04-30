@@ -116,6 +116,10 @@ void Application::Loop(float deltaTime)
     m_FrameBuffer->Resize({viewportSize.x, viewportSize.y});
     m_FrameBuffer->Bind();
 
+    glViewport(0, 0, viewportSize.x, viewportSize.y);
+    glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
     m_TestShader->Use();
 	m_VertexArray->Bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
