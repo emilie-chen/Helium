@@ -23,6 +23,11 @@
 #include <exception>
 #include <algorithm>
 #include <string_view>
+#include <sstream>
+#include <new>
+#include <variant>
+#include <optional>
+#include <array>
 
 using namespace std::literals::string_literals;
 using namespace std::literals::chrono_literals;

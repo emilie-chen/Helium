@@ -18,6 +18,9 @@ public:
 	void OnRendererUpdate(F32 ts) override;
 
 private:
+	void InternalRendererUpdate(F32 ts);
+
+private:
 	Handle<Scene> m_Scene;
 	Reference<IVirtualViewport> m_VirtualViewport;
 };

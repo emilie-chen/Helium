@@ -48,7 +48,7 @@ int main(int argc, char** argv)
         EnginePref::Set(PreferenceEntry::ManagedDebug, false);
     }
 
-    std::locale::global(std::locale("en_CA.UTF-8"));
+    std::locale::global(std::locale("en_US.UTF-8"));
     HeliumRegisterClasses();
     Application app{};
     app.Execute();

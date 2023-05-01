@@ -10,6 +10,7 @@
 #include "Helium/AssetManagement/ShaderSourceFileAsset.h"
 #include "Helium/Rendering/VertexBuffer.h"
 #include "Helium/Rendering/VertexArray.h"
+#include "Helium/Editor/SceneViewer.h"
 
 heliumBegin
 
@@ -39,6 +40,8 @@ private:
     Reference<IVertexBuffer> m_VertexBuffer;
     Reference<IIndexBuffer> m_IndexBuffer;
     Reference<IFrameBuffer> m_FrameBuffer;
+    Reference<SceneViewer> m_SceneViewer;
+    Handle<Scene> m_Scene;
 };
 
 heliumEnd

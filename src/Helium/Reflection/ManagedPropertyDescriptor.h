@@ -3,6 +3,7 @@
 #include "Helium/HeliumPrecompiled.h"
 #include "Helium/Reflection/PropertyType.h"
 #include "Helium/ObjectModel/Handle.h"
+#include "Helium/LowLevel/PersistentObjectAllocator.h"
 
 heliumBegin
 
@@ -12,6 +13,8 @@ class ManagedEnumDescriptor;
 class ManagedPropertyDescriptor final
 {
 public:
+	using self = ManagedPropertyDescriptor;
+
 	ManagedPropertyDescriptor(UnsafeHandle<ManagedClassDescriptor> ownerClass, StringView propertyName, PropertyType PropertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter, std::variant<nullptr_t, UnsafeHandle<ManagedClassDescriptor>, UnsafeHandle<ManagedEnumDescriptor>> descriptor);
 
 	DELETE_COPY_AND_MOVE(ManagedPropertyDescriptor);
@@ -36,6 +39,19 @@ public:
 	UnsafeHandle<ManagedEnumDescriptor> GetEnumDescriptor() const;
 
 	Bool IsReadOnly() const { return !m_Setter.has_value(); }
+
+	static constexpr size_t MaxInstanceCount = 10000;
+
+	void* operator new(size_t size)
+	{
+		assert(size == sizeof(self));
+		return PersistentObjectAllocator::Allocate<self>();
+	}
+
+	void operator delete(void* ptr)
+	{
+		PersistentObjectAllocator::Deallocate(static_cast<self*>(ptr));
+	}
 
 private:
 	UnsafeHandle<ManagedClassDescriptor> m_OwnerClass;

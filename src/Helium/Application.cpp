@@ -18,6 +18,7 @@
 #include "Helium/Platform/GL/GLVertexBuffer.h"
 #include "Helium/Rendering/ShaderProgram.h"
 #include "Helium/Utility/Stopwatch.h"
+#include "Helium/CoreGame/Scene.h"
 
 heliumBegin
 
@@ -80,6 +81,9 @@ Application::Application()
 
 
     m_FrameBuffer = MakeReference<GLFrameBuffer>(vec2{100, 100});
+
+    m_Scene = CreateObject<Scene>();
+    m_SceneViewer = MakeReference<SceneViewer>(m_Scene);
 }
 
 void Application::Execute()
@@ -109,7 +113,7 @@ void Application::Loop(float deltaTime)
 {
     m_Window->PreUpdate(deltaTime);
 
-    ImGui::Begin("Scene");
+    ImGui::Begin("Test Window");
     ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
     m_FrameBuffer->Resize({viewportSize.x, viewportSize.y});
@@ -133,6 +137,8 @@ void Application::Loop(float deltaTime)
     m_FrameBuffer->Unbind();
 
     ImGui::End();
+
+    m_SceneViewer->OnRendererUpdate(deltaTime);
 
     m_Window->OnRendererUpdate(deltaTime);
     m_Window->OnUpdate(deltaTime);

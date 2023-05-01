@@ -20,6 +20,8 @@ using TypeErasedSetAccessor = std::function<void(Handle<ManagedObject>, std::any
 class ManagedClassDescriptor final
 {
 public:
+    using self = ManagedClassDescriptor;
+
     ManagedClassDescriptor(const String& className, std::function<ManagedObject*()> factory);
 
     NODISCARD String GetClassName() const;

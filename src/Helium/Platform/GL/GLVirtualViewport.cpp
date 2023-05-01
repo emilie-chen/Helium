@@ -11,8 +11,7 @@ GLVirtualViewport::GLVirtualViewport(StringView name, IVirtualViewport::Viewport
 
 void GLVirtualViewport::OnRendererUpdate(F32 dt)
 {
-	bool open = true;
-	ImGui::Begin(m_Name.c_str(), &open, ImGuiWindowFlags_NoCollapse);
+	ImGui::Begin(m_Name.c_str(), nullptr, ImGuiWindowFlags_NoCollapse);
 	ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 	m_FrameBuffer->Resize({viewportSize.x, viewportSize.y});
 	m_FrameBuffer->Bind();
