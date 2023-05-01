@@ -5,6 +5,8 @@
 #include "Helium/AssetManagement/AssetDescriptor.h"
 #include "Helium/AssetManagement/PlainTextFileAsset.h"
 #include "Helium/AssetManagement/PlainTextFileAssetDescriptor.h"
+#include "Helium/AssetManagement/ShaderSourceFileAsset.h"
+#include "Helium/AssetManagement/ShaderSourceFileAssetDescriptor.h"
 #include "Helium/CoreGame/Actor.h"
 #include "Helium/CoreGame/ActorComponent.h"
 #include "Helium/CoreGame/Camera.h"
@@ -29,6 +31,8 @@ void HeliumRegisterClasses()
     REGISTER_CLASS(Transform);
     REGISTER_ENUM(CameraType);
     REGISTER_ENUM(PropertyType);
+    REGISTER_ENUM(ShaderLanguage);
+    REGISTER_ENUM(ShaderType);
 }
 
 heliumEnd

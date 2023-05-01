@@ -5,6 +5,7 @@
 #include "Helium/Reflection/TypeDescriptor.h"
 
 #include "Helium/ObjectModel/UnsafeHandle.h"
+#include "Helium/LowLevel/PersistentObjectAllocator.h"
 
 heliumBegin
 
@@ -49,7 +50,12 @@ public:                         \
     } \
 private:                        \
     inline static Reference<HelperType> s_Helper{}; \
-    ManagedEnumDescriptor m_Descriptor{EnumName};              \
+    ManagedEnumDescriptor m_Descriptor{EnumName};             \
+public:\
+    void* operator new(size_t size) \
+    { return PersistentObjectAllocator::Allocate<HelperType>(); } \
+    void operator delete(void* ptr) \
+    { PersistentObjectAllocator::Deallocate(ptr); }   \
 };
 
 
