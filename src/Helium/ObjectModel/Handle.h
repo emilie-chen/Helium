@@ -70,6 +70,12 @@ public:
     }
 
     template <typename U>
+    Bool Is() const
+    {
+		return dynamic_cast<U*>(m_Object) != nullptr;
+	}
+
+    template <typename U>
     bool operator==(const Handle<U>& other) const
     {
         return m_Object == other.m_Object;

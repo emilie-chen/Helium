@@ -21,6 +21,9 @@ public:
 public:
     mat4 GetProjectionMatrix();
 #pragma endregion
+
+public:
+    void Update() override;
 };
 
 heliumEnd

@@ -34,4 +34,8 @@ mat4 Camera::GetProjectionMatrix()
 	return glm::identity<mat4>();
 }
 
+void Camera::Update()
+{
+}
+
 heliumEnd

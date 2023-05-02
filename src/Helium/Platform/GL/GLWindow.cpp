@@ -16,17 +16,17 @@ GLWindow::GLWindow(const String& title, const glm::ivec2& dim, WindowCloseCallba
         throw std::runtime_error("Failed to initialize GLFW");
     }
 
-    if (PLATFORM == Platform::MacOS)
-    {
-        glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-#ifdef heliumDebug
-        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);;
-#endif // heliumDebug
-    }
+	if (PLATFORM == Platform::MacOS)
+	{
+		glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
+	}
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+#ifdef _DEBUG
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
 
     m_Window = UnsafeHandle(glfwCreateWindow(dim.x, dim.y, title.c_str(), nullptr, nullptr));
     if (!m_Window)
@@ -54,6 +54,12 @@ GLWindow::GLWindow(const String& title, const glm::ivec2& dim, WindowCloseCallba
         glViewport(0, 0, frameBufferSize.x, frameBufferSize.y);
     });
 
+#ifdef _DEBUG
+    glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+        {
+            spdlog::error("%s", message);
+        }, 0);
+#endif
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

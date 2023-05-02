@@ -19,6 +19,7 @@
 #include "Helium/Rendering/ShaderProgram.h"
 #include "Helium/Utility/Stopwatch.h"
 #include "Helium/CoreGame/Scene.h"
+#include "Helium/ObjectModel/IUpdatable.h"
 
 heliumBegin
 
@@ -53,6 +54,8 @@ Application::Application()
     Reference<ActorInspectorWindow> actorInspector = MakeReference<ActorInspectorWindow>(actor);
     AddGuiWindow(actorInspector);
     actor->AddOrGetComponent<Camera>();
+
+	actor->Invoke<IGameplayUpdatable>(&IGameplayUpdatable::Update);
 
     UnsafeHandle<ManagedClassDescriptor> transformClassDescriptor = actorTransform->GetDescriptor();
 

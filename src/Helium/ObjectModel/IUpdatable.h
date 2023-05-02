@@ -13,4 +13,13 @@ interface IUpdatable
     virtual void PostUpdate(F32 dt) {}
 };
 
+interface IGameplayUpdatable
+{
+    virtual void Awake() {}
+    virtual void Start() {}
+    virtual void Update() {}
+    virtual void FixedUpdate() {}
+    virtual void OnDestroy() {}
+};
+
 heliumEnd
