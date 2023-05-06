@@ -8,6 +8,7 @@ heliumBegin
 
 class Scene;
 interface IVirtualViewport;
+class Camera;
 
 class SceneViewer final : public IUpdatable
 {
@@ -17,12 +18,15 @@ public:
 
 	void OnRendererUpdate(F32 ts) override;
 
+	void SetCamera(Handle<Camera> camera);
+
 private:
 	void InternalRendererUpdate(F32 ts);
 
 private:
 	Handle<Scene> m_Scene;
 	Reference<IVirtualViewport> m_VirtualViewport;
+	Handle<Camera> m_Camera;
 };
 
 heliumEnd

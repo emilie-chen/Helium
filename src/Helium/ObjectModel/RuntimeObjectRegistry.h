@@ -37,6 +37,8 @@ private:
 
     void ReportFrameEnd();
 
+    Bool IsObjectValid(Handle<ManagedObject> object) const;
+
 private:
     void UnregisterAndDestroyObject(Handle<ManagedObject> object);
 
@@ -45,19 +47,27 @@ private:
     {
         Handle<T> object = new T(std::forward<TArgs>(args)...);
         Handle<ManagedObject> managedObject = object;
+        managedObject->m_InstanceID = GetNextInstanceID();
         m_ActiveObjects.insert(managedObject);
         return object;
     }
+
+    InstanceID GetNextInstanceID();
+    void ReturnInstanceID(InstanceID id);
 
 private:
     std::deque<Handle<ManagedObject>> m_DestroyQueue;
     std::unordered_set<Handle<ManagedObject>> m_ActiveObjects;
 
+    std::deque<InstanceID> m_InstanceIDPool;
+    std::unordered_map<U32, U32> m_InstanceIDInUse;
+    U32 m_InstanceIDCounter = 0;
 private:
     template<typename T, typename ... TArgs> requires std::is_base_of_v<ManagedObject, T>
     friend Handle<T> CreateObject(TArgs&& ... args);
 
     friend void QueueDestroyForEndOfFrame(Handle<ManagedObject> object);
+    friend Bool IsObjectValid(Handle<ManagedObject> object);
 
     friend class ManagedObject;
     friend class Application;
@@ -71,5 +81,6 @@ Handle<T> CreateObject(TArgs&& ... args)
 
 
 void QueueDestroyForEndOfFrame(Handle<ManagedObject> object);
+Bool IsObjectValid(Handle<ManagedObject> object);
 
 heliumEnd

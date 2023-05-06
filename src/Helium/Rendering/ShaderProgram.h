@@ -4,6 +4,8 @@
 
 heliumBegin
 
+enum class GraphicsDataType;
+
 interface IShaderProgram
 {
     static Reference<IShaderProgram> Create(const String& vertexShaderPath, const String& fragmentShaderPath);
@@ -11,6 +13,8 @@ interface IShaderProgram
     virtual ~IShaderProgram() = default;
 
     virtual void Use() const = 0;
+
+    virtual void SetUniform(StringView name, GraphicsDataType type, const void* data) = 0;
 };
 
 heliumEnd

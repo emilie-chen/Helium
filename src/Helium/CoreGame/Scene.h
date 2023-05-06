@@ -10,7 +10,7 @@ heliumBegin
 
 class Actor;
 
-class Scene final : public ManagedObject, public IUpdatable
+class Scene final : public ManagedObject, public implements<IGameplayUpdatable>
 {
     MANAGED_CLASS(Scene, ManagedObject, false);
 public:
@@ -19,6 +19,8 @@ public:
 
     void DestroyChildObjects() override;
     std::vector<Handle<Actor>>& GetRootActors() { return m_RootActors; }
+
+    void AddRootActor(Handle<Actor> actor);
 
 private:
     std::vector<Handle<Actor>> m_RootActors;

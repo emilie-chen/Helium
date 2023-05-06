@@ -4,6 +4,7 @@
 #include "Helium/CoreGame/Scene.h"
 #include "Helium/Platform/GL/GLVirtualViewport.h"
 #include "Helium/CoreGame/AbstractRenderer.h"
+#include "Helium/CoreGame/Camera.h"
 
 heliumBegin
 
@@ -20,6 +21,11 @@ SceneViewer::~SceneViewer()
 void SceneViewer::OnRendererUpdate(F32 ts)
 {
 	m_VirtualViewport->OnRendererUpdate(ts);
+}
+
+void SceneViewer::SetCamera(Handle<Camera> camera)
+{
+	m_Camera = camera;
 }
 
 void SceneViewer::InternalRendererUpdate(F32 ts)
@@ -47,12 +53,18 @@ void SceneViewer::InternalRendererUpdate(F32 ts)
 			}
 		}
 	}
-	glClearColor(0.4f, 0.3f, 0.2f, 1.0f);
+
+	if (m_Camera)
+	{
+		m_Camera->SetAspectRatio(m_VirtualViewport->GetAspectRatio());
+	}
+
+	glClearColor(0.1f, 0.02f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (Handle<AbstractRenderer> renderer : renderers)
 	{
-		renderer->OnRendererUpdate(ts);
+		renderer->DoRender(m_Camera);
 	}
 }
 

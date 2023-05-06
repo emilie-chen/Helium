@@ -25,6 +25,20 @@ UnsafeHandle<TypeRegistry> TypeRegistry::GetInstance()
     return s_Instance;
 }
 
+std::vector<UnsafeHandle<ManagedClassDescriptor>> TypeRegistry::GetAddableActorComponents() const
+{
+    UnsafeHandle<ManagedClassDescriptor> rootComponentClass = m_ManagedClasses.at(CRC32_COMPUTE("ActorComponent"));
+    std::vector<UnsafeHandle<ManagedClassDescriptor>> addableComponents;
+
+    for (const auto& classDescriptorPair : m_ManagedClasses)
+    {
+		const UnsafeHandle<ManagedClassDescriptor>& classDescriptor = classDescriptorPair.second;
+        
+	}
+
+    return addableComponents;
+}
+
 UnsafeHandle<ManagedClassDescriptor> TypeRegistry::GetClassDescriptor(const CRC32& classID) const
 {
     if (m_ManagedClasses.contains(classID))
@@ -35,7 +49,7 @@ UnsafeHandle<ManagedClassDescriptor> TypeRegistry::GetClassDescriptor(const CRC3
     return UnsafeHandle<ManagedClassDescriptor>(nullptr);
 }
 
-NODISCARD UnsafeHandle<ManagedEnumDescriptor> TypeRegistry::GetEnumDescriptor(const CRC32& enumID) const
+UnsafeHandle<ManagedEnumDescriptor> TypeRegistry::GetEnumDescriptor(const CRC32& enumID) const
 {
     if (m_ManagedEnums.contains(enumID))
     {

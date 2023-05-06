@@ -15,6 +15,9 @@ public:
 
     DELETE_COPY_AND_MOVE(GLShaderProgram);
 
+   
+    void SetUniform(StringView name, GraphicsDataType type, const void* data) override;
+
 private:
     void CompileAndLinkShadersFromSource(const String& vertSource, const String& fragSource);
     void CompileVertexShaderFromSource(const String& vert);

@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 
 add_executable(Helium)
+add_compile_options("/MP")
 
 find_package(spdlog CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
@@ -19,6 +20,7 @@ find_package(EASTL CONFIG REQUIRED)
 find_package(Boost REQUIRED)
 find_package(argparse REQUIRED)
 find_package(cppcoro REQUIRED)
+find_package(imguizmo REQUIRED)
 
 set(HELIUM_WORKING_DIR ${CMAKE_CURRENT_LIST_DIR})
 
@@ -44,6 +46,7 @@ target_link_libraries(Helium PUBLIC fmt::fmt
     argparse::argparse
     EASTL
     cppcoro
+    imguizmo::imguizmo
 )
 ELSE()
 target_link_libraries(Helium PUBLIC fmt::fmt
@@ -101,7 +104,8 @@ ENDIF()
 
 add_subdirectory(tools/HeliumCodeAssist)
 
-target_compile_options(Helium PUBLIC "/arch:AVX2")
+
+target_compile_options(Helium PUBLIC "/arch:AVX2" "/MP")
 target_compile_options(Helium PUBLIC
     "$<$<CONFIG:RELEASE>:/Oi>"
     "$<$<CONFIG:RELEASE>:/Oy>"

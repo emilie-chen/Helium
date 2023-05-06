@@ -8,8 +8,6 @@
 
 heliumBegin
 
-using ActorID = size_t;
-
 class ActorComponentStore final
 {
 public:

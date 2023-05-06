@@ -20,6 +20,8 @@
 #include "Helium/Utility/Stopwatch.h"
 #include "Helium/CoreGame/Scene.h"
 #include "Helium/ObjectModel/IUpdatable.h"
+#include "Helium/CoreGame/PrimitiveRenderer.h"
+#include "Helium/Rendering/PrimitiveRendererBackend.h"
 
 heliumBegin
 
@@ -36,6 +38,7 @@ Application::Application()
     m_TestShader = IShaderProgram::Create("Assets/Shaders/test.vert", "Assets/Shaders/test.frag");
     m_TestShader->Use();
 
+    PrimitiveRendererBackend::Initialize();
 
 	std::array<F32, 4 * 8> vertices = {
 	-0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
@@ -53,9 +56,12 @@ Application::Application()
     Handle<Transform> actorTransform = actor->GetComponent<Transform>();
     Reference<ActorInspectorWindow> actorInspector = MakeReference<ActorInspectorWindow>(actor);
     AddGuiWindow(actorInspector);
-    actor->AddOrGetComponent<Camera>();
-
-	actor->Invoke<IGameplayUpdatable>(&IGameplayUpdatable::Update);
+    Handle<Camera> camera = actor->AddOrGetComponent<Camera>();
+    camera->SetCameraType(CameraType::Perspective);
+    camera->SetFOV(45.0f);
+    camera->SetNearPlane(0.1f);
+	camera->SetFarPlane(100.0f);
+	camera->SetAspectRatio(1.0f);
 
     UnsafeHandle<ManagedClassDescriptor> transformClassDescriptor = actorTransform->GetDescriptor();
 
@@ -75,24 +81,26 @@ Application::Application()
     m_IndexBuffer->Bind();
     m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-    EnumHandle<CameraType> h = CameraType::Perspective;
-    h = CameraType::Orthographic;
-    h = CameraType::Perspective;
-    EnumHandleRef ref = h.ToRef();
-    U64 value = ref.GetValue();
-    UnsafeHandle<ManagedEnumDescriptor> enumDescriptor = ref.GetDescriptor();
-
-
     m_FrameBuffer = MakeReference<GLFrameBuffer>(vec2{100, 100});
 
     m_Scene = CreateObject<Scene>();
     m_SceneViewer = MakeReference<SceneViewer>(m_Scene);
+    m_Scene->AddRootActor(actor);
+
+    m_SceneViewer->SetCamera(actor->GetComponent<Camera>());
+
+    Handle<Actor> plane = CreateObject<Actor>();
+    Handle<PrimitiveRenderer> renderer = plane->AddOrGetComponent<PrimitiveRenderer>();
+    renderer->SetPrimitive(PrimitiveType::Plane);
+    m_Scene->AddRootActor(plane);
 }
 
 void Application::Execute()
 {
     m_TimerSystem->SetFrameTime(std::chrono::milliseconds(16));
     m_TimerSystem->StartPulsing();
+    m_Scene->Awake();
+    m_Scene->Start();
     float dt = 0.01f;
     Stopwatch sw;
     sw.Start();
@@ -116,31 +124,7 @@ void Application::Loop(float deltaTime)
 {
     m_Window->PreUpdate(deltaTime);
 
-    ImGui::Begin("Test Window");
-    ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-
-    m_FrameBuffer->Resize({viewportSize.x, viewportSize.y});
-    m_FrameBuffer->Bind();
-
-    glViewport(0, 0, viewportSize.x, viewportSize.y);
-    glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-    m_TestShader->Use();
-	m_VertexArray->Bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-    ImGui::Image(
-        (ImTextureID)m_FrameBuffer->GetFrameBufferTexture(),
-        ImVec2(viewportSize.x, viewportSize.y),
-        ImVec2(0, 1),
-        ImVec2(1, 0)
-    );
-
-    m_FrameBuffer->Unbind();
-
-    ImGui::End();
-
+    m_Scene->Update();
     m_SceneViewer->OnRendererUpdate(deltaTime);
 
     m_Window->OnRendererUpdate(deltaTime);

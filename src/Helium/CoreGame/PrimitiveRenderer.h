@@ -6,6 +6,8 @@
 
 heliumBegin
 
+class Camera;
+
 class PrimitiveRenderer : public AbstractRenderer
 {
 #pragma region Generated
@@ -20,7 +22,7 @@ public:
 #pragma endregion
 
 public:
-    void OnRendererUpdate(F32 ts) override;
+    void DoRender(Handle<Camera> camera) override;
 };
 
 heliumEnd

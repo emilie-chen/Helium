@@ -23,6 +23,8 @@ public:
 
     NODISCARD static UnsafeHandle<TypeRegistry> GetInstance();
 
+    NODISCARD std::vector<UnsafeHandle<ManagedClassDescriptor>> GetAddableActorComponents() const;
+
 private:
     std::unordered_map<CRC32, UnsafeHandle<ManagedClassDescriptor>> m_ManagedClasses;
     std::unordered_map<CRC32, UnsafeHandle<ManagedEnumDescriptor>> m_ManagedEnums;

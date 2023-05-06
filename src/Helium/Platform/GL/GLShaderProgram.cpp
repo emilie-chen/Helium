@@ -1,6 +1,8 @@
 #include "Helium/HeliumPrecompiled.h"
 
 #include "GLShaderProgram.h"
+#include "Helium/Rendering/VertexBufferLayout.h"
+
 #include <fstream>
 #include <sstream>
 
@@ -10,6 +12,49 @@ GLShaderProgram::GLShaderProgram(const String& vertexShaderPath, const String& f
 {
     // read files
     CompileAndLinkShadersFromSource(ReadFromFile(vertexShaderPath), ReadFromFile(fragmentShaderPath));
+}
+
+void GLShaderProgram::SetUniform(StringView name, GraphicsDataType type, const void* data)
+{
+    Use();
+    const auto uniformLocation = glGetUniformLocation(m_Program, name.data());
+    switch (type)
+    {
+    case Helium::V0::GraphicsDataType::Invalid:
+        break;
+    case Helium::V0::GraphicsDataType::Float:
+        glUniform1fv(uniformLocation, 1, (const float*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Float2:
+        glUniform2fv(uniformLocation, 1, (const float*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Float3:
+        glUniform3fv(uniformLocation, 1, (const float*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Float4:
+        glUniform4fv(uniformLocation, 1, (const float*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Int:
+        glUniform1iv(uniformLocation, 1, (const int*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Int2:
+        glUniform2iv(uniformLocation, 1, (const int*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Int3:
+        glUniform3iv(uniformLocation, 1, (const int*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Int4:
+        glUniform4iv(uniformLocation, 1, (const int*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Mat3:
+        glUniformMatrix3fv(uniformLocation, 1, GL_FALSE, (const float*)data);
+        break;
+    case Helium::V0::GraphicsDataType::Mat4:
+        glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, (const float*)data);
+        break;
+    default:
+        break;
+    }
 }
 
 void GLShaderProgram::CompileAndLinkShadersFromSource(const String& vertSource, const String& fragSource)

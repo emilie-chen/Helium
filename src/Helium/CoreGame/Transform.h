@@ -42,6 +42,10 @@ public:
 public:
     Transform() = default;
 
+    vec3 GetForward();
+    vec3 GetUp();
+    vec3 GetRight();
+
 private:
     void UpdateLocalMatrix();
     void UpdateWorldMatrixAndDecompose();

@@ -25,4 +25,9 @@ void Scene::DestroyChildObjects()
     m_RootActors.clear();
 }
 
+void Scene::AddRootActor(Handle<Actor> actor)
+{
+    m_RootActors.push_back(actor);
+}
+
 heliumEnd

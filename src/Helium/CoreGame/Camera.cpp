@@ -2,6 +2,8 @@
 
 #include "Camera.h"
 #include "Helium/Reflection/PropertyType.h"
+#include "Helium/CoreGame/Transform.h"
+#include "Helium/CoreGame/Actor.h"
 
 heliumBegin
 
@@ -26,12 +28,76 @@ void Camera::RegisterMembers()
     },
     std::nullopt,
     nullptr);
+    descriptor->AddProperty(nameof(ViewMatrix), PropertyType::Mat4,
+    [](Handle<ManagedObject> instance)
+    {
+    	return  instance.As<Camera>()->GetViewMatrix();
+    },
+    std::nullopt,
+    nullptr);
+    descriptor->AddProperty(nameof(FOV), PropertyType::F32,
+    [](Handle<ManagedObject> instance)
+    {
+    	return  instance.As<Camera>()->GetFOV();
+    },
+    [](Handle<ManagedObject> instance, std::any value)
+    {
+    	instance.As<Camera>()->SetFOV(std::any_cast<F32>(value));
+    },
+    nullptr);
+    descriptor->AddProperty(nameof(NearPlane), PropertyType::F32,
+    [](Handle<ManagedObject> instance)
+    {
+    	return  instance.As<Camera>()->GetNearPlane();
+    },
+    [](Handle<ManagedObject> instance, std::any value)
+    {
+    	instance.As<Camera>()->SetNearPlane(std::any_cast<F32>(value));
+    },
+    nullptr);
+    descriptor->AddProperty(nameof(FarPlane), PropertyType::F32,
+    [](Handle<ManagedObject> instance)
+    {
+    	return  instance.As<Camera>()->GetFarPlane();
+    },
+    [](Handle<ManagedObject> instance, std::any value)
+    {
+    	instance.As<Camera>()->SetFarPlane(std::any_cast<F32>(value));
+    },
+    nullptr);
+    descriptor->AddProperty(nameof(AspectRatio), PropertyType::F32,
+    [](Handle<ManagedObject> instance)
+    {
+    	return  instance.As<Camera>()->GetAspectRatio();
+    },
+    [](Handle<ManagedObject> instance, std::any value)
+    {
+    	instance.As<Camera>()->SetAspectRatio(std::any_cast<F32>(value));
+    },
+    nullptr);
 }
 #pragma endregion
 
 mat4 Camera::GetProjectionMatrix()
 {
-	return glm::identity<mat4>();
+    Handle<Transform> transform = GetOwnerActor()->GetComponent<Transform>();
+    if (m_CameraType == CameraType::Orthographic)
+    {
+        // return glm::ortho(-GetOrthographicSize() * GetAspectRatio(), GetOrthographicSize() * GetAspectRatio(), -GetOrthographicSize(), GetOrthographicSize(), GetNearPlane(), GetFarPlane());
+        return glm::identity<mat4>();
+    }
+    else
+    {
+        return glm::perspective(glm::radians(GetFOV()), GetAspectRatio(), GetNearPlane(), GetFarPlane());
+    }
+}
+
+mat4 Camera::GetViewMatrix()
+{
+	Handle<Transform> transform = GetOwnerActor()->GetComponent<Transform>();
+	//const vec3 position = transform->GetWorldTranslation();
+	//return glm::lookAt(position, position + transform->GetForward(), transform->GetUp());
+    return glm::inverse(transform->GetWorldMatrix());
 }
 
 void Camera::Update()

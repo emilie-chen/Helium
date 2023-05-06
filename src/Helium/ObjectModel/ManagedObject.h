@@ -7,6 +7,7 @@
 #include "Helium/Utility/Hex.h"
 #include "Helium/Reflection/TypeRegistry.h"
 #include "Helium/Reflection/TypeDescriptor.h"
+#include "Helium/ObjectModel/InstanceID.h"
 
 #include "yaml-cpp/yaml.h"
 
@@ -47,7 +48,14 @@ private:
 
     friend class RuntimeObjectRegistry;
 
+    InstanceID m_InstanceID = DefaultInstanceID;
+
+    friend class RuntimeObjectRegistry;
+
 public:
+    InstanceID GetInstanceID() const { return m_InstanceID; }
+    constexpr static U64 DefaultInstanceID = std::numeric_limits<U64>::max();
+
     using self = ManagedObject;
     virtual ~ManagedObject() = default;
     static void RegisterMembers();

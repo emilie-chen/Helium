@@ -7,6 +7,7 @@
 #include <utility>
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <ImGuizmo.h>
 
 heliumBegin
 
@@ -76,9 +77,10 @@ void ObjectInspector::Inspect(Handle<ManagedObject> object)
             case PropertyType::Vec3:
             {
                 vec3 currentValue = property->GetValue<vec3>(object);
+                const vec3 currentValueBackup = currentValue;
                 if (ImGui::DragFloat3(LabelPrefix(property->GetName().c_str()).c_str(), &currentValue.x, 0.1f, 0.0f, 0.0f, "%.3f", propertyIsReadOnly ? ImGuiSliderFlags_ReadOnly : 0))
                 {
-                    if (!propertyIsReadOnly)
+                    if (!propertyIsReadOnly && currentValue != currentValueBackup)
                     {
                         property->SetValue(object, currentValue);
                     }
@@ -90,14 +92,28 @@ void ObjectInspector::Inspect(Handle<ManagedObject> object)
                 quat currentValue = property->GetValue<quat>(object);
                 // convert to euler angles
                 vec3 euler = glm::degrees(glm::eulerAngles(currentValue));
+                const vec3 currentValueBackup = euler;
                 if (ImGui::DragFloat3(LabelPrefix(property->GetName().c_str()).c_str(), &euler.x, 0.1f, 0.0f, 0.0f, "%.3f", propertyIsReadOnly ? ImGuiSliderFlags_ReadOnly : 0))
                 {
-                    if (!propertyIsReadOnly)
+                    if (!propertyIsReadOnly && euler != currentValueBackup)
                     {
 						// convert back to quaternion
 						currentValue = glm::quat(glm::radians(euler));
 						property->SetValue(object, currentValue);
 					}
+                }
+                break;
+            }
+            case PropertyType::F32:
+            {
+                float currentValue = property->GetValue<float>(object);
+                const float currentValueBackup = currentValue;
+                if (ImGui::DragFloat(LabelPrefix(property->GetName().c_str()).c_str(), &currentValue, 0.1f, 0.0f, 0.0f, "%.3f", propertyIsReadOnly ? ImGuiSliderFlags_ReadOnly : 0))
+                {
+                    if (!propertyIsReadOnly && currentValue != currentValueBackup)
+                    {
+                        property->SetValue(object, currentValue);
+                    }
                 }
                 break;
             }

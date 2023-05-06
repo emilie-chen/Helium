@@ -5,6 +5,8 @@
 
 heliumBegin
 
+class Camera;
+
 class AbstractRenderer : public ActorComponent
 {
 #pragma region Generated
@@ -13,7 +15,7 @@ public:
 #pragma endregion
 
 public:
-    virtual void OnRendererUpdate(F32 ts) { }
+    virtual void DoRender(Handle<Camera> camera) { }
 };
 
 heliumEnd

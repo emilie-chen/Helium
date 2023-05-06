@@ -41,6 +41,10 @@ using namespace std::literals::string_view_literals;
 #endif
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <spdlog/spdlog.h>
 #include <cppcoro/sync_wait.hpp>
 #include <cppcoro/task.hpp>

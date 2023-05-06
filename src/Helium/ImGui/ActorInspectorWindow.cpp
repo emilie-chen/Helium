@@ -67,6 +67,16 @@ void ActorInspectorWindow::OnGUIUpdate(float deltaTime)
 				}
 			}
 		}
+
+		if (ImGui::Button("Add Component"))
+		{
+			ImGui::OpenPopup("AddComponentPopup");
+		}
+		if (ImGui::BeginPopup("AddComponentPopup"))
+		{
+			
+			ImGui::EndPopup();
+		}
 	}
 
 	ImGui::End();

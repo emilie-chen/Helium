@@ -2,6 +2,8 @@
 
 #include "AbstractRenderer.h"
 #include "Helium/Reflection/PropertyType.h"
+#include "Helium/CoreGame/Transform.h"
+#include "Helium/CoreGame/Actor.h"
 
 heliumBegin
 

@@ -122,6 +122,7 @@ void ActorComponentStore::RemoveComponentByTypeID(const CRC32 typeID)
         Handle<ActorComponent> component = m_ComponentLookupTable[typeID];
         m_ComponentLookupTable.erase(typeID);
         m_Components.erase(std::find(m_Components.begin(), m_Components.end(), component));
+        QueueDestroyForEndOfFrame(component);
     }
 }
 

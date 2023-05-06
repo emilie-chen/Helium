@@ -2,6 +2,10 @@
 
 #include "PrimitiveRenderer.h"
 #include "Helium/Reflection/PropertyType.h"
+#include "Helium/CoreGame/Camera.h"
+#include "Helium/CoreGame/Transform.h"
+#include "Helium/CoreGame/Actor.h"
+#include "Helium/Rendering/PrimitiveRendererBackend.h"
 
 heliumBegin
 
@@ -22,8 +26,25 @@ void PrimitiveRenderer::RegisterMembers()
 }
 #pragma endregion
 
-void PrimitiveRenderer::OnRendererUpdate(F32 ts)
+void PrimitiveRenderer::DoRender(Handle<Camera> camera)
 {
+    if (!camera)
+    {
+        return;
+    }
+    Handle<Transform> transform = GetOwnerActor()->GetComponent<Transform>();
+    const mat4 modelMatrix = transform->GetWorldMatrix();
+    const mat4 viewMatrix = camera->GetViewMatrix();
+    const mat4 projectionMatrix = camera->GetProjectionMatrix();
+    static const std::array<float, 16> vertexBuffer;
+    switch (m_Primitive)
+    {
+    case PrimitiveType::Plane:
+    {
+        PrimitiveRendererBackend::GetInstance()->RenderQuad(modelMatrix, viewMatrix, projectionMatrix);
+        break;
+    }
+    }
 }
 
 heliumEnd

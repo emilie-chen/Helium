@@ -10,14 +10,16 @@ heliumBegin
 class GLVirtualViewport : public IVirtualViewport
 {
 public:
-	GLVirtualViewport(StringView name, IVirtualViewport::ViewportRendererUpdate updater);
+	GLVirtualViewport(StringView name, ViewportRendererUpdate updater);
 
 	void OnRendererUpdate(F32 dt) override;
+	F32 GetAspectRatio() const override { return m_AspectRatio; }
 
 private:
 	String m_Name;
 	Reference<GLFrameBuffer> m_FrameBuffer;
-	IVirtualViewport::ViewportRendererUpdate m_Updater;
+	ViewportRendererUpdate m_Updater;
+	F32 m_AspectRatio = 1.0f;
 };
 
 heliumEnd
