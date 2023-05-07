@@ -15,6 +15,7 @@ public:
     explicit ActorInspectorWindow(Handle<Actor> actor);
 
     void OnGUIUpdate(float deltaTime) override;
+    void SetActor(Handle<Actor> actor) { m_Actor = actor; }
 
 private:
     Handle<Actor> m_Actor;

@@ -22,6 +22,9 @@ public:
 #pragma endregion
 
 public:
+    PrimitiveRenderer();
+
+public:
     void DoRender(Handle<Camera> camera) override;
 };
 

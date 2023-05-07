@@ -8,9 +8,9 @@
 
 heliumBegin
 
-ManagedClassDescriptor::ManagedClassDescriptor(const String& className, std::function<ManagedObject*()> factory)
-    : m_ClassName(className)
+ManagedClassDescriptor::ManagedClassDescriptor(const String& className, CRC32 baseID, std::function<ManagedObject*()> factory) : m_ClassName(className)
     , m_ClassID(CRC32Compute(className.c_str(), className.length()))
+    , m_BaseID(baseID)
     , m_Factory(std::move(factory))
 {
 }
@@ -28,6 +28,11 @@ CRC32 ManagedClassDescriptor::GetClassID() const
 ManagedObject* ManagedClassDescriptor::CreateInstance() const
 {
     return m_Factory();
+}
+
+NODISCARD CRC32 ManagedClassDescriptor::GetBaseID() const
+{
+    return m_BaseID;
 }
 
 void ManagedClassDescriptor::AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter, std::variant<nullptr_t, UnsafeHandle<ManagedClassDescriptor>, UnsafeHandle<ManagedEnumDescriptor>> descriptor)

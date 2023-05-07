@@ -2,11 +2,12 @@
 
 #include "Helium/ObjectModel/ManagedObject.h"
 #include "Helium/HeliumPrecompiled.h"
+#include "Helium/ObjectModel/IUpdatable.h"
 
 heliumBegin
 
 
-class ImGuiWindow : public ManagedObject
+class ImGuiWindow : public ManagedObject, implements<IUpdatable>
 {
     MANAGED_CLASS(ImGuiWindow, ManagedObject, false);
 public:

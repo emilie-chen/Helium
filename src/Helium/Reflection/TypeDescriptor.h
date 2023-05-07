@@ -22,11 +22,12 @@ class ManagedClassDescriptor final
 public:
     using self = ManagedClassDescriptor;
 
-    ManagedClassDescriptor(const String& className, std::function<ManagedObject*()> factory);
+    ManagedClassDescriptor(const String& className, CRC32 baseID, std::function<ManagedObject*()> factory);
 
     NODISCARD String GetClassName() const;
     NODISCARD CRC32 GetClassID() const;
     NODISCARD ManagedObject* CreateInstance() const;
+    NODISCARD CRC32 GetBaseID() const;
 
     void AddProperty(StringView propertyName, PropertyType propertyType, TypeErasedGetAccessor getter, std::optional<TypeErasedSetAccessor> setter, std::variant<nullptr_t, UnsafeHandle<ManagedClassDescriptor>, UnsafeHandle<ManagedEnumDescriptor>> descriptor);
     std::vector<UnsafeHandle<ManagedPropertyDescriptor>> GetProperties() const;
@@ -34,6 +35,7 @@ public:
 private:
     String m_ClassName;
     CRC32 m_ClassID;
+    CRC32 m_BaseID;
     std::function<ManagedObject*()> m_Factory;
     std::vector<UnsafeHandle<ManagedPropertyDescriptor>> m_Properties;
 };

@@ -84,15 +84,20 @@ Application::Application()
     m_FrameBuffer = MakeReference<GLFrameBuffer>(vec2{100, 100});
 
     m_Scene = CreateObject<Scene>();
-    m_SceneViewer = MakeReference<SceneViewer>(m_Scene);
+    Reference<SceneViewer> sceneViewer = MakeReference<SceneViewer>(m_Scene);
     m_Scene->AddRootActor(actor);
 
-    m_SceneViewer->SetCamera(actor->GetComponent<Camera>());
+    sceneViewer->SetCamera(actor->GetComponent<Camera>());
+    AddGuiWindow(sceneViewer);
+    m_SceneViewer = sceneViewer;
 
     Handle<Actor> plane = CreateObject<Actor>();
     Handle<PrimitiveRenderer> renderer = plane->AddOrGetComponent<PrimitiveRenderer>();
     renderer->SetPrimitive(PrimitiveType::Plane);
     m_Scene->AddRootActor(plane);
+
+    m_SceneHierarchyPanel = MakeReference<SceneHierarchyPanel>(m_Scene);
+    AddGuiWindow(m_SceneHierarchyPanel);
 }
 
 void Application::Execute()
@@ -130,6 +135,7 @@ void Application::Loop(float deltaTime)
     m_Window->OnRendererUpdate(deltaTime);
     m_Window->OnUpdate(deltaTime);
     OnGUIUpdate(deltaTime);
+    m_SceneViewer->OnGUIUpdate(deltaTime);
     m_Window->PostUpdate(deltaTime);
 }
 

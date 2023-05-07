@@ -25,6 +25,8 @@ public:
 
     NODISCARD std::vector<UnsafeHandle<ManagedClassDescriptor>> GetAddableActorComponents() const;
 
+    Bool IsBaseOf(const CRC32& baseID, const CRC32& derivedID) const;
+
 private:
     std::unordered_map<CRC32, UnsafeHandle<ManagedClassDescriptor>> m_ManagedClasses;
     std::unordered_map<CRC32, UnsafeHandle<ManagedEnumDescriptor>> m_ManagedEnums;

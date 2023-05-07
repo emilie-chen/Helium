@@ -93,9 +93,11 @@ using StaticConstructType = ManagedObject* (*)();
     private:                                      \
     constexpr static Bool s_IsSerializable = (isSerializable); \
     constexpr static CRC32 s_TypeID = CRC32_COMPUTE(nameof(className)); \
+    constexpr static CRC32 s_BaseID = CRC32_COMPUTE(nameof(superClass)); \
     constexpr static const char* s_TypeName = nameof(className);        \
     inline static const ManagedClassDescriptor s_TypeDescriptor = ManagedClassDescriptor( \
         s_TypeName, \
+        s_BaseID, \
         reinterpret_cast<StaticConstructType>(reinterpret_cast<void*>(StaticConstruct)) \
     );\
     public:                                                   \

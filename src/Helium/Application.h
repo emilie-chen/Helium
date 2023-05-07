@@ -41,6 +41,7 @@ private:
     Reference<IIndexBuffer> m_IndexBuffer;
     Reference<IFrameBuffer> m_FrameBuffer;
     Reference<SceneViewer> m_SceneViewer;
+    Reference<SceneHierarchyPanel> m_SceneHierarchyPanel;
     Handle<Scene> m_Scene;
 };
 

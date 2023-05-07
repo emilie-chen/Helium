@@ -5,11 +5,12 @@
 #include "Helium/Platform/GL/GLVirtualViewport.h"
 #include "Helium/CoreGame/AbstractRenderer.h"
 #include "Helium/CoreGame/Camera.h"
+#include "Helium/ImGui/SceneHierarchyPanel.h"
 
 heliumBegin
 
 SceneViewer::SceneViewer(Handle<Scene> scene)
-    : m_Scene(scene)
+    : m_Scene(scene), m_HierarchyPanel(scene)
 {
     m_VirtualViewport = MakeReference<GLVirtualViewport>("Scene", std::bind(&SceneViewer::InternalRendererUpdate, this, std::placeholders::_1));
 }
@@ -26,6 +27,10 @@ void SceneViewer::OnRendererUpdate(F32 ts)
 void SceneViewer::SetCamera(Handle<Camera> camera)
 {
 	m_Camera = camera;
+}
+
+void SceneViewer::OnGUIUpdate(F32 dt)
+{
 }
 
 void SceneViewer::InternalRendererUpdate(F32 ts)

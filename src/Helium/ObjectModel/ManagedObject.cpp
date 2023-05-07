@@ -70,6 +70,7 @@ ManagedObject* ManagedObject::StaticConstruct()
 
 ManagedClassDescriptor ManagedObject::s_TypeDescriptor = ManagedClassDescriptor(
 	s_TypeName,
+    0,
 	StaticConstruct
 );;
 

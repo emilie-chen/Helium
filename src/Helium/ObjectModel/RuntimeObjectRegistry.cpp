@@ -86,6 +86,14 @@ void RuntimeObjectRegistry::ReturnInstanceID(InstanceID id)
     m_InstanceIDInUse.erase(id.instance);
 }
 
+Handle<ManagedObject> RuntimeObjectRegistry::RegisterObject(ManagedObject* object)
+{
+	object->m_InstanceID = GetNextInstanceID();
+    Handle<ManagedObject> managedObject = object;
+	m_ActiveObjects.insert(managedObject);
+	return managedObject;
+}
+
 void QueueDestroyForEndOfFrame(Handle<ManagedObject> object)
 {
     RuntimeObjectRegistry::GetInstance()->ObjectQueueDestroyForEndOfFrame(object);

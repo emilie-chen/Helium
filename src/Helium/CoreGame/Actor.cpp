@@ -7,6 +7,7 @@
 heliumBegin
 
 Actor::Actor()
+    : m_Name("Anonymous Actor")
 {
 	// immediately add a transform component, which is mandatory for all actors
 	AddOrGetComponent<Transform>();
@@ -57,6 +58,20 @@ void Actor::DestroyChildObjects()
     {
         QueueDestroyForEndOfFrame(component);
     }
+}
+
+Handle<ActorComponent> Actor::AddComponentByTypeID(const CRC32 typeID)
+{
+    if (m_ComponentStore.HasComponentByTypeID(typeID))
+    {
+		return m_ComponentStore.GetComponentByTypeID(typeID);
+	}
+
+    ManagedObject* component = TypeRegistry::GetInstance()->GetClassDescriptor(typeID)->CreateInstance();
+    Handle<ActorComponent> componentRegistered = RuntimeObjectRegistry::GetInstance()->RegisterObject(component).As<ActorComponent>();
+    componentRegistered->m_OwnerActor = this;
+    m_ComponentStore.AddComponent(componentRegistered);
+    return componentRegistered;
 }
 
 void Actor::RemoveComponentByTypeID(const CRC32 typeID)

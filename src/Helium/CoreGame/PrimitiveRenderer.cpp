@@ -26,6 +26,11 @@ void PrimitiveRenderer::RegisterMembers()
 }
 #pragma endregion
 
+PrimitiveRenderer::PrimitiveRenderer()
+	: m_Primitive(PrimitiveType::Plane)
+{
+}
+
 void PrimitiveRenderer::DoRender(Handle<Camera> camera)
 {
     if (!camera)

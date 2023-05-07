@@ -53,6 +53,8 @@ public:
     template <ActorComponentConcept T>
     Handle<T> AddOrGetComponent();
 
+    Handle<ActorComponent> AddComponentByTypeID(const CRC32 typeID);
+
     template <ActorComponentConcept T>
     std::vector<Handle<T>> GetComponentsOfBaseType();
 
@@ -69,9 +71,14 @@ public:
 
     template <typename TInterface, typename TFunction, typename... Args>
     void Invoke(TFunction func, Args&&... args);
+
+    String GetName() const { return m_Name; }
+    void SetName(const String& name) { m_Name = name; }
     
 private:
     bool m_Active = true;
+
+    String m_Name;
 
     // component array
     ActorComponentStore m_ComponentStore;

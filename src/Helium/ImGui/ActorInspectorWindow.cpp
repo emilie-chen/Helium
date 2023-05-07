@@ -6,6 +6,7 @@
 #include "Helium/CoreGame/Actor.h"
 #include "Helium/CoreGame/Transform.h"
 #include "Helium/ImGui/ObjectInspector.h"
+#include "Helium/Reflection/TypeRegistry.h"
 
 #include <utility>
 #include <imgui.h>
@@ -74,7 +75,14 @@ void ActorInspectorWindow::OnGUIUpdate(float deltaTime)
 		}
 		if (ImGui::BeginPopup("AddComponentPopup"))
 		{
-			
+			std::vector<UnsafeHandle<ManagedClassDescriptor>> descriptors = TypeRegistry::GetInstance()->GetAddableActorComponents();
+			for (UnsafeHandle<ManagedClassDescriptor> descriptor : descriptors)
+			{
+				if (ImGui::MenuItem(descriptor->GetClassName().c_str()))
+				{
+					m_Actor->AddComponentByTypeID(descriptor->GetClassID());
+				}
+			}
 			ImGui::EndPopup();
 		}
 	}

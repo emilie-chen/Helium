@@ -55,6 +55,8 @@ private:
     InstanceID GetNextInstanceID();
     void ReturnInstanceID(InstanceID id);
 
+    Handle<ManagedObject> RegisterObject(ManagedObject* object);
+
 private:
     std::deque<Handle<ManagedObject>> m_DestroyQueue;
     std::unordered_set<Handle<ManagedObject>> m_ActiveObjects;
@@ -70,6 +72,7 @@ private:
     friend Bool IsObjectValid(Handle<ManagedObject> object);
 
     friend class ManagedObject;
+    friend class Actor;
     friend class Application;
 };
 
