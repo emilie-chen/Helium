@@ -43,6 +43,12 @@ void SceneHierarchyPanel::RenderActorOnPanel(Handle<Actor> actor)
 
 	const Bool result = ImGui::TreeNode(actorName.c_str());
 	ImGui::PushID((actorName + "ID").c_str());
+	if (ImGui::IsItemClicked())
+	{
+		ActorSelectedMessage message;
+		message.Actor = actor;
+		MESSAGE_PUBLISH(ActorSelectedMessage, message);
+	}
 	if (ImGui::BeginPopupContextItem((actorName + "Popup").c_str()))
 	{
 		if (ImGui::MenuItem("Delete"))

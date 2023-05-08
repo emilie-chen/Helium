@@ -4,6 +4,7 @@
 #include "Helium/ObjectModel/Handle.h"
 #include "Helium/ObjectModel/IUpdatable.h"
 #include "Helium/ImGui/ImGuiWindow.h"
+#include "Helium/ImGui/ActorSelectedMessage.h"
 
 heliumBegin
 

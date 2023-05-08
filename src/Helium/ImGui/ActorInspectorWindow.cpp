@@ -15,9 +15,20 @@
 
 heliumBegin
 
-ActorInspectorWindow::ActorInspectorWindow(Handle<Actor> actor)
-    : m_Actor(actor)
+ActorInspectorWindow::ActorInspectorWindow()
 {
+	MESSAGE_SUBSCRIBE(ActorSelectedMessage, MESSAGE_LISTENER(OnActorSelected));
+}
+
+ActorInspectorWindow::~ActorInspectorWindow()
+{
+	MESSAGE_UNSUBSCRIBE(ActorSelectedMessage, MESSAGE_LISTENER(OnActorSelected));
+}
+
+ActorInspectorWindow::ActorInspectorWindow(Handle<Actor> actor)
+    : self()
+{
+	SetActor(actor);
 }
 
 static String LabelPrefix(const char* const label)
@@ -32,6 +43,7 @@ static String LabelPrefix(const char* const label)
 
 	return "##"s + label;
 }
+
 
 void ActorInspectorWindow::OnGUIUpdate(float deltaTime)
 {
@@ -88,6 +100,11 @@ void ActorInspectorWindow::OnGUIUpdate(float deltaTime)
 	}
 
 	ImGui::End();
+}
+
+void ActorInspectorWindow::OnActorSelected(const ActorSelectedMessage& message)
+{
+	SetActor(message.Actor);
 }
 
 heliumEnd
